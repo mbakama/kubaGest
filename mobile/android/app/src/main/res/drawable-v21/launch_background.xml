@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Fond de lancement : dégradé de marque, sans écran blanc. -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:angle="315"
+                android:endColor="@color/kuba_brand"
+                android:startColor="@color/kuba_brand_deep" />
+        </shape>
+    </item>
+</layer-list>

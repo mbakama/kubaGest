@@ -1,0 +1,43 @@
+services:
+  api:
+    build:
+      context: .
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DB_TYPE: postgres
+      DB_SYNCHRONIZE: 'false'
+      DATABASE_URL: postgresql://${POSTGRES_USER:-kubagest}:${POSTGRES_PASSWORD:-kubagest}@db:5432/${POSTGRES_DB:-kubagest}
+      SWAGGER_ENABLED: 'false'
+    ports:
+      - '${PORT:-3000}:3000'
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-kubagest}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-kubagest}
+      POSTGRES_DB: ${POSTGRES_DB:-kubagest}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD-SHELL',
+          'pg_isready -U ${POSTGRES_USER:-kubagest} -d ${POSTGRES_DB:-kubagest}',
+        ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+volumes:
+  db-data:

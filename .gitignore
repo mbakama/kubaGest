@@ -1,0 +1,101 @@
+# =============================================================================
+# KubaGest — ignores à la racine (complète backend/, frontend/, mobile/.gitignore)
+# =============================================================================
+
+# Cache npm (installations locales à la racine)
+.npm-cache/
+
+# Dépendances Node (monorepo)
+**/node_modules/
+
+# Secrets et environnement
+**/.env
+**/.env.local
+**/.env.development.local
+**/.env.test.local
+**/.env.production.local
+!**/.env.example
+
+# Builds et caches de compilation
+**/dist/
+**/build/
+**/.angular/cache/
+**/out-tsc/
+**/bazel-out/
+*.tsbuildinfo
+
+# Tests et rapports
+**/coverage/
+**/.nyc_output/
+**/test-results/
+**/playwright-report/
+**/__screenshots__/
+
+# Logs
+**/*.log
+**/logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Flutter / Dart
+.dart-appdata/
+.dart-localappdata/
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.pub-cache/
+**/.pub/
+**/ios/Flutter/.last_build_id
+app.*.symbols
+app.*.map.json
+
+# Android / Gradle
+**/.gradle/
+**/android/local.properties
+**/android/**/key.properties
+**/*.keystore
+**/*.jks
+**/.cxx/
+
+# Données locales (ex. sqljs backend)
+**/.data/
+
+# IDE
+.idea/
+**/*.iml
+**/*.ipr
+**/*.iws
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+.history/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+!.vscode/mcp.json
+
+# Système
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Temporaires locaux
+.tmp/
+.temp/
+**/.temp/
+**/.tmp/
+
+# Exports design locaux (non source)
+.design-shots/
+
+# Maquettes Stitch (sources design dans docs/mobile/mockup/)
+stitch_maquette_interface_kubagest*.zip
+/stitch_maquette_interface_kubagest/
+/stitch_maquette_interface_kubagest (1)/
+/stitch_maquette_interface_kubagest (2)/

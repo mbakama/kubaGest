@@ -1,0 +1,21 @@
+<a class="skip-link" href="#content">Aller au contenu</a>
+<div class="workspace">
+  <aside class="sidebar">
+    <a class="brand" routerLink="/accueil"><span class="monogram">K</span>Kubagest</a>
+    <p class="eyebrow">ESPACE DE TRAVAIL</p>
+    <nav aria-label="Navigation principale">
+      <a routerLink="/accueil" routerLinkActive="active" ariaCurrentWhenActive="page">Accueil</a>
+      <a routerLink="/connexion" routerLinkActive="active" ariaCurrentWhenActive="page"
+        >Connexion au serveur</a
+      >
+    </nav>
+    <p class="sidebar-note">Votre espace Kubagest<br /><small>Interface en préparation</small></p>
+  </aside>
+  <div class="main-area">
+    <header class="topbar">
+      <span>Espace de travail / Kubagest</span><span class="tag">Préparation</span>
+    </header>
+    <main id="content" tabindex="-1"><router-outlet /></main>
+    <footer>Kubagest <span>Un espace pour travailler ensemble.</span></footer>
+  </div>
+</div>

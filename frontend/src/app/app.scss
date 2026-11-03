@@ -1,0 +1,154 @@
+.workspace {
+  display: flex;
+  min-height: 100dvh;
+}
+.sidebar {
+  width: 248px;
+  flex-shrink: 0;
+  padding: 32px 24px;
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: var(--ink);
+  font-size: 1.4rem;
+  font-weight: 650;
+  letter-spacing: -0.04em;
+  margin-bottom: 56px;
+}
+.monogram {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: white;
+  font-family: Georgia, serif;
+}
+nav {
+  display: grid;
+  gap: 8px;
+}
+nav a {
+  text-decoration: none;
+  color: var(--muted);
+  padding: 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+nav a:hover,
+nav a.active {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+nav a.active {
+  font-weight: 650;
+}
+.sidebar-note {
+  margin: auto 0 0;
+  padding-top: 32px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.sidebar-note small {
+  font-size: 0.75rem;
+}
+.main-area {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.topbar {
+  min-height: 80px;
+  padding: 20px 48px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+main {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px;
+  flex: 1;
+}
+footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  border-top: 1px solid var(--line);
+  margin: 0 48px;
+  padding: 24px 0;
+  font-size: 0.75rem;
+  color: var(--muted);
+}
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 16px;
+  padding: 12px;
+  background: var(--surface);
+  z-index: 10;
+}
+.skip-link:focus {
+  top: 16px;
+}
+@media (max-width: 1023px) {
+  .sidebar {
+    width: 216px;
+    padding: 24px 16px;
+  }
+  main {
+    padding: 32px;
+  }
+  .topbar {
+    padding-inline: 32px;
+  }
+}
+@media (max-width: 767px) {
+  .workspace {
+    display: block;
+  }
+  .sidebar {
+    width: 100%;
+    padding: 16px;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    margin-bottom: 16px;
+  }
+  .sidebar > .eyebrow,
+  .sidebar-note {
+    display: none;
+  }
+  nav {
+    grid-template-columns: auto 1fr;
+  }
+  nav a {
+    font-size: 0.8rem;
+  }
+  .topbar {
+    padding: 16px;
+    min-height: 64px;
+  }
+  main {
+    padding: 32px 16px;
+  }
+  footer {
+    margin: 0 16px;
+    flex-wrap: wrap;
+  }
+}

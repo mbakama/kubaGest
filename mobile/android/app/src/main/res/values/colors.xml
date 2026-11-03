@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="kuba_brand">#FF007A55</color>
+    <color name="kuba_brand_deep">#FF005F41</color>
+    <color name="kuba_surface">#FFF8FAFC</color>
+</resources>

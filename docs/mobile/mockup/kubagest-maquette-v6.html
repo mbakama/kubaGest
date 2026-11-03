@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>KubaGest — Tableau de bord commerçant V6</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <style>
+    :root{--ink:#151616;--muted:#858782;--card:rgba(255,255,255,.88);--lime:#8fbd2b;--coral:#ff6965}
+    *{box-sizing:border-box}html{color-scheme:light}body{margin:0;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:28px;font-family:Manrope,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 8%,#fff 0 7%,transparent 26%),radial-gradient(circle at 86% 28%,#f3f7df 0,transparent 27%),linear-gradient(145deg,#dce5df,#f8f9ef 52%,#c9d8d0)}
+    button,input{font:inherit}.phone{position:relative;width:307px;height:646px;overflow:hidden;border:1px solid rgba(255,255,255,.9);border-radius:31px;background:radial-gradient(circle at 82% 17%,rgba(182,232,209,.78),transparent 30%),linear-gradient(180deg,#f5fcf8 0%,#e6f6f0 54%,#d8eee5 100%);box-shadow:0 20px 55px rgba(43,64,51,.18)}
+    main{height:100%;overflow:hidden;padding:7px 12px 76px}.profile{display:flex;align-items:center;justify-content:space-between}.person{display:flex;align-items:center;gap:7px;padding:4px 10px 4px 4px;border:0;border-radius:99px;background:rgba(255,255,255,.82);color:inherit;text-align:left}.avatar{width:31px;height:31px;overflow:hidden;border-radius:50%;background:#dce3da}.avatar img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 32%}.person small{display:block;color:#898b86;font-size:8px;line-height:1}.person strong{display:block;margin-top:2px;font-size:10px;font-weight:600}.circle{width:38px;height:38px;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.88);color:#111}.circle svg{width:16px;height:16px}
+    h1{margin:13px 0 11px;font-size:22px;font-weight:700;font-style:normal;line-height:1.04;letter-spacing:-.045em}.search{position:relative;display:block;margin-bottom:8px}.search svg{position:absolute;left:13px;top:50%;width:15px;height:15px;transform:translateY(-50%)}.search input{width:100%;height:40px;padding:0 14px 0 38px;border:1px solid rgba(255,255,255,.9);border-radius:19px;outline:none;background:rgba(255,255,255,.7);font-size:10px}.search input:focus{box-shadow:0 0 0 3px rgba(143,189,43,.2)}
+    .metrics{display:grid;grid-template-columns:1fr 1fr;gap:3px;margin-bottom:6px}.card{border:1px solid rgba(255,255,255,.96);border-radius:20px;background:var(--card);box-shadow:0 7px 17px rgba(48,66,54,.05)}.metric{height:112px;padding:11px 9px}.metric.dark{border-color:#1d1e1e;background:#1d1e1e;color:#fff}.top{display:flex;align-items:flex-start;justify-content:space-between;gap:4px}.icon{width:15px;height:15px}.label{margin-top:5px;color:#858782;font-size:9px;line-height:1.08}.dark .label{color:rgba(255,255,255,.72)}.good{padding:3px 6px;border:1px solid #dfedbc;border-radius:99px;background:#f7fce8;color:#63900e;font-size:7px;font-weight:700}.value{margin-top:15px;font-size:22px;font-weight:400;letter-spacing:-.045em}.value.money{font-size:17px;white-space:nowrap}
+    .calories{height:120px;margin-bottom:8px;padding:10px 10px 7px}.cal-head{display:flex;justify-content:space-between;align-items:flex-start}.cal-label{margin:0;color:var(--muted);font-size:8px}.cal-total{display:block;margin-top:2px;font-size:12px;letter-spacing:-.02em}.chart{height:70px;display:grid;grid-template-columns:repeat(7,1fr);gap:5px;align-items:end;margin-top:-2px}.day{display:grid;justify-items:center;gap:5px;color:#737670;font-size:7px}.bar{width:20px;border-radius:12px;background:#edf3ef}.day:nth-child(1) .bar{height:25px}.day:nth-child(2) .bar{height:37px}.day:nth-child(3) .bar{height:41px}.day:nth-child(4) .bar{height:31px}.day:nth-child(5) .bar{height:52px;background:#007a55;box-shadow:0 5px 12px rgba(0,122,85,.22)}.day:nth-child(6) .bar{height:34px}.day:nth-child(7) .bar{height:22px}
+    .schedule{height:112px;padding:9px 10px}.schedule-head{display:flex;align-items:center;justify-content:space-between}.schedule h2{margin:0;font-size:10px;font-weight:600}.schedule .circle{width:29px;height:29px;border:1px solid rgba(17,18,20,.05)}.activity-list{display:grid;gap:4px;margin-top:4px}.activity{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:7px;padding:6px 7px;border-radius:10px;background:rgba(230,246,240,.8)}.activity-icon{width:20px;height:20px;display:grid;place-items:center;border-radius:7px;background:#fff;color:#007a55}.activity-icon svg{width:11px;height:11px}.activity-copy{min-width:0}.activity-copy strong{display:block;color:#242725;font-size:8px}.activity-copy small{display:block;margin-top:1px;color:#777b77;font-size:7px}.activity-amount{color:#007a55;font-size:8px;font-weight:700;white-space:nowrap}.activity.stock{background:#f7f8f5}.activity.stock .activity-icon{color:#b26b16}.activity.stock .activity-amount{color:#b26b16}
+    nav{position:absolute;z-index:3;left:34px;right:34px;bottom:28px;height:47px;display:grid;grid-template-columns:1.35fr repeat(3,.72fr);align-items:center;gap:4px;padding:4px;border:1px solid rgba(17,18,20,.06);border-radius:26px;background:rgba(255,255,255,.86);box-shadow:0 12px 27px rgba(45,61,51,.14);backdrop-filter:blur(14px)}.nav{height:39px;display:flex;align-items:center;justify-content:center;gap:6px;border:0;border-radius:22px;background:transparent;color:#767873}.nav svg{width:16px;height:16px}.nav span{display:none;font-size:9px}.nav.active{background:#121313;color:#fff}.nav.active span{display:inline}.home-line{position:absolute;z-index:4;left:50%;bottom:8px;width:107px;height:4px;border-radius:99px;background:#090909;transform:translateX(-50%)}
+    /* Format mobile agrandi : le cadre reste fixe et le contenu défile. */
+    .phone{width:390px;height:844px;border-radius:40px}
+    main{height:100%;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;padding:24px 16px 118px;scrollbar-width:none;scroll-behavior:smooth}
+    main::-webkit-scrollbar{display:none}
+    .person{gap:9px;padding:5px 13px 5px 5px}.avatar{width:39px;height:39px}.person small{font-size:10px}.person strong{font-size:12px}.circle{width:46px;height:46px}.circle svg{width:19px;height:19px}
+    h1{margin:18px 0 16px;font-size:29px;line-height:1.05}
+    .search{margin-bottom:12px}.search svg{left:17px;width:18px;height:18px}.search input{height:52px;padding-left:48px;border-radius:23px;font-size:13px}
+    .metrics-mask{margin:0 -16px 12px;overflow:hidden}.metrics{display:flex;gap:12px;margin:0 0 -18px;padding:0 16px 22px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-left:16px;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch}.metrics::-webkit-scrollbar{display:none!important;width:0!important;height:0!important;background:transparent!important}.metric{flex:0 0 82%;height:168px;padding:18px 16px;scroll-snap-align:start}.icon{width:21px;height:21px}.label{margin-top:9px;font-size:12px}.good{padding:5px 9px;font-size:10px}.value{margin-top:28px;font-size:30px}.value.money{font-size:25px;font-weight:700}
+    .card{border-radius:25px}.calories{height:158px;margin-bottom:12px;padding:14px 14px 10px}.cal-label{font-size:11px}.cal-total{margin-top:3px;font-size:16px}.chart{height:96px;gap:7px}.day{gap:7px;font-size:9px}.bar{width:27px}.day:nth-child(1) .bar{height:34px}.day:nth-child(2) .bar{height:49px}.day:nth-child(3) .bar{height:54px}.day:nth-child(4) .bar{height:41px}.day:nth-child(5) .bar{height:69px}.day:nth-child(6) .bar{height:45px}.day:nth-child(7) .bar{height:29px}
+    .schedule{height:auto;min-height:148px;padding:13px 14px}.schedule h2{font-size:13px}.schedule .circle{width:38px;height:38px}.activity-list{gap:6px;margin-top:7px}.activity{padding:8px 9px;border-radius:13px}.activity-icon{width:27px;height:27px;border-radius:9px}.activity-icon svg{width:14px;height:14px}.activity-copy strong,.activity-amount{font-size:10px}.activity-copy small{font-size:9px}
+    nav{left:43px;right:43px;bottom:35px;height:59px;display:flex;padding:5px;border-radius:31px}.nav{flex:1;height:49px;border-radius:26px;transition:flex .2s ease,background .2s ease}.nav.active{flex:1.55}.nav svg{width:20px;height:20px}.nav span{font-size:11px;white-space:nowrap}.home-line{bottom:11px;width:136px;height:5px}
+    .page[hidden]{display:none}.sales-page{padding-top:24px}.sales-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}.sales-kicker{margin:0 0 3px;color:var(--muted);font-size:12px}.sales-title{margin:0;font-size:28px;letter-spacing:-.04em}.new-sale{height:44px;display:inline-flex;align-items:center;gap:6px;padding:0 14px;border:0;border-radius:16px;background:#111;color:#fff;font-weight:700;font-size:12px}.new-sale svg{width:17px;height:17px}.sales-summary{display:grid;grid-template-columns:1.35fr 1fr;gap:10px;margin-bottom:14px}.summary-main,.summary-side{padding:16px;border-radius:22px}.summary-main{background:#007a55;color:#fff}.summary-side{background:rgba(255,255,255,.88)}.summary-label{display:block;font-size:10px;opacity:.74}.summary-value{display:block;margin-top:9px;font-size:22px;letter-spacing:-.04em}.summary-hint{display:block;margin-top:5px;font-size:9px;opacity:.72}.sales-tools{display:flex;gap:8px;margin-bottom:14px}.sales-tools .search{flex:1;margin:0}.filter-button{width:52px;height:52px;display:grid;place-items:center;border:1px solid rgba(17,18,20,.06);border-radius:18px;background:#fff}.filter-button svg{width:19px;height:19px}.list-heading{display:flex;align-items:end;justify-content:space-between;margin:0 0 8px}.list-heading h3{margin:0;font-size:15px}.list-heading span{color:var(--muted);font-size:10px}.sales-list{display:grid;gap:8px}.sale-row{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:11px;padding:12px;border-radius:18px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95)}.sale-logo{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:#e6f6f0;color:#007a55;font-size:11px;font-weight:800}.sale-info strong{display:block;font-size:14px}.sale-info small{display:block;margin-top:3px;color:#5d615c;font-size:12px}.sale-price{text-align:right}.sale-price strong{display:block;font-size:14px}.sale-price small{display:block;margin-top:3px;color:#007a55;font-size:12px;font-weight:700}.sale-price small.credit{color:#b26b16}.summary-label{font-size:12px}.summary-hint{font-size:12px;opacity:.86}.list-heading span{font-size:12px}
+    .journal-link{height:44px;padding:0 14px;border:0;border-radius:16px;background:rgba(255,255,255,.88);color:#111;font-size:13px;font-weight:700}
+    .counter-lead{margin:-8px 0 14px;color:#3d4240;font-size:14px;line-height:1.4}
+    .cart-list{display:grid;gap:8px;margin-bottom:16px}
+    .cart-row{display:grid;grid-template-columns:auto 1fr auto;gap:11px;align-items:center;padding:12px;border-radius:18px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.95)}
+    .qty{display:flex;align-items:center;gap:8px;margin-top:8px}
+    .qty button{width:36px;height:36px;border:0;border-radius:12px;background:#e6f6f0;color:#007a55;font-size:18px;font-weight:700}
+    .qty strong{min-width:18px;text-align:center;font-size:14px}
+    .line-price{text-align:right}
+    .line-price strong{display:block;font-size:14px}
+    .line-price small{display:block;margin-top:3px;color:#5d615c;font-size:12px}
+    .pay-title{margin:0 0 8px;font-size:15px}
+    .pay-methods{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+    .pay-chip{min-height:44px;padding:0 12px;border:1px solid rgba(17,18,20,.08);border-radius:16px;background:#fff;color:#3d4240;font-size:13px;font-weight:700}
+    .pay-chip.active{border-color:#111;background:#111;color:#fff}
+    .credit-panel{margin-top:10px;padding:14px;border-radius:18px;background:#fff}
+    .credit-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+    .credit-head strong{font-size:14px}
+    .credit-link{border:0;background:none;padding:0;color:#007a55;font-size:12px;font-weight:700}
+    .credit-client{display:flex;align-items:center;gap:10px}
+    .credit-client .sale-info strong{font-size:14px}
+    .credit-change{margin-left:auto;border:0;background:none;padding:6px;color:#007a55;font-size:12px;font-weight:700}
+    .credit-note{margin:6px 0 10px;font-size:12px;color:#3d4240}
+    .credit-due{display:flex;align-items:center;gap:8px;width:100%;padding:10px 12px;border:0;border-radius:14px;background:#e6f6f0;text-align:left;font-size:13px}
+    .credit-due span{color:#5d615c;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .credit-due strong{font-size:13px}
+    .credit-due em{margin-left:auto;color:#007a55;font-size:11px;font-style:normal;font-weight:700}
+    .credit-after{margin:8px 0 0;font-size:12px;color:#3d4240}
+    .tender{display:flex;align-items:center;justify-content:space-between;min-height:48px;margin-bottom:8px;padding:0 14px;border-radius:16px;background:rgba(255,255,255,.88);font-size:14px}
+    .tender[hidden],.tender-input[hidden],.credit-panel[hidden]{display:none}
+    .tender-input{display:flex;flex-direction:column;gap:6px;margin-bottom:8px;padding:12px 14px;border-radius:16px;background:#fff;font-size:14px;font-weight:700}
+    .tender-input input{height:48px;border:1px solid rgba(17,18,20,.12);border-radius:14px;padding:0 12px;font:inherit;font-size:20px;font-weight:700}
+    .tender.change strong{color:#007a55}
+    .checkout-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:8px;padding:12px 14px;border-radius:22px;background:#111;color:#fff}
+    .checkout-bar small{display:block;font-size:12px;opacity:.75}
+    .checkout-bar strong{display:block;margin-top:2px;font-size:20px;letter-spacing:-.03em}
+    .checkout-bar button{height:44px;padding:0 16px;border:0;border-radius:14px;background:#8fbd2b;color:#111;font-size:14px;font-weight:800}
+    .settings-page{padding-top:24px}
+    .settings-profile{display:flex;align-items:center;gap:14px;margin-bottom:18px;padding:14px;border-radius:24px;background:rgba(255,255,255,.88);border:1px solid rgba(255,255,255,.96)}
+    .settings-profile img{width:64px;height:64px;border-radius:50%;object-fit:cover;object-position:center 32%}
+    .settings-profile strong{display:block;font-size:18px;letter-spacing:-.03em}
+    .settings-profile small{display:block;margin-top:3px;color:var(--muted);font-size:12px}
+    .settings-group{margin:0 0 14px}
+    .settings-group h3{margin:0 0 8px 4px;color:#5d615c;font-size:12px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+    .settings-card{overflow:hidden;border-radius:22px;background:rgba(255,255,255,.9);border:1px solid rgba(255,255,255,.96)}
+    .settings-row{width:100%;min-height:56px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px 14px;border:0;border-bottom:1px solid rgba(17,18,20,.06);background:transparent;color:inherit;text-align:left}
+    .settings-row:last-child{border-bottom:0}
+    .settings-icon{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:#e6f6f0;color:#007a55}
+    .settings-icon svg{width:18px;height:18px}
+    .settings-copy strong{display:block;font-size:14px}
+    .settings-copy small{display:block;margin-top:2px;color:var(--muted);font-size:12px}
+    .settings-value{color:#3d4240;font-size:13px;font-weight:600}
+    .chevron{width:16px;height:16px;color:#9aa09b}
+    .switch{position:relative;width:44px;height:26px}
+    .switch input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+    .switch span{position:absolute;inset:0;border-radius:99px;background:#d7ddd8;pointer-events:none}
+    .switch span:before{content:"";position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .2s ease}
+    .switch input:checked+span{background:#007a55}
+    .switch input:checked+span:before{transform:translateX(18px)}
+    .logout{width:100%;height:52px;margin-top:6px;border:0;border-radius:18px;background:#111;color:#fff;font-size:14px;font-weight:700}
+    .notify-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .notify-head .circle{flex:0 0 auto}
+    .notify-kicker{margin:0 0 2px;color:var(--muted);font-size:12px}
+    .notify-title{margin:0;font-size:28px;letter-spacing:-.04em}
+    .note-feature{margin-bottom:16px;padding:16px;border-radius:24px;background:#007a55;color:#fff}
+    .note-feature .tag{display:inline-flex;align-items:center;gap:6px;padding:4px 8px;border-radius:99px;background:rgba(255,255,255,.18);font-size:12px;font-weight:700}
+    .note-feature strong{display:block;margin-top:12px;font-size:18px;letter-spacing:-.03em}
+    .note-feature p{margin:6px 0 14px;font-size:14px;line-height:1.35}
+    .note-feature button{height:44px;padding:0 14px;border:0;border-radius:14px;background:#111;color:#fff;font-size:14px;font-weight:700}
+    .note-list{display:grid;gap:8px}
+    .note-row{width:100%;min-height:68px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:12px;border:0;border-radius:18px;background:rgba(255,255,255,.9);color:inherit;text-align:left}
+    .note-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:14px;background:#e6f6f0;color:#007a55}
+    .note-icon svg{width:18px;height:18px}
+    .note-icon.warn{background:#fff4e5;color:#8a4b00}
+    .note-icon.late{background:#fde8e7;color:#9a2b27}
+    .note-copy strong{display:block;font-size:14px}
+    .note-copy small{display:block;margin-top:3px;color:#5c615d;font-size:12px;line-height:1.3}
+    .note-badge{padding:5px 8px;border-radius:99px;background:#e6f6f0;color:#007a55;font-size:11px;font-weight:700;white-space:nowrap}
+    .note-badge.warn{background:#fff4e5;color:#8a4b00}
+    .note-badge.late{background:#fde8e7;color:#9a2b27}
+    .summary-alert{background:#8a4b00;color:#fff}
+    .stock-filters{display:flex;gap:8px;margin-bottom:14px}
+    .chip{height:44px;padding:0 14px;border:0;border-radius:16px;background:rgba(255,255,255,.88);color:#3d4240;font-size:13px;font-weight:700}
+    .chip.active{background:#111;color:#fff}
+    .sale-price small.expiry{color:#9a2b27}
+    .welcome-page{display:flex;flex-direction:column;height:100%;padding:20px 20px 16px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+    .welcome-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+    .brand{display:flex;align-items:center;gap:8px;min-width:0}
+    .mark{width:36px;height:36px;display:grid;place-items:center;border-radius:12px;background:#007a55;color:#fff;font-weight:800;letter-spacing:-.04em}
+    .brand strong{font-size:18px;letter-spacing:-.04em}
+    .brand strong span{color:#8fbd2b}
+    .welcome-actions{display:flex;align-items:center;gap:2px}
+    .skip{height:44px;padding:0 10px;border:0;background:transparent;color:#3d4240;font-size:15px;font-weight:700}
+    .welcome-page .circle{width:44px;height:44px;font-size:18px;font-weight:700}
+    .welcome-track{display:flex;margin:0 -20px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;touch-action:pan-x;cursor:grab}
+    .welcome-track::-webkit-scrollbar{display:none}
+    .welcome-track.is-dragging{cursor:grabbing;scroll-snap-type:none}
+    .welcome-slide{flex:0 0 100%;min-width:0;scroll-snap-align:start;scroll-snap-stop:always;padding:0 20px}
+    .welcome-stage{position:relative;height:286px;margin:22px 0 22px;overflow:hidden;border:1px solid rgba(255,255,255,.96);border-radius:28px;background:radial-gradient(circle at 50% 38%,rgba(255,255,255,.95),transparent 46%),linear-gradient(180deg,#f8fcf9,#e5f4ec)}
+    .scene{position:absolute;left:0;right:0;top:8px;height:176px;display:grid;place-items:center}
+    .scene[hidden]{display:none}
+    .scene svg{width:210px;height:156px}
+    .float-badge{position:absolute;top:18px;right:28px;width:48px;height:48px;display:grid;place-items:center;border-radius:16px;color:#fff;box-shadow:0 10px 18px rgba(43,64,51,.12)}
+    .float-badge svg{width:24px;height:24px}
+    .float-badge.chart{background:#f5a524;box-shadow:0 10px 18px rgba(245,165,36,.28)}
+    .float-badge.box{background:#8a4b00}
+    .float-badge.link{background:#007a55}
+    .status-card{position:absolute;left:14px;right:14px;bottom:14px;display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;background:#fff;box-shadow:0 10px 24px rgba(43,64,51,.08)}
+    .status-card .check{width:28px;height:28px;display:grid;place-items:center;flex:0 0 auto;border-radius:50%;background:#e6f6f0;color:#007a55}
+    .status-card .check svg{width:15px;height:15px}
+    .status-card strong{display:block;font-size:14px}
+    .status-card small{display:block;margin-top:2px;color:#5c615d;font-size:12px}
+    .welcome-copy{padding:0 2px}
+    .welcome-kicker{margin:0 0 8px;color:#007a55;font-size:13px;font-weight:700}
+    .welcome-copy h1{margin:0 0 10px;font-size:34px;line-height:1.04;letter-spacing:-.045em}
+    .welcome-copy p{margin:0;max-width:34ch;color:#3d4240;font-size:16px;line-height:1.45}
+    .welcome-footer{margin-top:auto;padding-top:22px}
+    .create-page.is-short .welcome-footer{margin-top:8px;padding-top:8px}
+    .dots{display:flex;justify-content:center;gap:6px;margin-bottom:14px}
+    .dots button{width:8px;height:8px;padding:0;border:0;border-radius:99px;background:#d5ddd8}
+    .dots button[aria-current="true"]{width:26px;background:#007a55}
+    .start{width:100%;height:56px;border:0;border-radius:18px;background:#007a55;color:#fff;font-size:16px;font-weight:800;box-shadow:0 10px 18px rgba(0,122,85,.18)}
+    .login-link{width:100%;height:44px;margin-top:2px;border:0;background:transparent;color:#007a55;font-size:15px;font-weight:700}
+    .choice-page{display:flex;flex-direction:column;height:100%;padding:20px 20px 16px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+    .choice-page>*{flex-shrink:0}
+    .choice-page .welcome-stage{height:232px;margin:16px 0 18px}
+    .trust{margin-top:16px;overflow:hidden;border:1px solid rgba(255,255,255,.96);border-radius:20px;background:rgba(255,255,255,.92)}
+    .trust-row{min-height:56px;display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(17,18,20,.06);font-size:14px;font-weight:600}
+    .trust-row:last-child{border-bottom:0}
+    .trust-row>span:not(.trust-icon){flex:1;min-width:0;line-height:1.3}
+    .trust-icon{width:36px;height:36px;display:grid;place-items:center;flex:0 0 36px;border-radius:50%;background:#e6f6f0;color:#007a55}
+    .trust-icon svg{width:16px;height:16px}
+    .trust-row>.check{width:16px;height:16px;flex:0 0 16px;color:#007a55}
+    .choice-note{margin:8px 0 0;color:#5c615d;font-size:12px;line-height:1.4;text-align:center}
+    .choice-note.has-icon{display:flex;align-items:center;justify-content:center;gap:6px}
+    .choice-note.has-icon svg{width:14px;height:14px;flex:0 0 auto;color:#007a55}
+    .create-page{display:flex;flex-direction:column;height:100%;padding:18px 18px 16px;overflow-x:hidden;overflow-y:auto}
+    .create-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+    .create-head h2{margin:0;font-size:18px;letter-spacing:-.03em}
+    .back{width:40px;height:40px;border:0;border-radius:50%;background:rgba(255,255,255,.9);color:#151616;font-size:20px}
+    .progress{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px}
+    .progress-copy{min-width:0}
+    .progress-copy strong{display:block;color:#5c615d;font-size:11px;letter-spacing:.06em}
+    .bars{display:flex;gap:6px;width:118px;margin-top:8px}
+    .bars i{height:4px;flex:1;border-radius:99px;background:#d7ddd8;font-style:normal}
+    .bars i.on{background:#007a55}
+    .progress>small{color:#5c615d;font-size:12px;font-weight:700;white-space:nowrap}
+    .option{width:100%;min-height:72px;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;margin-bottom:10px;padding:12px 14px;border:1px solid rgba(17,18,20,.08);border-radius:18px;background:#fff;color:inherit;text-align:left}
+    .option strong{display:block;font-size:15px}
+    .option small{display:block;margin-top:2px;color:#5c615d;font-size:12px;line-height:1.3}
+    .radio{width:18px;height:18px;border:1.5px solid #c5ccc8;border-radius:50%}
+    .field{height:52px;display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:0 14px;border:1px solid rgba(17,18,20,.08);border-radius:16px;background:#fff;color:#6b716d;font-size:14px}
+    .field svg{width:18px;height:18px;flex:0 0 auto}
+    .field-label{margin:6px 0 8px;font-size:15px;font-weight:700}
+    .currencies{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+    .currency{height:48px;border:1px solid rgba(17,18,20,.08);border-radius:14px;background:#fff;color:#3d4240;font-size:12px;font-weight:700}
+    .currency.on{border-color:#b7e0cf;background:#e6f6f0;color:#007a55}
+    .hint{margin:0 0 14px;color:#5c615d;font-size:12px;line-height:1.4}
+    .recap{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 14px;border-radius:18px;background:#e6f6f0}
+    .recap strong{flex:1;font-size:15px}
+    .recap em{padding:4px 8px;border-radius:99px;background:#fff;color:#007a55;font-size:12px;font-style:normal;font-weight:800}
+    .success-stage{display:flex;flex-direction:column;align-items:center;gap:14px;margin:18px 0 18px;padding:22px 14px 14px;border:1px solid rgba(255,255,255,.96);border-radius:28px;background:radial-gradient(circle at 50% 28%,rgba(255,255,255,.95),transparent 42%),linear-gradient(180deg,#f8fcf9,#e5f4ec)}
+    .success-seal{width:72px;height:72px;display:grid;place-items:center;border-radius:50%;background:#007a55;color:#fff;box-shadow:0 10px 18px rgba(0,122,85,.22)}
+    .success-seal svg{width:34px;height:34px}
+    .success-stage .status-card{position:static;width:100%;left:auto;right:auto;bottom:auto}
+    .success-recap{display:flex;align-items:center;gap:10px;margin-top:16px;padding:12px 14px;border-radius:18px;background:#e6f6f0}
+    .success-recap .copy{flex:1;min-width:0}
+    .success-recap strong{display:block;font-size:15px}
+    .success-recap small{display:block;margin-top:2px;color:#5c615d;font-size:12px}
+    .success-recap .trust-icon{background:#fff}
+    .success-recap em{padding:4px 8px;border-radius:99px;background:#fff;color:#007a55;font-size:12px;font-style:normal;font-weight:800;white-space:nowrap}
+    .identity{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+    .photo-pick{position:relative;width:64px;height:64px;flex:0 0 auto;display:grid;place-items:center;border:0;border-radius:50%;background:#fff;color:#007a55;cursor:pointer}
+    .photo-pick img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+    .photo-pick svg{width:24px;height:24px}
+    .photo-add{position:absolute;right:-2px;bottom:-2px;width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#007a55;color:#fff;font-size:16px;font-weight:700;line-height:1}
+    .identity strong{display:block;font-size:15px}
+    .identity small{display:block;margin-top:2px;color:#5c615d;font-size:12px;line-height:1.35}
+    .name-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .name-row .field{padding:0 10px;font-size:13px}
+    .login-hero{margin:2px 0 18px;padding:18px;border:1px solid rgba(255,255,255,.96);border-radius:24px;background:rgba(255,255,255,.92)}
+    .login-hero-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+    .lock-mark{width:42px;height:42px;display:grid;place-items:center;flex:0 0 42px;border-radius:14px;background:#e6f6f0;color:#007a55}
+    .lock-mark svg{width:20px;height:20px}
+    .login-badge{padding:6px 10px;border-radius:99px;background:#151616;color:#fff;font-size:11px;font-weight:700}
+    .login-hero h1{margin:0 0 8px;font-size:28px;line-height:1.05;letter-spacing:-.04em}
+    .login-hero p{margin:0;color:#3d4240;font-size:14px;line-height:1.45}
+    .login-kicker{margin:6px 0 8px;color:#858782;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+    .login-options{margin:2px 0 0;overflow:hidden;border:1px solid rgba(255,255,255,.96);border-radius:18px;background:#fff}
+    .remember,.password-link{width:100%;min-height:52px;display:flex;align-items:center;gap:12px;padding:0 14px;border:0;background:transparent;color:#151616;font-size:14px;font-weight:700;text-align:left}
+    .remember input{width:18px;height:18px;margin:0;flex:0 0 auto;accent-color:#007a55}
+    .password-link{border-top:1px solid rgba(17,18,20,.06);color:#007a55}
+    .password-link svg{width:16px;height:16px;margin-left:auto;flex:0 0 auto}
+    .create-page>*{flex-shrink:0}
+    .login-split{display:flex;align-items:center;gap:10px;margin:16px 0 0;color:#858782;font-size:12px;font-weight:700}
+    .login-split::before,.login-split::after{content:"";height:1px;flex:1;background:rgba(17,18,20,.08)}
+    .shield-note{display:flex;align-items:center;justify-content:center;gap:6px;margin:8px 0 0;color:#858782;font-size:12px}
+    .shield-note svg{width:14px;height:14px;flex:0 0 auto}
+    .board{display:flex;flex-wrap:wrap;gap:36px 32px;align-items:flex-start;justify-content:center;width:min(100%,1280px)}.board figure{margin:0;display:grid;gap:12px;justify-items:center}.board figcaption{font-size:14px;font-weight:700;letter-spacing:-.02em}
+    @media(max-width:900px){.board{flex-direction:column;align-items:center}}
+  </style>
+</head>
+<body>
+  <div class="board">
+  <figure>
+    <figcaption>Tableau de bord</figcaption>
+    <section class="phone app-phone" aria-label="Tableau de bord commerçant KubaGest">
+    <main class="page" data-page="home">
+      <div class="profile">
+        <button class="person" type="button"><span class="avatar"><img src="avatar-hector.png" alt="Photo de profil d’Hector"></span><span><small>Bonjour, bon retour !</small><strong>Hector</strong></span></button>
+        <button class="circle" type="button" aria-label="Notifications" data-open="notifications"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 8.5h18C21 15 18 15 18 8Z"/><path d="M10 20h4"/><circle cx="18" cy="5" r="2.5" fill="#ff6965" stroke="#fff"/></svg></button>
+      </div>
+      <h1>Aperçu du jour</h1>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" aria-label="Rechercher un produit ou un client" placeholder="Rechercher un produit, client..."></label>
+      <div class="metrics-mask"><section class="metrics">
+        <article class="card metric dark"><div class="top"><div><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M7 15h4m5-6v6m-3-3h6"/></svg><div class="label">Ventes<br>du jour</div></div><span class="good">+12 %</span></div><div class="value money">245 000 FC</div></article>
+        <article class="card metric"><div class="top"><div><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18m-5 4h2"/></svg><div class="label">Solde<br>en caisse</div></div><span class="good">À jour</span></div><div class="value money">180 500 FC</div></article>
+      </section></div>
+      <section class="card calories"><div class="cal-head"><div><p class="cal-label">Évolution des ventes</p><strong class="cal-total">1 240 000 FC</strong></div><span class="good">+8,4 %</span></div><div class="chart" aria-label="Ventes de la semaine"><div class="day"><span class="bar"></span><span>Lun</span></div><div class="day"><span class="bar"></span><span>Mar</span></div><div class="day"><span class="bar"></span><span>Mer</span></div><div class="day"><span class="bar"></span><span>Jeu</span></div><div class="day"><span class="bar"></span><span>Ven</span></div><div class="day"><span class="bar"></span><span>Sam</span></div><div class="day"><span class="bar"></span><span>Dim</span></div></div></section>
+      <section class="card schedule"><div class="schedule-head"><h2>Activité récente</h2><button class="circle" type="button" aria-label="Voir toutes les activités"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.7"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div><div class="activity-list"><div class="activity"><span class="activity-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14m-5-5 5 5-5 5"/></svg></span><span class="activity-copy"><strong>Vente Nº 1048</strong><small>Il y a 5 min · Espèces</small></span><span class="activity-amount">+25 000 FC</span></div><div class="activity stock"><span class="activity-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 8 8-4 8 4-8 4-8-4Zm0 0v8l8 4 8-4V8"/></svg></span><span class="activity-copy"><strong>Stock faible</strong><small>Huile végétale · 3 restants</small></span><span class="activity-amount">À vérifier</span></div></div></section>
+    </main>
+    <main class="page sales-page" data-page="sales" hidden>
+      <header class="sales-header">
+        <div><h2 class="sales-title">Ventes</h2></div>
+        <button class="journal-link" type="button">Journal</button>
+      </header>
+      <p class="counter-lead">Le panier, le paiement et le reçu restent dans le même geste.</p>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" aria-label="Rechercher un article" placeholder="Nom, code-barres ou conditionnement"></label>
+      <div class="list-heading"><h3>Panier</h3><span>2 articles</span></div>
+      <section class="cart-list" aria-label="Articles du panier">
+        <article class="cart-row">
+          <span class="sale-logo">PA</span>
+          <span class="sale-info">
+            <strong>Paracétamol 500 mg</strong>
+            <small>Boîte · 4 000 FC</small>
+            <span class="qty"><button type="button" aria-label="Diminuer la quantité">−</button><strong>2</strong><button type="button" aria-label="Augmenter la quantité">+</button></span>
+          </span>
+          <span class="line-price"><strong>7 500 FC</strong><small>Remise 500</small></span>
+        </article>
+        <article class="cart-row">
+          <span class="sale-logo">SP</span>
+          <span class="sale-info">
+            <strong>Sérum physiologique</strong>
+            <small>Flacon · 3 500 FC</small>
+            <span class="qty"><button type="button" aria-label="Diminuer la quantité">−</button><strong>1</strong><button type="button" aria-label="Augmenter la quantité">+</button></span>
+          </span>
+          <span class="line-price"><strong>3 500 FC</strong><small>Sans remise</small></span>
+        </article>
+      </section>
+      <h3 class="pay-title">Encaissement</h3>
+      <div class="pay-methods" role="group" aria-label="Moyen de paiement">
+        <button class="pay-chip active" type="button">Espèces</button>
+        <button class="pay-chip" type="button">Mobile Money</button>
+        <button class="pay-chip" type="button">Crédit client</button>
+      </div>
+      <label class="tender-input">Montant remis par le client
+        <input class="received" inputmode="numeric" value="15 000" aria-label="Montant remis par le client">
+      </label>
+      <div class="tender change"><span class="change-label">À rendre</span><strong class="change-value">4 000 FC</strong></div>
+      <div class="checkout-bar">
+        <div><small>Total du panier</small><strong>11 000 FC</strong></div>
+        <button type="button">Encaisser</button>
+      </div>
+    </main>
+    <main class="page settings-page" data-page="settings" hidden>
+      <header class="sales-header">
+        <div><p class="sales-kicker">Compte et commerce</p><h2 class="sales-title">Paramètres</h2></div>
+      </header>
+      <section class="settings-profile">
+        <img src="avatar-hector.png" alt="Photo de profil d’Hector">
+        <div>
+          <strong>Hector</strong>
+          <small>hector@commerce.cd</small>
+        </div>
+      </section>
+      <section class="settings-group">
+        <h3>Commerce</h3>
+        <div class="settings-card">
+          <button class="settings-row" type="button">
+            <span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 10h16v9H4z"/><path d="M3 10l2-5h14l2 5M9 19v-5h6v5"/></svg></span>
+            <span class="settings-copy"><strong>Pharmacie Centrale</strong><small>Nom du commerce</small></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+          <div class="settings-row">
+            <span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M7 8h7a3 3 0 0 1 0 6H9a3 3 0 0 0 0 6h8"/></svg></span>
+            <span class="settings-copy"><strong>Devise</strong><small>Référence des montants</small></span>
+            <span class="settings-value">CDF</span>
+          </div>
+        </div>
+      </section>
+      <section class="settings-group">
+        <h3>Notifications</h3>
+        <div class="settings-card">
+          <label class="settings-row"><span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v3M5 13a7 7 0 0 1 14 0v4H5v-4Z"/><path d="M9 20h6"/></svg></span><span class="settings-copy"><strong>Mises à jour</strong><small>Nouvelle version et maintenance</small></span><span class="switch"><input type="checkbox" checked aria-label="Mises à jour"><span></span></span></label>
+          <label class="settings-row"><span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 8 8-4 8 4-8 4-8-4Zm0 0v8l8 4 8-4V8"/></svg></span><span class="settings-copy"><strong>Stock</strong><small>Seuil et péremption</small></span><span class="switch"><input type="checkbox" checked aria-label="Stock"><span></span></span></label>
+          <label class="settings-row"><span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg></span><span class="settings-copy"><strong>Caisse</strong><small>Session ouverte et écart</small></span><span class="switch"><input type="checkbox" checked aria-label="Caisse"><span></span></span></label>
+          <label class="settings-row"><span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span><span class="settings-copy"><strong>Abonnement</strong><small>Échéance et suspension</small></span><span class="switch"><input type="checkbox" checked aria-label="Abonnement"><span></span></span></label>
+          <label class="settings-row"><span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span><span class="settings-copy"><strong>Crédits</strong><small>Échéance client dépassée</small></span><span class="switch"><input type="checkbox" aria-label="Crédits"><span></span></span></label>
+        </div>
+      </section>
+      <section class="settings-group">
+        <h3>Compte</h3>
+        <div class="settings-card">
+          <button class="settings-row" type="button">
+            <span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span>
+            <span class="settings-copy"><strong>Modifier le mot de passe</strong><small>Mot de passe actuel, puis le nouveau</small></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+          <button class="settings-row" type="button">
+            <span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 7h16v12H4z"/><path d="M8 7V5h8v2"/></svg></span>
+            <span class="settings-copy"><strong>Mon abonnement</strong><small>Formule et échéance</small></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+          <button class="settings-row" type="button">
+            <span class="settings-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="8"/><path d="M12 11v5M12 8h.01"/></svg></span>
+            <span class="settings-copy"><strong>À propos</strong><small>Version de l’application</small></span>
+            <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 6 6 6-6 6"/></svg>
+          </button>
+        </div>
+      </section>
+      <button class="logout" type="button">Se déconnecter</button>
+    </main>
+    <main class="page" data-page="notifications" hidden>
+      <header class="notify-head">
+        <button class="circle" type="button" aria-label="Retour à l’accueil" data-back="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 6 9 12l6 6"/></svg></button>
+        <div>
+          <p class="notify-kicker">Pour le propriétaire</p>
+          <h2 class="notify-title">Notifications</h2>
+        </div>
+      </header>
+      <article class="note-feature">
+        <span class="tag">Application · non lue</span>
+        <strong>Nouvelle version disponible</strong>
+        <p>KubaGest peut être mis à jour. Les ventes et le stock du commerce restent en place.</p>
+        <button type="button">Voir la mise à jour</button>
+      </article>
+      <section class="settings-group">
+        <h3>Alertes du commerce</h3>
+        <div class="note-list">
+          <button class="note-row" type="button">
+            <span class="note-icon warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 8 8-4 8 4-8 4-8-4Zm0 0v8l8 4 8-4V8"/></svg></span>
+            <span class="note-copy"><strong>Huile végétale</strong><small>Stock · 3 restants, sous le seuil</small></span>
+            <span class="note-badge warn">Seuil</span>
+          </button>
+          <button class="note-row" type="button">
+            <span class="note-icon warn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 10h18"/></svg></span>
+            <span class="note-copy"><strong>Session encore ouverte</strong><small>Caisse · la clôture n’est pas faite</small></span>
+            <span class="note-badge warn">Ouverte</span>
+          </button>
+          <button class="note-row" type="button">
+            <span class="note-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 10h18"/></svg></span>
+            <span class="note-copy"><strong>Échéance proche</strong><small>Abonnement · la formule arrive à terme</small></span>
+            <span class="note-badge">Bientôt</span>
+          </button>
+          <button class="note-row" type="button">
+            <span class="note-icon late"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0Z"/><path d="M4 20a8 8 0 0 1 16 0"/></svg></span>
+            <span class="note-copy"><strong>Marie K.</strong><small>Crédit · échéance dépassée</small></span>
+            <span class="note-badge late">En retard</span>
+          </button>
+        </div>
+      </section>
+    </main>
+    <main class="page sales-page" data-page="stock" hidden>
+      <header class="sales-header">
+        <div><p class="sales-kicker">Avant la rupture</p><h2 class="sales-title">Stock</h2></div>
+        <button class="new-sale" type="button" aria-label="Enregistrer une réception"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Réception</button>
+      </header>
+      <section class="sales-summary" aria-label="Résumé du stock">
+        <article class="summary-main summary-alert"><span class="summary-label">Sous le seuil</span><strong class="summary-value">1 article</strong><span class="summary-hint">Huile végétale · 3 restants</span></article>
+        <article class="summary-side"><span class="summary-label">Péremption</span><strong class="summary-value">1 lot</strong><span class="summary-hint">À surveiller</span></article>
+      </section>
+      <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" aria-label="Rechercher un article" placeholder="Rechercher un article..."></label>
+      <div class="stock-filters" role="tablist" aria-label="Filtrer le stock">
+        <button class="chip active" type="button">Tous</button>
+        <button class="chip" type="button">Seuil</button>
+        <button class="chip" type="button">Péremption</button>
+      </div>
+      <div class="list-heading"><h3>Articles</h3><span>4 suivis</span></div>
+      <section class="sales-list" aria-label="Niveaux de stock">
+        <article class="sale-row"><span class="sale-logo">HV</span><span class="sale-info"><strong>Huile végétale</strong><small>Seuil 10 · flacon 1 L</small></span><span class="sale-price"><strong>3</strong><small class="credit">Sous le seuil</small></span></article>
+        <article class="sale-row"><span class="sale-logo">PA</span><span class="sale-info"><strong>Paracétamol 500 mg</strong><small>Lot proche de la péremption</small></span><span class="sale-price"><strong>18</strong><small class="expiry">Péremption</small></span></article>
+        <article class="sale-row"><span class="sale-logo">SP</span><span class="sale-info"><strong>Sérum physiologique</strong><small>Seuil 12 · dosettes</small></span><span class="sale-price"><strong>48</strong><small>En stock</small></span></article>
+        <article class="sale-row"><span class="sale-logo">CS</span><span class="sale-info"><strong>Compresses stériles</strong><small>Seuil 10 · boîte</small></span><span class="sale-price"><strong>24</strong><small>En stock</small></span></article>
+      </section>
+    </main>
+    <nav aria-label="Navigation principale">
+      <button class="nav active" type="button" data-target="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 11 8-7 8 7v9H4v-9Z"/><path d="M9 20v-6h6v6"/></svg><span>Accueil</span></button>
+      <button class="nav" type="button" aria-label="Ventes" data-target="sales"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12l2 4-2 3H6L4 7l2-4Z"/><path d="M6 10v10h12V10M9 14h6"/></svg><span>Ventes</span></button>
+      <button class="nav" type="button" aria-label="Stock" data-target="stock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="m4 7 8 4 8-4v10l-8 4-8-4V7Z"/><path d="M12 11v10"/></svg><span>Stock</span></button>
+      <button class="nav" type="button" aria-label="Paramètres" data-target="settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 13.5v-3l-2-.7a7 7 0 0 0-.8-1.8l.9-1.9-2.2-2.2-1.9.9a7 7 0 0 0-1.8-.8L10.5 2h-3l-.7 2a7 7 0 0 0-1.8.8l-1.9-.9L.9 6.1 1.8 8a7 7 0 0 0-.8 1.8l-2 .7v3l2 .7a7 7 0 0 0 .8 1.8l-.9 1.9 2.2 2.2 1.9-.9a7 7 0 0 0 1.8.8l.7 2h3l.7-2a7 7 0 0 0 1.8-.8l1.9.9 2.2-2.2-.9-1.9a7 7 0 0 0 .8-1.8l2-.7Z" transform="translate(2.5) scale(.79)"/></svg><span>Paramètres</span></button>
+    </nav>
+    <div class="home-line"></div>
+  </section>
+  </figure>
+  <figure>
+    <figcaption>Ventes — à valider</figcaption>
+    <section class="phone" aria-label="Ventes KubaGest">
+      <main class="page sales-page">
+        <header class="sales-header">
+          <div><h2 class="sales-title">Ventes</h2></div>
+          <button class="journal-link" type="button">Journal</button>
+        </header>
+        <p class="counter-lead">Le panier, le paiement et le reçu restent dans le même geste.</p>
+        <label class="search"><svg viewBox="0 0 24 24" fill="none" stroke="#111" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4 4"/></svg><input type="search" aria-label="Rechercher un article" placeholder="Nom, code-barres ou conditionnement"></label>
+        <div class="list-heading"><h3>Panier</h3><span>2 articles</span></div>
+        <section class="cart-list" aria-label="Articles du panier">
+          <article class="cart-row">
+            <span class="sale-logo">PA</span>
+            <span class="sale-info">
+              <strong>Paracétamol 500 mg</strong>
+              <small>Boîte · 4 000 FC</small>
+              <span class="qty"><button type="button" aria-label="Diminuer la quantité">−</button><strong>2</strong><button type="button" aria-label="Augmenter la quantité">+</button></span>
+            </span>
+            <span class="line-price"><strong>7 500 FC</strong><small>Remise 500</small></span>
+          </article>
+          <article class="cart-row">
+            <span class="sale-logo">SP</span>
+            <span class="sale-info">
+              <strong>Sérum physiologique</strong>
+              <small>Flacon · 3 500 FC</small>
+              <span class="qty"><button type="button" aria-label="Diminuer la quantité">−</button><strong>1</strong><button type="button" aria-label="Augmenter la quantité">+</button></span>
+            </span>
+            <span class="line-price"><strong>3 500 FC</strong><small>Sans remise</small></span>
+          </article>
+        </section>
+        <h3 class="pay-title">Encaissement</h3>
+        <div class="pay-methods" role="group" aria-label="Moyen de paiement">
+          <button class="pay-chip active" type="button">Espèces</button>
+          <button class="pay-chip" type="button">Mobile Money</button>
+          <button class="pay-chip" type="button">Crédit client</button>
+        </div>
+        <label class="tender-input">Montant remis par le client
+          <input class="received" inputmode="numeric" value="15 000" aria-label="Montant remis par le client">
+        </label>
+        <div class="tender change"><span class="change-label">À rendre</span><strong class="change-value">4 000 FC</strong></div>
+        <div class="credit-panel" hidden>
+          <div class="credit-head"><strong>Vente à crédit</strong><button class="credit-link" type="button">Carnet de crédit</button></div>
+          <div class="credit-client">
+            <span class="sale-logo">MK</span>
+            <span class="sale-info"><strong>Marie Kabongo</strong><small>+243 810 000 001</small></span>
+            <button class="credit-change" type="button">Changer</button>
+          </div>
+          <p class="credit-note">Déjà dû 15 000 FC · disponible 35 000 FC</p>
+          <button class="credit-due" type="button"><span>Échéance</span><strong>26/11/2026</strong><em>Modifier</em></button>
+          <p class="credit-after">Après cette vente, Marie devra 26 000 FC.</p>
+        </div>
+        <div class="checkout-bar">
+          <div><small>Total du panier</small><strong>11 000 FC</strong></div>
+          <button type="button">Encaisser</button>
+        </div>
+      </main>
+      <nav aria-label="Navigation principale">
+        <button class="nav" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 11 8-7 8 7v9H4v-9Z"/><path d="M9 20v-6h6v6"/></svg><span>Accueil</span></button>
+        <button class="nav active" type="button" aria-label="Ventes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 3h12l2 4-2 3H6L4 7l2-4Z"/><path d="M6 10v10h12V10M9 14h6"/></svg><span>Ventes</span></button>
+        <button class="nav" type="button" aria-label="Stock"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m4 7 8-4 8 4-8 4-8-4Z"/><path d="m4 7 8 4 8-4v10l-8 4-8-4V7Z"/><path d="M12 11v10"/></svg><span>Stock</span></button>
+        <button class="nav" type="button" aria-label="Paramètres"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19 13.5v-3l-2-.7a7 7 0 0 0-.8-1.8l.9-1.9-2.2-2.2-1.9.9a7 7 0 0 0-1.8-.8L10.5 2h-3l-.7 2a7 7 0 0 0-1.8.8l-1.9-.9L.9 6.1 1.8 8a7 7 0 0 0-.8 1.8l-2 .7v3l2 .7a7 7 0 0 0 .8 1.8l-.9 1.9 2.2 2.2 1.9-.9a7 7 0 0 0 1.8.8l.7 2h3l.7-2a7 7 0 0 0 1.8-.8l1.9.9 2.2-2.2-.9-1.9a7 7 0 0 0 .8-1.8l2-.7Z" transform="translate(2.5) scale(.79)"/></svg><span>Paramètres</span></button>
+      </nav>
+      <div class="home-line"></div>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Accueil</figcaption>
+    <section class="phone" aria-label="Accueil KubaGest">
+      <main class="page welcome-page">
+        <header class="welcome-top">
+          <div class="brand"><span class="mark" aria-hidden="true">K</span><strong>KubaGest<span>.</span></strong></div>
+          <div class="welcome-actions">
+            <button class="skip" type="button">Passer</button>
+            <button class="circle" type="button" aria-label="Aide">?</button>
+          </div>
+        </header>
+        <div class="welcome-track" aria-label="Présentation en trois étapes">
+          <article class="welcome-slide">
+            <div class="welcome-stage">
+              <div class="scene">
+                <svg viewBox="0 0 210 156" fill="none" aria-hidden="true"><ellipse cx="105" cy="142" rx="62" ry="7" fill="#d7ebe3"/><rect x="48" y="62" width="114" height="72" rx="8" fill="#fff"/><path d="M40 62h130v10c-8 9-16 9-24 0-8 9-16 9-24 0-8 9-16 9-24 0-8 9-16 9-24 0-8 9-10 9-10 0V62Z" fill="#007a55"/><rect x="62" y="86" width="22" height="18" rx="3" fill="#e5f4ec"/><rect x="94" y="86" width="22" height="18" rx="3" fill="#e5f4ec"/><rect x="126" y="98" width="20" height="36" rx="3" fill="#007a55"/></svg>
+                <span class="float-badge chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 16 5-5 4 3 7-8"/><path d="M14 6h6v6"/></svg></span>
+              </div>
+              <div class="status-card"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span><span><strong>Le commerce avance</strong><small>Vous gardez le contrôle</small></span></div>
+            </div>
+            <div class="welcome-copy"><p class="welcome-kicker">Bienvenue chez KubaGest</p><h1>Gérer votre commerce, l’esprit tranquille.</h1><p>Boutique, alimentation ou pharmacie : une façon plus simple de prendre soin de votre activité.</p></div>
+          </article>
+          <article class="welcome-slide">
+            <div class="welcome-stage">
+              <div class="scene">
+                <svg viewBox="0 0 210 156" fill="none" aria-hidden="true"><ellipse cx="105" cy="142" rx="62" ry="7" fill="#d7ebe3"/><rect x="38" y="46" width="134" height="88" rx="16" fill="#fff"/><rect x="52" y="62" width="34" height="28" rx="6" fill="#e5f4ec"/><rect x="94" y="62" width="34" height="28" rx="6" fill="#fff4e5"/><rect x="136" y="62" width="22" height="28" rx="6" fill="#e5f4ec"/><rect x="52" y="98" width="48" height="18" rx="6" fill="#e5f4ec"/><rect x="108" y="98" width="50" height="18" rx="6" fill="#e5f4ec"/></svg>
+                <span class="float-badge box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 8 8-4 8 4-8 4-8-4Zm0 0v8l8 4 8-4V8"/></svg></span>
+              </div>
+              <div class="status-card"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span><span><strong>Le stock reste lisible</strong><small>Lots, seuils et péremptions</small></span></div>
+            </div>
+            <div class="welcome-copy"><p class="welcome-kicker">Une gestion plus claire</p><h1>Chaque article, à sa place.</h1><p>Produits, conditionnements, lots et péremptions : donnez de la clarté à votre gestion.</p></div>
+          </article>
+          <article class="welcome-slide">
+            <div class="welcome-stage">
+              <div class="scene">
+                <svg viewBox="0 0 210 156" fill="none" aria-hidden="true"><ellipse cx="105" cy="142" rx="62" ry="7" fill="#d7ebe3"/><rect x="28" y="78" width="86" height="54" rx="8" fill="#fff"/><rect x="36" y="86" width="70" height="32" rx="4" fill="#e5f4ec"/><rect x="130" y="52" width="48" height="80" rx="10" fill="#fff"/><rect x="138" y="64" width="32" height="48" rx="4" fill="#e5f4ec"/><circle cx="154" cy="122" r="3" fill="#007a55"/></svg>
+                <span class="float-badge link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></span>
+              </div>
+              <div class="status-card"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span><span><strong>Le même espace</strong><small>Mobile et ordinateur</small></span></div>
+            </div>
+            <div class="welcome-copy"><p class="welcome-kicker">Votre espace vous suit</p><h1>Gardez le lien avec votre commerce.</h1><p>Retrouvez votre espace sur mobile et ordinateur, avec les mêmes comptes et les mêmes données.</p></div>
+          </article>
+        </div>
+        <footer class="welcome-footer">
+          <div class="dots" role="tablist" aria-label="Étapes de présentation">
+            <button type="button" aria-current="true" aria-label="Étape 1"></button>
+            <button type="button" aria-label="Étape 2"></button>
+            <button type="button" aria-label="Étape 3"></button>
+          </div>
+          <button class="start" type="button" data-next>Commencer →</button>
+          <button class="login-link" type="button">Se connecter</button>
+        </footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>À vous de jouer</figcaption>
+    <section class="phone" aria-label="Créer ou rejoindre un commerce">
+      <main class="choice-page">
+        <header class="welcome-top">
+          <div class="brand"><span class="mark" aria-hidden="true">K</span><strong>KubaGest<span>.</span></strong></div>
+          <button class="circle" type="button" aria-label="Aide">?</button>
+        </header>
+        <div class="welcome-stage">
+          <div class="scene">
+            <svg viewBox="0 0 210 156" fill="none" aria-hidden="true"><ellipse cx="105" cy="142" rx="62" ry="7" fill="#d7ebe3"/><rect x="48" y="62" width="114" height="72" rx="8" fill="#fff"/><path d="M40 62h130v10c-8 9-16 9-24 0-8 9-16 9-24 0-8 9-16 9-24 0-8 9-16 9-24 0-8 9-10 9-10 0V62Z" fill="#007a55"/><rect x="62" y="86" width="22" height="18" rx="3" fill="#e5f4ec"/><rect x="94" y="86" width="22" height="18" rx="3" fill="#e5f4ec"/><rect x="126" y="98" width="20" height="36" rx="3" fill="#007a55"/></svg>
+            <span class="float-badge chart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m4 16 5-5 4 3 7-8"/><path d="M14 6h6v6"/></svg></span>
+          </div>
+          <div class="status-card"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span><span><strong>Le commerce avance</strong><small>Vous gardez le contrôle</small></span></div>
+        </div>
+        <div class="welcome-copy">
+          <p class="welcome-kicker">À vous de jouer</p>
+          <h1>Un nouvel espace. Votre prochain chapitre.</h1>
+          <p>Créez votre commerce ou connectez-vous à un espace existant.</p>
+        </div>
+        <div class="trust">
+          <div class="trust-row"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></span><span>Compte personnel</span><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></div>
+          <div class="trust-row"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="12" height="9" rx="1.5"/><rect x="9" y="10" width="12" height="9" rx="1.5"/></svg></span><span>Mobile et ordinateur synchronisés</span><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></div>
+          <div class="trust-row"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 19a7 7 0 0 1 14 0"/></svg></span><span>Un accompagnement en français</span><svg class="check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></div>
+        </div>
+        <footer class="welcome-footer">
+          <button class="start" type="button">Créer mon commerce →</button>
+          <button class="login-link" type="button">Se connecter</button>
+          <p class="choice-note has-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/></svg>Un espace à vous. Des données bien gardées.</p>
+        </footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Création · 1</figcaption>
+    <section class="phone" aria-label="Choisir l’activité">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Nouveau commerce</h2></header>
+        <div class="progress"><div class="progress-copy"><strong>CRÉATION DU COMMERCE</strong><div class="bars" aria-hidden="true"><i class="on"></i><i></i><i></i></div></div><small>Étape 1 sur 3</small></div>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre activité</p><h1>À chaque commerce, son espace.</h1><p>Choisissez votre activité. KubaGest s’adaptera aux besoins de votre établissement.</p></div>
+        <div style="height:16px"></div>
+        <button class="option" type="button"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v9H4z"/><path d="M3 10l2-5h14l2 5"/></svg></span><span><strong>Boutique</strong><small>Vos articles, vos ventes et votre caisse.</small></span><span class="radio"></span></button>
+        <button class="option" type="button"><span class="trust-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/><path d="M3 5h2l2 10h11l2-7H7"/></svg></span><span><strong>Alimentation</strong><small>Le quotidien et les produits périssables.</small></span><span class="radio"></span></button>
+        <button class="option" type="button"><span class="trust-icon" style="background:#f3e8ff;color:#6d28d9"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 4h8v4a4 4 0 0 1-8 0V4Z"/><path d="M12 12v8M9 16h6"/></svg></span><span><strong>Pharmacie</strong><small>Les médicaments, les lots et les péremptions.</small></span><span class="radio"></span></button>
+        <footer class="welcome-footer"><button class="start" type="button">Continuer →</button><button class="login-link" type="button">J’ai déjà un compte</button></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Création · 2</figcaption>
+    <section class="phone" aria-label="Nommer le commerce">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Nouveau commerce</h2></header>
+        <div class="progress"><div class="progress-copy"><strong>CRÉATION DU COMMERCE</strong><div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i></div></div><small>Étape 2 sur 3</small></div>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre commerce</p><h1>Donnons-lui un nom.</h1><p>Quelques informations pour préparer votre espace de travail.</p></div>
+        <div style="height:16px"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v9H4z"/><path d="M3 10l2-5h14l2 5"/></svg>Nom du commerce *</div>
+        <p class="field-label">Devise de référence</p>
+        <div class="currencies"><button class="currency on" type="button">Franc congolais · CDF</button><button class="currency" type="button">Dollar · USD</button></div>
+        <p class="hint">La devise de référence est fixée à l’activation. Elle ne limite pas les moyens de paiement prévus pour vos ventes.</p>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s7-6 7-11a7 7 0 1 0-14 0c0 5 7 11 7 11Z"/><circle cx="12" cy="10" r="2"/></svg>Adresse (facultatif)</div>
+        <footer class="welcome-footer"><button class="start" type="button">Continuer →</button></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Création · 3</figcaption>
+    <section class="phone" aria-label="Créer le compte">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Nouveau commerce</h2></header>
+        <div class="progress"><div class="progress-copy"><strong>CRÉATION DU COMMERCE</strong><div class="bars" aria-hidden="true"><i class="on"></i><i class="on"></i><i class="on"></i></div></div><small>Étape 3 sur 3</small></div>
+        <div class="welcome-copy"><p class="welcome-kicker">Vous</p><h1>Et vous, faisons connaissance.</h1><p>Votre prénom s’affichera à chaque ouverture. Ces identifiants servent sur mobile et sur ordinateur.</p></div>
+        <div style="height:16px"></div>
+        <div class="identity">
+          <button class="photo-pick" type="button" aria-label="Ajouter une photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 8h3l2-2h6l2 2h3v11H4V8Z"/><circle cx="12" cy="13" r="3"/></svg><span class="photo-add" aria-hidden="true">+</span></button>
+          <span><strong>Votre photo</strong><small>Facultatif. Elle apparaît sur l’accueil.</small></span>
+        </div>
+        <div class="name-row">
+          <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="3"/><path d="M5 19a7 7 0 0 1 14 0"/></svg>Prénom *</div>
+          <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg>Nom *</div>
+        </div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 3h4l1 4-2 1a11 11 0 0 0 6 6l1-2 4 1v4a2 2 0 0 1-2 2A16 16 0 0 1 5 5a2 2 0 0 1 2-2Z"/></svg>Téléphone (facultatif)</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>Adresse email *</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Mot de passe *</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Confirmer le mot de passe</div>
+        <footer class="welcome-footer"><button class="start" type="button">Créer mon commerce</button><p class="choice-note">Votre compte sera créé à la validation.</p></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Commerce créé</figcaption>
+    <section class="phone" aria-label="Commerce créé">
+      <main class="create-page">
+        <header class="welcome-top">
+          <div class="brand"><span class="mark" aria-hidden="true">K</span><strong>KubaGest<span>.</span></strong></div>
+        </header>
+        <div class="success-stage">
+          <span class="success-seal" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span>
+          <div class="status-card"><span class="check"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="m5 12 5 5L20 7"/></svg></span><span><strong>Espace ouvert</strong><small>Votre compte est actif</small></span></div>
+        </div>
+        <div class="welcome-copy">
+          <p class="welcome-kicker">C’est prêt</p>
+          <h1>Votre commerce est créé.</h1>
+          <p>Retrouvez-le dans votre espace, sur ce téléphone et sur l’ordinateur.</p>
+        </div>
+        <div class="success-recap">
+          <span class="trust-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 10h16v9H4z"/><path d="M3 10l2-5h14l2 5"/></svg></span>
+          <span class="copy"><strong>Boutique Lumière</strong><small>Alimentation · CDF</small><small>hector@kubagest.cd</small></span>
+          <em>Ouvert</em>
+        </div>
+        <footer class="welcome-footer">
+          <button class="start" type="button">Accéder à mon commerce →</button>
+          <p class="choice-note has-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 3 5 6v6c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V6l-7-3Z"/></svg>Un espace à vous. Des données bien gardées.</p>
+        </footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Connexion</figcaption>
+    <section class="phone" aria-label="Connexion">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Connexion</h2></header>
+        <div class="login-hero">
+          <div class="login-hero-top">
+            <span class="lock-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0"/></svg></span>
+            <span class="login-badge">Connexion sécurisée</span>
+          </div>
+          <p class="welcome-kicker">Votre espace vous attend</p>
+          <h1>Heureux de vous retrouver.</h1>
+          <p>Connectez-vous avec le compte de votre commerce.</p>
+        </div>
+        <p class="login-kicker">Vos identifiants</p>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>Adresse email</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Mot de passe</div>
+        <div class="login-options">
+          <label class="remember"><input type="checkbox">Mémoriser les identifiants</label>
+          <button class="password-link" type="button">Mot de passe oublié<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 6 6 6-6 6"/></svg></button>
+        </div>
+        <footer class="welcome-footer">
+          <button class="start" type="button">Se connecter</button>
+          <p class="login-split">Nouveau chez KubaGest ?</p>
+          <button class="login-link" type="button">Créer mon commerce</button>
+          <p class="shield-note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3 5 6v6c0 4.5 2.8 7.4 7 9 4.2-1.6 7-4.5 7-9V6l-7-3Z"/></svg>Votre mot de passe reste confidentiel.</p>
+        </footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Mot de passe oublié</figcaption>
+    <section class="phone" aria-label="Mot de passe oublié">
+      <main class="create-page is-short">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Mot de passe oublié</h2></header>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre accès</p><h1>Indiquez votre email.</h1><p>Nous vous enverrons un code pour choisir un nouveau mot de passe.</p></div>
+        <div style="height:16px"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m4 7 8 6 8-6"/></svg>Adresse email</div>
+        <footer class="welcome-footer"><button class="start" type="button">Envoyer le code</button><p class="choice-note">Saisissez le code reçu, puis choisissez le mot de passe qui remplace l’ancien.</p></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Code reçu</figcaption>
+    <section class="phone" aria-label="Code reçu">
+      <main class="create-page is-short">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Code reçu</h2></header>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre accès</p><h1>Saisissez le code.</h1><p>Nous l’avons envoyé à l’adresse indiquée.</p></div>
+        <div style="height:16px"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>Code à 6 chiffres</div>
+        <footer class="welcome-footer"><button class="start" type="button">Continuer</button><p class="choice-note">Le code est valable 15 minutes.</p></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Nouveau mot de passe</figcaption>
+    <section class="phone" aria-label="Nouveau mot de passe">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Mot de passe</h2></header>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre compte</p><h1>Choisissez un nouveau mot de passe.</h1><p>Il remplace l’ancien pour ce compte.</p></div>
+        <div style="height:16px"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Nouveau mot de passe</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Confirmer le mot de passe</div>
+        <p class="hint">Entre 8 et 72 caractères.</p>
+        <footer class="welcome-footer"><button class="start" type="button">Enregistrer</button><p class="choice-note">L’ancien mot de passe ne sera plus accepté.</p></footer>
+      </main>
+    </section>
+  </figure>
+  <figure>
+    <figcaption>Modifier le mot de passe</figcaption>
+    <section class="phone" aria-label="Modifier le mot de passe">
+      <main class="create-page">
+        <header class="create-head"><button class="back" type="button" aria-label="Retour">←</button><h2>Mot de passe</h2></header>
+        <div class="welcome-copy"><p class="welcome-kicker">Votre compte</p><h1>Changez votre mot de passe.</h1><p>Indiquez le mot de passe actuel, puis celui qui le remplace.</p></div>
+        <div style="height:16px"></div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Mot de passe actuel</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Nouveau mot de passe</div>
+        <div class="field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>Confirmer le mot de passe</div>
+        <p class="hint">Entre 8 et 72 caractères.</p>
+        <footer class="welcome-footer"><button class="start" type="button">Enregistrer</button><p class="choice-note">L’ancien mot de passe ne sera plus accepté.</p></footer>
+      </main>
+    </section>
+  </figure>
+  </div>
+  <script>
+    const track=document.querySelector('.welcome-track');
+    const actions=['Commencer','Continuer','Continuer'];
+    let slide=0;
+    let drag=null;
+    let auto=null;
+    function arm(){
+      clearTimeout(auto);
+      auto=setTimeout(()=>goTo((slide+1)%actions.length),5000);
+    }
+    function sync(index){
+      slide=index;
+      document.querySelector('[data-next]').textContent=actions[slide]+' →';
+      document.querySelectorAll('.dots button').forEach((dot,index)=>{
+        if(index===slide) dot.setAttribute('aria-current','true');
+        else dot.removeAttribute('aria-current');
+      });
+    }
+    function goTo(index){
+      const next=Math.max(0,Math.min(actions.length-1,index));
+      track.scrollTo({left:next*track.clientWidth,behavior:'smooth'});
+      sync(next);
+      if(!drag) arm();
+    }
+    track.addEventListener('scroll',()=>{
+      if(drag) return;
+      const index=Math.round(track.scrollLeft/Math.max(track.clientWidth,1));
+      if(index!==slide) sync(index);
+    },{passive:true});
+    track.addEventListener('pointerdown',(event)=>{
+      if(event.button!==0) return;
+      clearTimeout(auto);
+      drag={id:event.pointerId,x:event.clientX,left:track.scrollLeft};
+      track.classList.add('is-dragging');
+      track.setPointerCapture(event.pointerId);
+    });
+    track.addEventListener('pointermove',(event)=>{
+      if(!drag||event.pointerId!==drag.id) return;
+      track.scrollLeft=drag.left-(event.clientX-drag.x);
+    });
+    function endDrag(event){
+      if(!drag||event.pointerId!==drag.id) return;
+      drag=null;
+      track.classList.remove('is-dragging');
+      goTo(Math.round(track.scrollLeft/Math.max(track.clientWidth,1)));
+    }
+    track.addEventListener('pointerup',endDrag);
+    track.addEventListener('pointercancel',endDrag);
+    const app=document.querySelector('.app-phone');
+    function showPage(target){
+      app.querySelectorAll('.page').forEach(page=>page.hidden=page.dataset.page!==target);
+      const current=app.querySelector(`[data-page="${target}"]`);
+      if(current) current.scrollTop=0;
+      app.querySelectorAll('.nav').forEach(item=>item.classList.toggle('active',item.dataset.target===target));
+    }
+    document.querySelector('[data-next]').addEventListener('click',()=>{
+      if(slide<actions.length-1) goTo(slide+1);
+    });
+    document.querySelectorAll('.dots button').forEach((dot,index)=>dot.addEventListener('click',()=>goTo(index)));
+    arm();
+    app.querySelectorAll('.nav').forEach(button=>button.addEventListener('click',()=>{
+      const target=button.dataset.target;
+      if(target) showPage(target);
+      app.querySelectorAll('.nav').forEach(item=>item.classList.remove('active'));
+      button.classList.add('active');
+    }));
+    document.querySelectorAll('.sales-page').forEach(page=>{
+      const input=page.querySelector('.received');
+      const out=page.querySelector('.change-value');
+      const label=page.querySelector('.change-label');
+      if(!input||!out||!label) return;
+      const render=()=>{
+        const digits=input.value.replace(/\D/g,'');
+        if(!digits){label.textContent='À rendre';out.textContent='—';return;}
+        const diff=Number(digits)-11000;
+        const grouped=Math.abs(diff).toString().replace(/\B(?=(\d{3})+(?!\d))/g,' ');
+        label.textContent=diff<0?'Il manque':'À rendre';
+        out.textContent=grouped+' FC';
+      };
+      input.addEventListener('input',render);
+
+      // Moyen de paiement : espèces, mobile money ou crédit client.
+      const chips=[...page.querySelectorAll('.pay-chip')];
+      const tender=page.querySelector('.tender-input');
+      const change=page.querySelector('.tender.change');
+      const credit=page.querySelector('.credit-panel');
+      const renderMethod=(name)=>{
+        chips.forEach(chip=>chip.classList.toggle('active',chip.textContent.trim()===name));
+        if(tender) tender.hidden=name!=='Espèces';
+        if(change) change.hidden=name!=='Espèces';
+        if(credit) credit.hidden=name!=='Crédit client';
+      };
+      chips.forEach(chip=>chip.addEventListener('click',()=>renderMethod(chip.textContent.trim())));
+      const changeCustomer=page.querySelector('.credit-change');
+      if(changeCustomer){
+        const people=[
+          {initials:'MK',name:'Marie Kabongo',phone:'+243 810 000 001',due:15000,limit:50000},
+          {initials:'JT',name:'Joseph Tshibanda',phone:'+243 820 000 002',due:32000,limit:40000},
+        ];
+        let index=0;
+        changeCustomer.addEventListener('click',()=>{
+          index=(index+1)%people.length;
+          const person=people[index];
+          const card=page.querySelector('.credit-client');
+          card.querySelector('.sale-logo').textContent=person.initials;
+          card.querySelector('strong').textContent=person.name;
+          card.querySelector('small').textContent=person.phone;
+          page.querySelector('.credit-note').textContent=
+            `Déjà dû ${person.due.toLocaleString('fr-FR').replace(/\u202f/g,' ')} FC · disponible ${(person.limit-person.due).toLocaleString('fr-FR').replace(/\u202f/g,' ')} FC`;
+          page.querySelector('.credit-after').textContent=
+            `Après cette vente, ${person.name.split(' ')[0]} devra ${(person.due+11000).toLocaleString('fr-FR').replace(/\u202f/g,' ')} FC.`;
+        });
+      }
+    });
+    document.querySelectorAll('[data-open]').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.open)));
+    document.querySelectorAll('[data-back]').forEach(button=>button.addEventListener('click',()=>showPage(button.dataset.back)));
+    // La photo de profil se choisit depuis l'appareil : la maquette montre
+    // l'aperçu rond et le badge de modification, comme l'application.
+    document.querySelectorAll('.photo-pick').forEach(button=>{
+      const input=document.createElement('input');
+      input.type='file';
+      input.accept='image/*';
+      input.hidden=true;
+      button.insertAdjacentElement('afterend',input);
+      button.addEventListener('click',()=>input.click());
+      input.addEventListener('change',()=>{
+        const file=input.files&&input.files[0];
+        if(!file) return;
+        const image=document.createElement('img');
+        image.alt='Photo de profil choisie';
+        image.src=URL.createObjectURL(file);
+        const badge=document.createElement('span');
+        badge.className='photo-add';
+        badge.setAttribute('aria-hidden','true');
+        badge.textContent='✓';
+        button.replaceChildren(image,badge);
+        button.setAttribute('aria-label','Changer la photo');
+        const copy=button.parentElement.querySelector('small');
+        if(copy) copy.textContent='Touchez pour la changer ou la retirer.';
+      });
+    });
+  </script>
+</body>
+</html>
