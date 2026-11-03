@@ -10,9 +10,12 @@ services:
       DB_TYPE: postgres
       DB_SYNCHRONIZE: 'false'
       DATABASE_URL: postgresql://${POSTGRES_USER:-kubagest}:${POSTGRES_PASSWORD:-kubagest}@db:5432/${POSTGRES_DB:-kubagest}
+      AVATAR_STORAGE_DIR: /app/data/avatars
       SWAGGER_ENABLED: 'false'
     ports:
       - '${PORT:-3000}:3000'
+    volumes:
+      - avatar-data:/app/data/avatars
     depends_on:
       db:
         condition: service_healthy
@@ -41,3 +44,4 @@ services:
 
 volumes:
   db-data:
+  avatar-data:

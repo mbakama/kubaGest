@@ -10,3 +10,5 @@ Gestion commerciale pour boutiques, alimentations et pharmacies.
 Les deux clients partagent les données et les règles du backend. Le MVP reste connecté.
 
 Consulter le [cahier des charges](KubaGest_Cahier_des_charges_V3.md), le [schéma proposé](docs/database/SCHEMA.md) et le [guide mobile](mobile/README.md).
+
+Déploiement de l’API en production (VPS Contabo, Docker, Nginx) : [backend/DEPLOIEMENT-CONTABO.md](backend/DEPLOIEMENT-CONTABO.md).

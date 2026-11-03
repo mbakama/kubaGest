@@ -310,6 +310,8 @@ L'API est exposée sur `http://localhost:3000` (ou `$PORT`) et PostgreSQL sur
 `5432`. Les identifiants de la base se configurent avec `POSTGRES_USER`,
 `POSTGRES_PASSWORD`, `POSTGRES_DB` et `POSTGRES_PORT`.
 
+Production sur VPS (Contabo) : voir **[DEPLOIEMENT-CONTABO.md](DEPLOIEMENT-CONTABO.md)** (`docker-compose.prod.yml`, Nginx, HTTPS).
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

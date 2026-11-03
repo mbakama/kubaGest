@@ -1,0 +1,9 @@
+# Production VPS (Contabo, etc.) : API en local uniquement, PostgreSQL non exposé.
+# Usage : docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+services:
+  api:
+    ports:
+      - '127.0.0.1:3000:3000'
+
+  db:
+    ports: []
