@@ -1,0 +1,225 @@
+:host button:not(:disabled) {
+  cursor: pointer;
+}
+
+.users-page-title {
+  margin: 0;
+  font-size: clamp(1.75rem, 2.25vw, 2.25rem);
+  line-height: 1.12;
+  text-wrap: balance;
+}
+
+.users-page-subtitle {
+  margin: 0.375rem 0 0;
+  max-width: 42rem;
+  font-size: 0.9375rem;
+  line-height: 1.5;
+}
+
+:host button:disabled {
+  cursor: not-allowed;
+}
+
+:host ::ng-deep .utilisateurs-dialog button:not(:disabled) {
+  cursor: pointer;
+}
+
+.users-edit-dialog__section-title {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
+.users-edit-dialog__section + .users-edit-dialog__section {
+  padding-top: 0.25rem;
+  border-top: 1px solid color-mix(in srgb, var(--color-outline-variant) 45%, transparent);
+}
+
+:host ::ng-deep .users-edit-dialog.p-dialog .p-dialog-content {
+  padding-top: 0.25rem;
+}
+
+:host ::ng-deep .users-phone-group.p-inputgroup {
+  height: 2.5rem;
+  min-height: 2.5rem;
+  overflow: hidden;
+  border: 1px solid var(--p-inputtext-border-color);
+  border-radius: var(--p-inputtext-border-radius);
+  background: var(--p-inputtext-background);
+}
+
+:host ::ng-deep .users-phone-group .p-inputgroupaddon {
+  height: 100%;
+  min-height: 0;
+  align-self: stretch;
+  border: 0;
+  border-right: 1px solid var(--p-inputtext-border-color);
+}
+
+:host ::ng-deep .users-phone-group input.p-inputtext {
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+:host ::ng-deep .users-phone-group--invalid.p-inputgroup {
+  border-color: var(--p-inputtext-invalid-border-color);
+}
+
+:host ::ng-deep .users-role-select.p-select,
+:host ::ng-deep .users-role-select .p-select-dropdown,
+:host ::ng-deep .users-role-select .p-select-label {
+  cursor: pointer;
+}
+
+:host ::ng-deep .users-audit-card.p-card {
+  border: 1px solid color-mix(in srgb, var(--color-outline-variant) 35%, transparent);
+  background: var(--color-surface-container-lowest);
+  box-shadow: var(--p-card-shadow, 0 1px 3px rgb(0 0 0 / 0.06));
+}
+
+:host ::ng-deep .users-audit-card .p-card-header {
+  padding: 0.85rem 1rem 0.35rem;
+  border: 0;
+  background: transparent;
+}
+
+:host ::ng-deep .users-audit-card .p-card-body {
+  padding: 0.5rem 1rem 1rem;
+}
+
+:host ::ng-deep .users-audit-toolbar {
+  .p-datepicker,
+  .p-select,
+  .p-button {
+    height: 2rem;
+  }
+
+  .p-datepicker .p-datepicker-input {
+    width: 7.25rem;
+    font-size: 0.8125rem;
+    padding-block: 0.25rem;
+  }
+
+  .users-audit-actor-select.p-select {
+    width: min(12.5rem, 42vw);
+    height: 2rem;
+    align-items: center;
+  }
+
+  .p-button {
+    white-space: nowrap;
+  }
+}
+
+:host ::ng-deep .users-role-select.p-select {
+  height: 2.5rem;
+  align-items: center;
+}
+
+:host ::ng-deep .users-members-table.p-datatable,
+:host ::ng-deep .users-audit-table.p-datatable {
+  background: transparent;
+}
+
+:host ::ng-deep .users-members-table .p-datatable-table-container,
+:host ::ng-deep .users-audit-table .p-datatable-table-container {
+  background: transparent;
+}
+
+:host ::ng-deep .users-members-table .p-datatable-tbody > tr,
+:host ::ng-deep .users-audit-table .p-datatable-tbody > tr {
+  background: transparent;
+}
+
+:host ::ng-deep .users-members-table .p-datatable-tbody > tr.users-members-table-row--selected > td {
+  background: color-mix(in srgb, var(--color-primary) 8%, transparent);
+}
+
+:host ::ng-deep .users-members-table .p-datatable-thead > tr > th,
+:host ::ng-deep .users-audit-table .p-datatable-thead > tr > th {
+  background: var(--color-surface-container-low);
+  color: var(--color-on-surface-variant);
+  border-color: var(--color-outline-variant);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+:host ::ng-deep .users-members-table.p-datatable-striped .p-datatable-tbody > tr:nth-child(odd),
+:host ::ng-deep .users-audit-table.p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) {
+  background: color-mix(in oklab, var(--color-surface-container-high) 35%, transparent);
+}
+
+:host ::ng-deep .users-members-table .p-paginator,
+:host ::ng-deep .users-audit-table .p-paginator {
+  background: transparent;
+  color: var(--color-on-surface);
+  border-color: var(--color-outline-variant);
+}
+
+/* Mode nuit : tableau uni avec la carte (fond lowest), pas de bande d’en-tête claire */
+:host-context(html.dark) ::ng-deep .users-members-table.p-datatable {
+  .p-datatable-header,
+  .p-datatable-table-container,
+  .p-datatable-table {
+    background: transparent;
+  }
+
+  .p-datatable-thead > tr > th {
+    background: transparent;
+    color: var(--color-text-muted);
+    border-color: var(--color-outline-variant);
+    font-weight: 600;
+  }
+
+  .p-datatable-tbody > tr > td {
+    background: transparent;
+    border-color: var(--color-outline-variant);
+    color: var(--color-on-surface);
+  }
+
+  &.p-datatable-striped .p-datatable-tbody > tr:nth-child(odd) {
+    background: transparent;
+  }
+
+  .p-datatable-tbody > tr:hover > td {
+    background: var(--color-surface-container-low);
+  }
+
+  .p-paginator {
+    background: transparent;
+    border-color: var(--color-outline-variant);
+    color: var(--color-on-surface);
+  }
+
+  .p-paginator .p-paginator-page,
+  .p-paginator .p-paginator-first,
+  .p-paginator .p-paginator-prev,
+  .p-paginator .p-paginator-next,
+  .p-paginator .p-paginator-last {
+    color: var(--color-text-muted);
+  }
+
+  .p-paginator .p-paginator-page:not(.p-disabled):hover {
+    background: var(--color-surface-container-low);
+    color: var(--color-on-surface);
+  }
+
+  .p-paginator .p-paginator-page.p-paginator-page-selected {
+    background: var(--color-growth-green);
+    border-color: var(--color-growth-green);
+    color: var(--color-on-primary);
+  }
+
+  .p-paginator .p-select,
+  .p-paginator .p-select-label {
+    background: var(--color-surface-container-low);
+    border-color: var(--color-outline-variant);
+    color: var(--color-on-surface);
+  }
+}
+

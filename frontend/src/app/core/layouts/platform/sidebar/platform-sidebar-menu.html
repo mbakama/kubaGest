@@ -1,0 +1,50 @@
+<ul
+  class="platform-sidebar__list"
+  [class.platform-sidebar__list--sub]="depth() > 0"
+  [attr.data-depth]="depth()"
+>
+  @for (item of items(); track item.id) {
+    <li class="platform-sidebar__entry">
+      @if (item.isTitle) {
+        <span class="platform-sidebar__title">{{ item.label }}</span>
+      } @else if (hasChildren(item)) {
+        <button
+          type="button"
+          class="platform-sidebar__nav-item platform-sidebar__nav-item--parent"
+          [class.platform-sidebar__nav-item--expanded]="isExpanded(item.id)"
+          (click)="toggleGroup(item.id)"
+          [attr.aria-expanded]="isExpanded(item.id)"
+        >
+          @if (item.icon) {
+            <i class="fa-solid" [class]="item.icon" aria-hidden="true"></i>
+          }
+          <span>{{ item.label }}</span>
+          <i class="fa-solid fa-chevron-down platform-sidebar__chevron" aria-hidden="true"></i>
+        </button>
+        @if (isExpanded(item.id)) {
+          <app-platform-sidebar-menu [items]="item.children!" [depth]="depth() + 1" />
+        }
+      } @else if (item.link && !item.disabled) {
+        <a
+          class="platform-sidebar__nav-item"
+          [routerLink]="item.link"
+          routerLinkActive="platform-sidebar__nav-item--active"
+          [routerLinkActiveOptions]="{ exact: linkExact(item.link) }"
+        >
+          @if (item.icon) {
+            <i class="fa-solid" [class]="item.icon" aria-hidden="true"></i>
+          }
+          <span>{{ item.label }}</span>
+        </a>
+      } @else {
+        <span class="platform-sidebar__nav-item platform-sidebar__nav-item--disabled">
+          @if (item.icon) {
+            <i class="fa-solid" [class]="item.icon" aria-hidden="true"></i>
+          }
+          <span>{{ item.label }}</span>
+          <span class="platform-sidebar__soon">Bientôt</span>
+        </span>
+      }
+    </li>
+  }
+</ul>

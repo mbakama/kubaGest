@@ -1,0 +1,108 @@
+/// Styles de navigation latérale (plateforme + établissement).
+@mixin sidebar-menu($prefix) {
+  .#{$prefix}__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .#{$prefix}__list--sub {
+    padding: 0.25rem 0 0.35rem 0.65rem;
+    margin-left: 0.5rem;
+    border-left: 1px solid var(--color-sidebar-sub-border);
+  }
+
+  .#{$prefix}__title {
+    display: block;
+    padding: 0.5rem 0.75rem 0.25rem;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    opacity: 0.65;
+  }
+
+  .#{$prefix}__nav-item {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    border: 0;
+    padding: 0.62rem 0.75rem;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    font-size: 0.9rem;
+    text-decoration: none;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+    transition: background 0.15s ease;
+  }
+
+  .#{$prefix}__nav-item i:first-child {
+    width: 1.1rem;
+    text-align: center;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+
+  .#{$prefix}__nav-item--active {
+    background: var(--color-sidebar-nav-active);
+    box-shadow: inset 3px 0 0 var(--color-sidebar-nav-accent);
+  }
+
+  .#{$prefix}__nav-item--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .#{$prefix}__nav-item--parent .#{$prefix}__chevron {
+    margin-left: auto;
+    font-size: 0.7rem;
+    transition: transform 0.15s ease;
+  }
+
+  .#{$prefix}__nav-item--expanded .#{$prefix}__chevron {
+    transform: rotate(180deg);
+  }
+
+  .#{$prefix}__soon {
+    margin-left: auto;
+    font-size: 0.65rem;
+    padding: 0.12rem 0.35rem;
+    border-radius: 999px;
+    background: var(--color-sidebar-badge-bg);
+  }
+
+  :host-context(html.dark) {
+  .#{$prefix}__nav-item {
+    border-radius: 0.75rem;
+    color: #94a3b8;
+    padding: 0.62rem 0.875rem;
+
+    &:hover:not(.#{$prefix}__nav-item--disabled) {
+      background: #15273b;
+      color: #f1f5f9;
+    }
+  }
+
+  .#{$prefix}__nav-item--active {
+    background: #15273b;
+    box-shadow: none;
+    color: #f8fafc;
+
+    i:first-child {
+      color: #34d399;
+      opacity: 1;
+    }
+  }
+
+  .#{$prefix}__title {
+    color: #64748b;
+    opacity: 1;
+  }
+  }
+}

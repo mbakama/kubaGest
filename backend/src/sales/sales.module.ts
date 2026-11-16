@@ -7,6 +7,7 @@ import { CreditsModule } from '../credits/credits.module.js';
 import { DocumentCounter } from '../documents/document-counter.entity.js';
 import { DocumentNumberService } from '../documents/document-number.service.js';
 import { StockModule } from '../stock/stock.module.js';
+import { Warehouse } from '../tenants/entities/warehouse.entity.js';
 import { SaleItem } from './sale-item.entity.js';
 import { SalePayment } from './sale-payment.entity.js';
 import { Sale } from './sale.entity.js';
@@ -15,7 +16,13 @@ import { SalesService } from './sales.service.js';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Sale, SaleItem, SalePayment, DocumentCounter]),
+    TypeOrmModule.forFeature([
+      Sale,
+      SaleItem,
+      SalePayment,
+      DocumentCounter,
+      Warehouse,
+    ]),
     CatalogModule,
     CashModule,
     StockModule,

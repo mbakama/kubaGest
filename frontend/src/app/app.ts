@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
+import { AppDialogHostComponent } from './core/ui/dialog';
+import { AppLoadingHostComponent } from './core/ui/loading';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, AppDialogHostComponent, AppLoadingHostComponent],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })

@@ -1,0 +1,35 @@
+<aside class="tenant-sidebar" aria-label="Navigation établissement">
+  <div class="tenant-sidebar__logo">
+    <div class="tenant-sidebar__logo-mark" aria-hidden="true">K</div>
+    <div>
+      <strong>KubaGest</strong>
+      <small>Retail POS ERP</small>
+    </div>
+  </div>
+
+  <div class="tenant-sidebar__context" role="group" aria-label="Établissement actif">
+    <div class="tenant-sidebar__context-body">
+      <i class="fa-solid fa-store" aria-hidden="true"></i>
+      <div class="min-w-0">
+        <span class="tenant-sidebar__context-title">{{ tenantName() }}</span>
+        <span class="tenant-sidebar__context-sub">Espace commercial</span>
+      </div>
+    </div>
+    <i class="fa-solid fa-chevron-down tenant-sidebar__context-chevron" aria-hidden="true"></i>
+  </div>
+
+  <nav class="tenant-sidebar__nav" aria-label="Menu principal">
+    <app-tenant-sidebar-menu [items]="menuItems" />
+  </nav>
+
+  <div class="tenant-sidebar__footer">
+    <div class="tenant-sidebar__footer-card">
+      <div class="tenant-sidebar__footer-row">
+        <span>Mode Hybride P2P</span>
+        <span class="tenant-sidebar__footer-status" aria-hidden="true"></span>
+      </div>
+      <span class="tenant-sidebar__footer-title">Synchro locale active</span>
+      <span class="tenant-sidebar__footer-hint">Tolérance coupure web</span>
+    </div>
+  </div>
+</aside>

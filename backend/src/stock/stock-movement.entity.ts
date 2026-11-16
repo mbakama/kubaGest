@@ -7,6 +7,7 @@ import {
   Unique,
 } from 'typeorm';
 import { bigintNumber } from '../common/bigint.transformer.js';
+import { numericString } from '../common/decimal.js';
 import { StockBucket } from './stock-balance.entity.js';
 
 export enum StockMovementKind {
@@ -21,13 +22,12 @@ export enum StockMovementKind {
  * positif. Aucune mise à jour ni suppression après écriture.
  */
 @Entity({ name: 'stock_movements' })
-@Unique('uq_stock_movements_scope', ['tenantId', 'establishmentId', 'id'])
+@Unique('uq_stock_movements_scope', ['tenantId', 'id'])
 @Index('idx_stock_movements_product', [
   'tenantId',
-  'establishmentId',
-  'productId',
+  'warehouseId',
+  'physicalProductId',
 ])
-@Index('idx_stock_movements_sale', ['tenantId', 'saleItemId'])
 export class StockMovement {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -35,11 +35,14 @@ export class StockMovement {
   @Column({ name: 'tenant_id', type: 'uuid' })
   tenantId: string;
 
-  @Column({ name: 'establishment_id', type: 'uuid' })
-  establishmentId: string;
+  @Column({ name: 'warehouse_id', type: 'uuid' })
+  warehouseId: string;
 
-  @Column({ name: 'product_id', type: 'uuid' })
-  productId: string;
+  @Column({ name: 'physical_product_id', type: 'uuid' })
+  physicalProductId: string;
+
+  @Column({ name: 'batch_id', type: 'uuid', nullable: true })
+  batchId: string | null;
 
   @Column({ type: 'varchar', length: 20, default: StockBucket.AVAILABLE })
   bucket: StockBucket;
@@ -51,17 +54,37 @@ export class StockMovement {
   })
   quantityDelta: number;
 
+  @Column({
+    name: 'unit_cost',
+    type: 'numeric',
+    precision: 20,
+    scale: 6,
+    nullable: true,
+    transformer: numericString(6),
+  })
+  unitCost: string | null;
+
+  @Column({
+    name: 'total_cost',
+    type: 'numeric',
+    precision: 20,
+    scale: 6,
+    nullable: true,
+    transformer: numericString(6),
+  })
+  totalCost: string | null;
+
   @Column({ type: 'varchar', length: 30 })
   kind: StockMovementKind;
 
-  @Column({ name: 'sale_item_id', type: 'uuid', nullable: true })
-  saleItemId: string | null;
+  @Column({ name: 'source_type', type: 'varchar', length: 40, nullable: true })
+  sourceType: string | null;
 
-  @Column({ type: 'text', nullable: true })
-  reference: string | null;
+  @Column({ name: 'source_id', type: 'uuid', nullable: true })
+  sourceId: string | null;
 
-  @Column({ name: 'actor_id', type: 'uuid', nullable: true })
-  actorId: string | null;
+  @Column({ name: 'actor_membership_id', type: 'uuid', nullable: true })
+  actorMembershipId: string | null;
 
   @Column({
     name: 'occurred_at',

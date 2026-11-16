@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDateString, IsEnum, IsOptional } from 'class-validator';
-import { TenantPlan, TenantStatus } from '../tenant.enums.js';
+import { TenantPlan, TenantStatus } from '../../core/tenants/tenant.enums.js';
 
 /**
  * Paramétrage d'un abonnement par le super administrateur plateforme (§3).

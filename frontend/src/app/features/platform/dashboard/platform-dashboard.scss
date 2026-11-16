@@ -1,0 +1,326 @@
+.platform-dashboard__head {
+  margin-bottom: 1.25rem;
+}
+
+.platform-dashboard__head h1 {
+  margin: 0;
+  font-size: 1.65rem;
+}
+
+.platform-dashboard__head p {
+  margin: 0.35rem 0 0;
+  color: var(--color-platform-muted);
+}
+
+.platform-dashboard__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.platform-dashboard__kpi {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.platform-dashboard__kpi-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+
+.platform-dashboard__kpi-icon--users {
+  background: #e8f1ff;
+  color: #2b5ea8;
+}
+
+.platform-dashboard__kpi-icon--spaces {
+  background: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+
+.platform-dashboard__kpi-icon--subs {
+  background: #f2ecff;
+  color: #6b4bb2;
+}
+
+.platform-dashboard__kpi-icon--revenue {
+  background: #fff3e6;
+  color: #b35c16;
+}
+
+.platform-dashboard__kpi small {
+  display: block;
+  color: var(--color-platform-muted);
+  font-size: 0.8rem;
+}
+
+.platform-dashboard__kpi strong {
+  display: block;
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.platform-dashboard__kpi span {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+}
+
+.platform-dashboard__grid {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.platform-dashboard__card {
+  background: var(--color-surface-container-lowest);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 14px;
+  padding: 1rem 1.1rem;
+}
+
+.platform-dashboard__card h2 {
+  margin: 0 0 0.85rem;
+  font-size: 1rem;
+}
+
+.platform-dashboard__card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.85rem;
+}
+
+.platform-dashboard__card-head h2 {
+  margin: 0;
+}
+.platform-dashboard__card-head a {
+  color: var(--color-primary);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.platform-dashboard__chart {
+  position: relative;
+  height: 220px;
+  min-width: 0;
+}
+
+:host ::ng-deep .platform-dashboard__chart p-chart,
+:host ::ng-deep .platform-dashboard__chart .p-chart,
+:host ::ng-deep .platform-dashboard__chart canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.platform-dashboard__polar-chart {
+  position: relative;
+  height: 220px;
+  min-width: 0;
+}
+
+.platform-dashboard__empty {
+  display: grid;
+  min-height: 220px;
+  margin: 0;
+  place-items: center;
+  color: var(--color-platform-muted);
+  text-align: center;
+}
+
+:host ::ng-deep .platform-dashboard__polar-chart p-chart,
+:host ::ng-deep .platform-dashboard__polar-chart .p-chart,
+:host ::ng-deep .platform-dashboard__polar-chart canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.platform-dashboard__bottom {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 1rem;
+}
+
+.platform-dashboard__table-wrap {
+  overflow-x: auto;
+}
+
+.platform-dashboard__table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+
+.platform-dashboard__table th,
+.platform-dashboard__table td {
+  text-align: left;
+  padding: 0.55rem 0.35rem;
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.platform-dashboard__table th {
+  color: var(--color-platform-muted);
+  font-weight: 600;
+}
+
+.platform-dashboard__status {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  background: #e8f6ef;
+  color: #1a5c44;
+}
+
+.platform-dashboard__activity-table-wrap {
+  overflow-x: auto;
+}
+.platform-dashboard__activity-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+.platform-dashboard__activity-table th {
+  padding: 0.45rem 0.5rem;
+  color: var(--color-platform-muted);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.035em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.platform-dashboard__activity-table td {
+  padding: 0.55rem 0.5rem;
+  border-top: 1px solid var(--color-border-subtle);
+  vertical-align: middle;
+}
+.platform-dashboard__activity-table tr:hover td {
+  background: color-mix(in srgb, var(--color-primary-fixed) 28%, transparent);
+}
+.platform-dashboard__activity-author,
+.platform-dashboard__activity-action {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+.platform-dashboard__activity-author > span {
+  display: grid;
+  width: 1.85rem;
+  height: 1.85rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--color-primary-fixed);
+  color: var(--color-primary);
+  font-size: 0.62rem;
+  font-weight: 800;
+}
+.platform-dashboard__activity-action i {
+  display: grid;
+  width: 1.65rem;
+  height: 1.65rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 6px;
+  background: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+.platform-dashboard__activity-table time {
+  white-space: nowrap;
+  font-weight: 600;
+}
+.platform-dashboard__activity-table time small {
+  display: block;
+  margin-top: 0.12rem;
+  color: var(--color-platform-muted);
+  font-size: 0.6rem;
+  font-weight: 400;
+}
+.platform-dashboard__activity-link {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--color-primary);
+  text-decoration: none;
+}
+.platform-dashboard__activity-link:hover {
+  background: var(--color-primary-fixed);
+}
+
+.platform-dashboard__error {
+  color: #9a3412;
+}
+
+@media (max-width: 1100px) {
+  .platform-dashboard__kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .platform-dashboard__grid,
+  .platform-dashboard__bottom {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .platform-dashboard__kpis {
+    grid-template-columns: 1fr;
+  }
+
+  .platform-dashboard__activity-table thead {
+    display: none;
+  }
+  .platform-dashboard__activity-table,
+  .platform-dashboard__activity-table tbody,
+  .platform-dashboard__activity-table tr,
+  .platform-dashboard__activity-table td {
+    display: block;
+    width: 100%;
+  }
+  .platform-dashboard__activity-table tr {
+    position: relative;
+    padding: 0.65rem 2.5rem 0.65rem 0;
+    border-top: 1px solid var(--color-border-subtle);
+  }
+  .platform-dashboard__activity-table td {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.25rem 0;
+    border: 0;
+  }
+  .platform-dashboard__activity-table td::before {
+    content: attr(data-label);
+    color: var(--color-platform-muted);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .platform-dashboard__activity-table td:last-child {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    width: auto;
+    transform: translateY(-50%);
+  }
+  .platform-dashboard__activity-table td:last-child::before {
+    display: none;
+  }
+}

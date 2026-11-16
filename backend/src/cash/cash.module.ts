@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtAuthGuard, TenantGuard } from '../auth/guards/jwt-auth.guard.js';
 import { CatalogModule } from '../catalog/catalog.module.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
 import { CashController } from './cash.controller.js';
 import { CashMovement } from './cash-movement.entity.js';
 import { CashRegister } from './cash-register.entity.js';

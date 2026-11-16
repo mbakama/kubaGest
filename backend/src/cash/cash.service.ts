@@ -4,7 +4,7 @@ import type { EntityManager } from 'typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { AuditService } from '../audit/audit.service.js';
 import { addMoney, fromUnits, subtractMoney, toUnits } from '../common/money.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
 import { CashMovement, CashMovementKind } from './cash-movement.entity.js';
 import { CashRegister } from './cash-register.entity.js';
 import { CashSessionCurrency } from './cash-session-currency.entity.js';

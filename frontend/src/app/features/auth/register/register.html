@@ -1,0 +1,540 @@
+<main id="content" tabindex="-1" class="register-page">
+  <div class="register-stage">
+    <aside class="register-hero" aria-labelledby="register-hero-title">
+      <img
+        class="register-hero__kuba-pattern"
+        src="assets/kuba-textile-pattern.png"
+        alt=""
+        aria-hidden="true"
+      />
+      <div class="register-hero__glow" aria-hidden="true"></div>
+      <svg
+        class="register-hero__wave"
+        viewBox="0 0 400 800"
+        preserveAspectRatio="none"
+        aria-hidden="true"
+      >
+        <path
+          fill="rgb(255 255 255 / 0.06)"
+          d="M0,520 C90,420 140,580 260,480 S360,380 400,420 L400,800 L0,800 Z"
+        />
+      </svg>
+
+      <a class="brand register-hero__brand" routerLink="/authentification" aria-label="KubaGest">
+        <span class="brand__mark" aria-hidden="true">K</span>
+        <span><strong>KubaGest</strong><small>Gestion commerciale intégrée</small></span>
+      </a>
+
+      <div class="register-hero__body">
+        <p class="register-hero__eyebrow">Activation d’espace</p>
+        <h1 id="register-hero-title">Lancez votre point de vente sur une base solide</h1>
+        <p class="register-hero__lead">
+          Un seul formulaire pour créer l’établissement, le compte propriétaire et les paramètres
+          essentiels (activité, devise CDF).
+        </p>
+
+        <ul class="register-hero__features">
+          <li>
+            <i class="fa-solid fa-cart-shopping" aria-hidden="true"></i> Ventes &amp; encaissement
+          </li>
+          <li><i class="fa-solid fa-boxes-stacked" aria-hidden="true"></i> Stocks multi-dépôts</li>
+          <li><i class="fa-solid fa-truck" aria-hidden="true"></i> Achats fournisseurs</li>
+          <li>
+            <i class="fa-solid fa-chart-column" aria-hidden="true"></i> Rapports en temps réel
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+    <section class="register-workspace" aria-labelledby="register-form-title">
+      <header class="register-workspace__bar">
+        <a class="register-workspace__back" routerLink="/authentification">
+          <i class="fa-solid fa-arrow-left" aria-hidden="true"></i>
+          Retour à la connexion
+        </a>
+        <div class="language">
+          <p-select
+            inputId="register-locale"
+            size="small"
+            [options]="localeOptions"
+            [formControl]="form.controls.locale"
+            optionLabel="label"
+            optionValue="value"
+            styleClass="language-select"
+            panelStyleClass="language-select-panel"
+            appendTo="body"
+            ariaLabel="Langue de l’interface"
+          >
+            <ng-template #selectedItem let-option>
+              <span class="language__trigger">
+                <i class="fa-solid fa-globe" aria-hidden="true"></i>
+                <span>{{ option?.label }}</span>
+              </span>
+            </ng-template>
+            <ng-template #dropdownicon>
+              <i class="fa-solid fa-chevron-down language__chevron" aria-hidden="true"></i>
+            </ng-template>
+          </p-select>
+        </div>
+      </header>
+
+      <article class="register-card">
+        @if (registerSuccess()) {
+          <div class="register-card__success">
+            <div class="register-card__success-icon" aria-hidden="true">
+              <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 id="register-form-title">Votre espace est prêt</h2>
+            <p>
+              Connectez-vous avec l’adresse e-mail et le mot de passe que vous venez de définir.
+            </p>
+            <button class="submit-button" type="button" (click)="goToLogin()">
+              <i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i>
+              <span>Aller à la connexion</span>
+            </button>
+          </div>
+        } @else {
+          <header class="register-card__head">
+            <h2 id="register-form-title">Créer votre <span>espace</span></h2>
+            <p>Renseignez les informations ci-dessous pour activer KubaGest.</p>
+          </header>
+
+          <p-stepper class="register-stepper" [value]="currentStep()" [linear]="true">
+            <p-step-list>
+              <p-step [value]="1" [class.register-step--complete]="currentStep() > 1"
+                >Responsable</p-step
+              >
+              <p-step [value]="2" [class.register-step--complete]="currentStep() > 2"
+                >Établissement</p-step
+              >
+              <p-step [value]="3">Sécurité</p-step>
+            </p-step-list>
+          </p-stepper>
+
+          <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="register-form">
+            @if (currentStep() === 1) {
+              <div class="register-form__section">
+                <div class="register-form__grid register-form__grid--2">
+                  <div class="field">
+                    <label for="firstName">Prénom</label>
+                    <div
+                      class="field__control"
+                      [class.field__control--invalid]="
+                        form.controls.firstName.touched && form.controls.firstName.invalid
+                      "
+                    >
+                      <i class="fa-solid fa-user" aria-hidden="true"></i>
+                      <input
+                        pInputText
+                        fluid
+                        id="firstName"
+                        type="text"
+                        formControlName="firstName"
+                        autocomplete="given-name"
+                        placeholder="Prénom"
+                        [invalid]="
+                          form.controls.firstName.touched && form.controls.firstName.invalid
+                        "
+                      />
+                    </div>
+                    @if (
+                      form.controls.firstName.touched &&
+                      form.controls.firstName.hasError('required')
+                    ) {
+                      <p class="field__error" role="alert">Indiquez votre prénom.</p>
+                    }
+                  </div>
+                  <div class="field">
+                    <label for="lastName">Nom</label>
+                    <div
+                      class="field__control"
+                      [class.field__control--invalid]="
+                        form.controls.lastName.touched && form.controls.lastName.invalid
+                      "
+                    >
+                      <i class="fa-solid fa-user" aria-hidden="true"></i>
+                      <input
+                        pInputText
+                        fluid
+                        id="lastName"
+                        type="text"
+                        formControlName="lastName"
+                        autocomplete="family-name"
+                        placeholder="Nom"
+                        [invalid]="form.controls.lastName.touched && form.controls.lastName.invalid"
+                      />
+                    </div>
+                    @if (
+                      form.controls.lastName.touched && form.controls.lastName.hasError('required')
+                    ) {
+                      <p class="field__error" role="alert">Indiquez votre nom.</p>
+                    }
+                  </div>
+                </div>
+
+                <div class="field field--sex">
+                  <label for="register-sex">Sexe</label>
+                  <p-select
+                    inputId="register-sex"
+                    formControlName="sex"
+                    [options]="sexOptions"
+                    optionLabel="label"
+                    optionValue="value"
+                    [fluid]="true"
+                    appendTo="body"
+                    ariaLabel="Sexe"
+                    styleClass="register-sex-select"
+                    panelStyleClass="register-select-panel"
+                  />
+                </div>
+
+                <div class="register-form__grid register-form__grid--2">
+                  <div class="field field--email-availability">
+                    <label for="email">Adresse e-mail</label>
+                    <div
+                      class="field__control"
+                      [class.field__control--invalid]="
+                        form.controls.email.touched &&
+                        (form.controls.email.hasError('required') ||
+                          form.controls.email.hasError('email') ||
+                          emailFieldState() === 'taken')
+                      "
+                      [class.field__control--email-available]="emailFieldState() === 'available'"
+                      [class.field__control--email-checking]="emailFieldState() === 'checking'"
+                    >
+                      @switch (emailFieldState()) {
+                        @case ('checking') {
+                          <i
+                            class="fa-regular fa-spinner field__lead-icon field__lead-icon--spin"
+                            aria-hidden="true"
+                          ></i>
+                        }
+                        @default {
+                          <i class="fa-solid fa-envelope field__lead-icon" aria-hidden="true"></i>
+                        }
+                      }
+                      <input
+                        pInputText
+                        fluid
+                        id="email"
+                        type="email"
+                        formControlName="email"
+                        autocomplete="email"
+                        inputmode="email"
+                        placeholder="Adresse e-mail"
+                        [invalid]="
+                          form.controls.email.touched &&
+                          (form.controls.email.invalid || emailFieldState() === 'taken')
+                        "
+                        [attr.aria-invalid]="
+                          form.controls.email.touched &&
+                          (form.controls.email.invalid || emailFieldState() === 'taken')
+                        "
+                        [attr.aria-describedby]="
+                          form.controls.email.touched && form.controls.email.invalid
+                            ? 'email-error'
+                            : emailFieldState() === 'taken'
+                              ? 'email-taken-error'
+                              : null
+                        "
+                        (blur)="onEmailBlur()"
+                        (input)="onEmailInput()"
+                      />
+                      @switch (emailFieldState()) {
+                        @case ('available') {
+                          <i
+                            class="fa-solid fa-circle-check field__trail-icon field__trail-icon--ok"
+                            aria-hidden="true"
+                          ></i>
+                        }
+                        @case ('taken') {
+                          <i
+                            class="fa-solid fa-circle-exclamation field__trail-icon field__trail-icon--error"
+                            aria-hidden="true"
+                          ></i>
+                        }
+                      }
+                    </div>
+                    @if (
+                      form.controls.email.touched &&
+                      (form.controls.email.hasError('required') ||
+                        form.controls.email.hasError('email'))
+                    ) {
+                      <p id="email-error" class="field__error" role="alert">
+                        Format d’adresse e-mail invalide.
+                      </p>
+                    } @else if (emailFieldState() === 'taken') {
+                      <p
+                        id="email-taken-error"
+                        class="field__error field__error--actions"
+                        role="alert"
+                      >
+                        Un compte existe déjà avec cette adresse.
+                        <a [routerLink]="authPath">Se connecter</a>
+                        ou
+                        <a [routerLink]="forgotPasswordPath">mot de passe oublié&nbsp;?</a>
+                      </p>
+                    }
+                  </div>
+                  <div class="field">
+                    <label for="register-phone"
+                      >Téléphone <span class="register-optional">facultatif</span></label
+                    >
+                    <p-inputgroup
+                      class="auth-phone-group"
+                      [class.auth-phone-group--invalid]="!!phoneFieldError()"
+                    >
+                      <p-inputgroup-addon id="register-phone-dial">{{
+                        rdcDial
+                      }}</p-inputgroup-addon>
+                      <input
+                        pInputText
+                        fluid
+                        id="register-phone"
+                        type="tel"
+                        inputmode="tel"
+                        autocomplete="tel"
+                        placeholder="Ex. 812 345 678"
+                        aria-describedby="register-phone-dial"
+                        [invalid]="!!phoneFieldError()"
+                        [value]="phoneLocalValue()"
+                        (input)="onPhoneInput($event)"
+                        (blur)="onPhoneBlur()"
+                      />
+                    </p-inputgroup>
+                    @if (phoneFieldError()) {
+                      <p class="field__error field__error--phone" role="alert">
+                        {{ phoneFieldError() }}
+                      </p>
+                    }
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (currentStep() === 2) {
+              <div class="register-form__section">
+                <div class="field">
+                  <label for="tenantName">Nom de l’établissement</label>
+                  <div
+                    class="field__control"
+                    [class.field__control--invalid]="
+                      form.controls.tenantName.touched && form.controls.tenantName.invalid
+                    "
+                  >
+                    <i class="fa-solid fa-store" aria-hidden="true"></i>
+                    <input
+                      pInputText
+                      fluid
+                      id="tenantName"
+                      type="text"
+                      formControlName="tenantName"
+                      autocomplete="organization"
+                      placeholder="Ex. Boutique Kintambo"
+                      [invalid]="
+                        form.controls.tenantName.touched && form.controls.tenantName.invalid
+                      "
+                    />
+                  </div>
+                  @if (form.controls.tenantName.touched && form.controls.tenantName.invalid) {
+                    <p class="field__error" role="alert">Nom requis (2 caractères minimum).</p>
+                  }
+                </div>
+                <div class="field">
+                  <label for="activityType">Type d’activité</label>
+                  <div
+                    class="field__control field__control--select"
+                    [class.field__control--invalid]="
+                      form.controls.activityType.touched && form.controls.activityType.invalid
+                    "
+                  >
+                    <i class="fa-solid fa-briefcase" aria-hidden="true"></i>
+                    <div class="field__select">
+                      <p-select
+                        inputId="activityType"
+                        ariaLabel="Type d’activité"
+                        [options]="activityOptions"
+                        formControlName="activityType"
+                        optionLabel="label"
+                        optionValue="value"
+                        styleClass="register-activity-select"
+                        panelStyleClass="language-select-panel"
+                        appendTo="body"
+                        placeholder="Choisir une activité"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            @if (currentStep() === 3) {
+              <div class="register-form__section">
+                <div class="register-form__grid register-form__grid--2">
+                  <div class="field">
+                    <label for="register-password">Mot de passe</label>
+                    <div
+                      class="field__control"
+                      [class.field__control--invalid]="
+                        form.controls.password.touched && form.controls.password.invalid
+                      "
+                    >
+                      <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                      <input
+                        pInputText
+                        fluid
+                        id="register-password"
+                        [type]="showPassword() ? 'text' : 'password'"
+                        formControlName="password"
+                        autocomplete="new-password"
+                        placeholder="8 caractères min."
+                        [invalid]="form.controls.password.touched && form.controls.password.invalid"
+                      />
+                      <button type="button" class="field__toggle" (click)="togglePassword()">
+                        <i
+                          class="fa-solid"
+                          [class.fa-eye-slash]="showPassword()"
+                          [class.fa-eye]="!showPassword()"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </div>
+                    @if (
+                      form.controls.password.touched && form.controls.password.hasError('minlength')
+                    ) {
+                      <p class="field__error" role="alert">Mot de passe trop court.</p>
+                    }
+                  </div>
+                  <div class="field">
+                    <label for="confirmPassword">Confirmation</label>
+                    <div
+                      class="field__control"
+                      [class.field__control--invalid]="
+                        form.controls.confirmPassword.touched &&
+                        form.controls.confirmPassword.invalid
+                      "
+                    >
+                      <i class="fa-solid fa-lock" aria-hidden="true"></i>
+                      <input
+                        pInputText
+                        fluid
+                        id="confirmPassword"
+                        [type]="showConfirmPassword() ? 'text' : 'password'"
+                        formControlName="confirmPassword"
+                        autocomplete="new-password"
+                        placeholder="Répétez le mot de passe"
+                        [invalid]="
+                          form.controls.confirmPassword.touched &&
+                          form.controls.confirmPassword.invalid
+                        "
+                      />
+                      <button type="button" class="field__toggle" (click)="toggleConfirmPassword()">
+                        <i
+                          class="fa-solid"
+                          [class.fa-eye-slash]="showConfirmPassword()"
+                          [class.fa-eye]="!showConfirmPassword()"
+                          aria-hidden="true"
+                        ></i>
+                      </button>
+                    </div>
+                    @if (
+                      form.controls.confirmPassword.touched &&
+                      form.controls.confirmPassword.hasError('mismatch')
+                    ) {
+                      <p class="field__error" role="alert">
+                        Les mots de passe ne correspondent pas.
+                      </p>
+                    }
+                  </div>
+                </div>
+
+                <div
+                  class="remember register-terms"
+                  [class.register-terms--invalid]="
+                    form.controls.acceptTerms.touched && form.controls.acceptTerms.invalid
+                  "
+                >
+                  <p-checkbox
+                    formControlName="acceptTerms"
+                    [binary]="true"
+                    inputId="register-accept-terms"
+                  />
+                  <label for="register-accept-terms">
+                    J’accepte les
+                    <a
+                      [routerLink]="termsPath"
+                      [queryParams]="{ retour: registrationPath }"
+                      (click)="persistDraftNow(); $event.stopPropagation()"
+                      >conditions d’utilisation</a
+                    >
+                    et la
+                    <a
+                      [routerLink]="privacyPath"
+                      [queryParams]="{ retour: registrationPath }"
+                      (click)="persistDraftNow(); $event.stopPropagation()"
+                      >politique de confidentialité</a
+                    >
+                    de KubaGest.
+                  </label>
+                </div>
+                @if (form.controls.acceptTerms.touched && form.controls.acceptTerms.invalid) {
+                  <p class="field__error" role="alert">Acceptez les conditions pour continuer.</p>
+                }
+              </div>
+            }
+
+            @if (registerError()) {
+              <p class="form-error" role="alert">{{ registerError() }}</p>
+            }
+
+            <div class="register-form__footer">
+              <div class="register-form__footer-toolbar">
+                <p class="signup">
+                  Déjà un compte&nbsp;?
+                  <a routerLink="/authentification">Se connecter</a>
+                </p>
+                <div class="register-form__actions">
+                  @if (currentStep() > 1) {
+                    <button
+                      class="wizard-button"
+                      type="button"
+                      (click)="goToStep(currentStep() - 1)"
+                    >
+                      <i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>Précédent</span>
+                    </button>
+                  } @else {
+                    <a class="wizard-button" [routerLink]="authPath">Annuler</a>
+                  }
+                  @if (currentStep() < 3) {
+                    <button class="submit-button" type="button" (click)="nextStep()">
+                      <span>Continuer</span
+                      ><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+                    </button>
+                  } @else {
+                    <button
+                      class="submit-button"
+                      type="submit"
+                      [disabled]="submitting()"
+                      [attr.aria-busy]="submitting()"
+                    >
+                      @if (submitting()) {
+                        <i
+                          class="fa-regular fa-spinner submit-button__icon--spin"
+                          aria-hidden="true"
+                        ></i>
+                      } @else {
+                        <i class="fa-solid fa-user-plus" aria-hidden="true"></i>
+                      }
+                      <span>{{ submitting() ? 'Création en cours…' : 'Créer mon espace' }}</span>
+                    </button>
+                  }
+                </div>
+              </div>
+              <app-auth-legal-notice [saveDraft]="persistDraftNow" />
+            </div>
+          </form>
+        }
+      </article>
+    </section>
+  </div>
+</main>

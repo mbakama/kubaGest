@@ -15,7 +15,8 @@ npm start
 
 Ouvrir http://localhost:4200. Lancer le backend séparément selon son README.
 Le proxy `proxy.conf.json` redirige `/api/**` vers `http://localhost:3000`
-et retire `/api`. Adapter sa cible si le backend change de port.
+(sans retirer le préfixe `/api`). Voir `src/environments/environment.ts`
+pour `apiBaseUrl` et `.env.example` pour la doc.
 
 Node 24 est aussi disponible localement, sans modifier la configuration globale :
 
@@ -28,9 +29,9 @@ $node24 = 'C:\Users\Hector\.cache\codex-runtimes\codex-primary-runtime\dependenc
 
 ## Écrans préparés
 
-- `/accueil` : accueil et navigation responsive.
-- `/connexion` : contrôle manuel de `GET /`, états initial, chargement, succès et erreur.
-- Toute autre adresse : page introuvable avec retour à l’accueil.
+- `/authentification` : page de connexion (`/connexion` redirige ici).
+- Contrôle manuel de `GET /`, états initial, chargement, succès et erreur.
+- Toute autre adresse : page introuvable avec retour à l’authentification.
 
 Le contrôle attend le texte `Hello World!` du contrôleur NestJS actuel.
 Il ne valide ni une authentification ni les futurs services métier. Une réponse
@@ -39,12 +40,14 @@ HTML de repli n’est pas considérée comme un succès. Délai maximal : huit s
 ## Structure et intégration
 
 - `src/app/core/api` : configuration injectable de l’URL et accès HTTP.
-- `src/app/features` : écrans autonomes, séparés par fonctionnalité.
+- `src/app/core/auth` : session, gardes, intercepteur JWT.
+- `src/app/core/layouts` : layout + sidebar + topbar + `*-menu.ts` (comme eRecettes).
+- `src/app/features` : pages métier (tableaux de bord, auth, etc.).
 - `src/styles.scss` : couleurs sémantiques, typographie et composants communs.
 - `src/app/app.routes.ts` : routes et titres français.
 
 En production, le proxy Angular de développement n’est pas inclus : configurer
-un reverse proxy `/api` vers NestJS, ou fournir `API_BASE_URL` dans `app.config.ts`.
+un reverse proxy `/api` vers NestJS, ou éditer `environment.production.ts`.
 Pour une API sur une autre origine, adapter aussi le CORS du serveur.
 Le serveur web doit renvoyer `index.html` pour les routes du frontend.
 

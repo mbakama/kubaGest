@@ -17,7 +17,7 @@ describe('validateEnv', () => {
       DB_TYPE: 'postgres',
       DB_SYNCHRONIZE: false,
       DB_LOGGING: false,
-      JWT_EXPIRES_IN: '1h',
+      JWT_EXPIRES_IN: '8h',
       OBSERVE_SERVICE_ID: 'kubagest-backend',
     });
     expect(env.OBSERVE_APP_KEY).toBeUndefined();

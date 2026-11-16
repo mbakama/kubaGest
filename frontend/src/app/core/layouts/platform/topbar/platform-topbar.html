@@ -1,0 +1,113 @@
+<header
+  class="layout-platform-topbar flex items-center justify-between gap-4 border-b border-border-subtle bg-surface-container-lowest px-6 shadow-[0_1px_4px_rgba(15,34,58,0.06)] max-md:py-3.5 max-md:shadow-none dark:border-white/10 dark:bg-surface-container-lowest/95 dark:shadow-[0_1px_4px_rgba(0,0,0,0.35)] dark:backdrop-blur-md"
+>
+  <label
+    class="flex max-w-[520px] flex-1 items-center gap-2 rounded-full border border-border-subtle bg-surface-container-low px-3 py-2 text-platform-muted"
+  >
+    <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
+    <span class="sr-only">Rechercher</span>
+    <input
+      type="search"
+      class="min-w-0 flex-1 border-0 bg-transparent text-platform-ink outline-none"
+      placeholder="Rechercher un utilisateur, un espace…"
+      disabled
+    />
+    <kbd
+      class="rounded border border-border-subtle bg-surface-container-lowest px-1.5 py-0.5 text-[0.7rem] text-inherit"
+      >Ctrl + K</kbd
+    >
+  </label>
+
+  <div class="flex items-center gap-3">
+    <app-theme-toggle />
+
+    <button
+      type="button"
+      class="grid size-9 place-items-center rounded-full border border-border-subtle bg-surface-container-lowest text-platform-muted"
+      aria-label="Notifications"
+      disabled
+    >
+      <i class="fa-regular fa-bell" aria-hidden="true"></i>
+    </button>
+
+    <div class="relative min-w-0">
+      <button
+        type="button"
+        class="group flex max-w-full cursor-pointer items-center gap-2 rounded-lg border-0 bg-transparent p-0 text-left leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        (click)="toggleProfileMenu($event)"
+        [attr.aria-expanded]="profileMenuOpen()"
+        aria-haspopup="menu"
+        aria-controls="platform-profile-menu"
+        [attr.aria-label]="'Menu compte : ' + displayName()"
+      >
+        <span
+          class="grid size-[2.35rem] shrink-0 place-items-center rounded-full bg-primary-fixed font-semibold text-on-primary-fixed group-hover:shadow-[0_0_0_2px] group-hover:shadow-primary/25"
+          aria-hidden="true"
+        >
+          {{ displayName().charAt(0).toUpperCase() }}
+        </span>
+        <div class="min-w-0 max-sm:hidden">
+          <strong class="block max-w-40 truncate text-[0.88rem] text-platform-ink">{{
+            displayName()
+          }}</strong>
+          <small class="block text-[0.72rem] text-platform-muted">{{ userSubtitle() }}</small>
+        </div>
+        <i
+          class="fa-solid fa-chevron-down shrink-0 text-[0.65rem] text-platform-muted transition-transform"
+          [class.rotate-180]="profileMenuOpen()"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+      @if (profileMenuOpen()) {
+        <div
+          id="platform-profile-menu"
+          class="absolute right-0 top-[calc(100%+0.35rem)] z-[120] min-w-52 overflow-hidden rounded-xl border border-border-subtle bg-surface-container-lowest py-1 shadow-lg"
+          role="menu"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="border-b border-border-subtle px-3 py-2 sm:hidden">
+            <p class="truncate text-sm font-semibold text-platform-ink">{{ displayName() }}</p>
+            <p class="text-xs text-platform-muted">{{ userSubtitle() }}</p>
+          </div>
+          @if (session()?.user.email; as email) {
+            <p
+              class="hidden truncate border-b border-border-subtle px-3 py-2 text-xs text-[#8a9690] sm:block"
+              role="presentation"
+            >
+              {{ email }}
+            </p>
+          }
+          <a
+            routerLink="/profil"
+            [class]="profileMenuLinkClass"
+            role="menuitem"
+            (click)="closeProfileMenu()"
+          >
+            <i class="fa-solid fa-user w-4 text-center" aria-hidden="true"></i>
+            Mon profil
+          </a>
+          <a
+            routerLink="/parametres"
+            [class]="profileMenuLinkClass"
+            role="menuitem"
+            (click)="closeProfileMenu()"
+          >
+            <i class="fa-solid fa-gear w-4 text-center" aria-hidden="true"></i>
+            Paramètres
+          </a>
+          <div class="my-1 border-t border-border-subtle" role="separator"></div>
+          <button
+            type="button"
+            class="flex w-full items-center gap-2 px-3 py-2 text-left text-sm text-alert-red hover:bg-error-container"
+            role="menuitem"
+            (click)="logoutFromMenu()"
+          >
+            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+            Déconnexion
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

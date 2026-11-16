@@ -13,12 +13,8 @@ import {
  * établissement après normalisation (index `lower(name)`).
  */
 @Entity({ name: 'product_categories' })
-@Unique('uq_product_categories_scope', [
-  'tenantId',
-  'establishmentId',
-  'id',
-])
-@Index('idx_product_categories_tenant', ['tenantId', 'establishmentId'])
+@Unique('uq_product_categories_scope', ['tenantId', 'id'])
+@Index('idx_product_categories_tenant', ['tenantId'])
 export class ProductCategory {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -26,8 +22,8 @@ export class ProductCategory {
   @Column({ name: 'tenant_id', type: 'uuid' })
   tenantId: string;
 
-  @Column({ name: 'establishment_id', type: 'uuid' })
-  establishmentId: string;
+  @Column({ name: 'parent_id', type: 'uuid', nullable: true })
+  parentId: string | null;
 
   @Column({ type: 'varchar', length: 100 })
   name: string;

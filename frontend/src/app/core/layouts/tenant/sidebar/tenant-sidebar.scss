@@ -1,0 +1,189 @@
+@use '../../layout-shell.scss' as shell;
+@use '../../sidebar-shell.scss' as sidebar;
+
+:host {
+  display: block;
+}
+
+.tenant-sidebar {
+  @include shell.shell-sidebar-fixed(shell.$tenant-sidebar-width);
+  @include sidebar.app-sidebar-chrome;
+}
+
+:host-context(html.dark) .tenant-sidebar {
+  background: var(--color-surface-container-lowest);
+  border-right: 1px solid var(--color-border-subtle);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+  color: var(--color-sidebar-fg);
+}
+
+.tenant-sidebar__logo {
+  @include sidebar.app-sidebar-logo;
+  @include sidebar.app-sidebar-logo-text;
+}
+
+.tenant-sidebar__logo-mark {
+  @include sidebar.app-sidebar-logo-mark;
+}
+
+.tenant-sidebar__nav {
+  @include sidebar.app-sidebar-nav;
+}
+
+.tenant-sidebar__context {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin: 0 0.35rem 0.85rem;
+  padding: 0.55rem 0.65rem;
+  border-radius: 10px;
+  background: var(--color-sidebar-panel);
+}
+
+.tenant-sidebar__context-body {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.tenant-sidebar__context-body i {
+  width: 1.1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  opacity: 0.9;
+}
+
+.tenant-sidebar__context-title {
+  display: block;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tenant-sidebar__context-sub {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+.tenant-sidebar__context-chevron {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.tenant-sidebar__footer {
+  margin-top: 0.75rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--color-sidebar-divider);
+}
+
+.tenant-sidebar__footer-card {
+  padding: 0.65rem 0.75rem;
+  border-radius: 10px;
+  background: var(--color-sidebar-panel);
+}
+
+.tenant-sidebar__footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+  font-size: 0.72rem;
+  opacity: 0.8;
+}
+
+.tenant-sidebar__footer-status {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--color-sidebar-nav-accent);
+}
+
+.tenant-sidebar__footer-title {
+  display: block;
+  font-size: 0.9rem;
+}
+
+.tenant-sidebar__footer-hint {
+  font-size: 0.72rem;
+  opacity: 0.75;
+}
+
+:host-context(html.dark) {
+  .tenant-sidebar__logo strong {
+    color: #f8fafc;
+  }
+
+  .tenant-sidebar__logo small {
+    color: #34d399;
+    opacity: 1;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .tenant-sidebar__logo-mark {
+    border: 1px solid rgba(52, 211, 153, 0.35);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+    color: #6ee7b7;
+  }
+
+  .tenant-sidebar__context {
+    margin-inline: 0.5rem;
+    padding: 0.75rem;
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 0.75rem;
+    background: var(--color-sidebar-panel);
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.25);
+  }
+
+  .tenant-sidebar__context-body i {
+    color: #34d399;
+    opacity: 1;
+  }
+
+  .tenant-sidebar__context-title {
+    color: #f1f5f9;
+    font-weight: 600;
+  }
+
+  .tenant-sidebar__context-sub {
+    color: #94a3b8;
+    opacity: 1;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+  }
+
+  .tenant-sidebar__footer {
+    padding-inline: 0.5rem;
+  }
+
+  .tenant-sidebar__footer-card {
+    border: 1px solid color-mix(in srgb, var(--color-border-subtle) 80%, transparent);
+    border-radius: 0.75rem;
+    background: var(--color-sidebar-panel);
+  }
+
+  .tenant-sidebar__footer-status {
+    background: #34d399;
+    box-shadow: 0 0 8px #34d399;
+  }
+
+  .tenant-sidebar__footer-title {
+    color: #e2e8f0;
+    font-weight: 600;
+  }
+}
+
+@media (max-width: 768px) {
+  .tenant-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+}

@@ -1,7 +1,4 @@
 import { InjectionToken } from '@angular/core';
 
-// En production, configurer un reverse proxy /api ou fournir une autre valeur.
-export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL', {
-  providedIn: 'root',
-  factory: () => '/api',
-});
+/** Fourni dans `app.config.ts` à partir de `src/environments/environment*.ts`. */
+export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');

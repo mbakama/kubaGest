@@ -1,0 +1,36 @@
+.auth-data-privacy {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0.75rem 0 0;
+  padding: 0.5rem 0.65rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: #64748b;
+  text-align: left;
+}
+
+.auth-data-privacy__icon {
+  flex-shrink: 0;
+  margin-top: 0.05rem;
+  color: var(--color-primary);
+  font-size: 0.75rem;
+}
+
+.auth-data-privacy a {
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: inherit;
+  text-underline-offset: 2px;
+}
+
+.auth-data-privacy a:hover {
+  text-decoration: underline;
+}
+
+:host {
+  display: block;
+  width: 100%;
+}

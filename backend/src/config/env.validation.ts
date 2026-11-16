@@ -266,7 +266,7 @@ export function validateEnv(
     DB_LOGGING: dbLogging,
     CREDIT_REMINDERS_ENABLED: creditRemindersEnabled,
     JWT_SECRET: jwtSecret as string,
-    JWT_EXPIRES_IN: readOptional(config.JWT_EXPIRES_IN) ?? '1h',
+    JWT_EXPIRES_IN: readOptional(config.JWT_EXPIRES_IN) ?? '8h',
     OBSERVE_APP_KEY: observeAppKey,
     OBSERVE_APP_SECRET: observeAppSecret,
     OBSERVE_SERVICE_ID:

@@ -40,24 +40,24 @@ Les variables d'environnement sont chargées et **validées au démarrage** via
 `@nestjs/config` (`src/config/env.validation.ts`). Une valeur invalide empêche
 le démarrage avec un message explicite.
 
-| Variable              | Description                                              | Défaut             |
-| --------------------- | -------------------------------------------------------- | ------------------ |
-| `NODE_ENV`            | `development`, `test` ou `production`                    | `development`      |
-| `PORT`                | Port HTTP de l'API                                       | `3000`             |
-| `CORS_ORIGIN`         | Origines autorisées, séparées par des virgules (`*` = toutes) | `*`            |
-| `SWAGGER_ENABLED`     | Expose la documentation OpenAPI sur `/docs`              | `true`             |
-| `DB_TYPE`             | `sqljs` (local, sans serveur) ou `postgres`              | `postgres`         |
-| `DB_LOCATION`         | Fichier SQLite (vide = base en mémoire)                  | —                  |
-| `DATABASE_URL`        | URL PostgreSQL (requise si `DB_TYPE=postgres`)           | —                  |
-| `DB_SYNCHRONIZE`      | Création automatique du schéma ; `true` avec `sqljs`, `false` en production | `false` |
-| `DB_LOGGING`          | Journalise les requêtes SQL                              | `false`            |
-| `JWT_SECRET`          | Secret de signature JWT (32 caractères minimum)          | —                  |
-| `JWT_EXPIRES_IN`      | Durée de validité des jetons                             | `1h`               |
-| `OBSERVE_APP_KEY`     | Clé NestJS Observe (optionnelle, avec le secret)         | —                  |
-| `OBSERVE_APP_SECRET`  | Secret NestJS Observe (optionnel, avec la clé)           | —                  |
-| `OBSERVE_SERVICE_ID`  | Identifiant du service dans Observe                      | `kubagest-backend` |
-| `PLATFORM_ADMIN_EMAIL`    | Email du super administrateur plateforme (optionnel, avec le mot de passe) | — |
-| `PLATFORM_ADMIN_PASSWORD` | Mot de passe du super administrateur (créé ou promu au démarrage) | — |
+| Variable                  | Description                                                                 | Défaut             |
+| ------------------------- | --------------------------------------------------------------------------- | ------------------ |
+| `NODE_ENV`                | `development`, `test` ou `production`                                       | `development`      |
+| `PORT`                    | Port HTTP de l'API                                                          | `3000`             |
+| `CORS_ORIGIN`             | Origines autorisées, séparées par des virgules (`*` = toutes)               | `*`                |
+| `SWAGGER_ENABLED`         | Expose la documentation OpenAPI sur `/docs`                                 | `true`             |
+| `DB_TYPE`                 | `sqljs` (local, sans serveur) ou `postgres`                                 | `postgres`         |
+| `DB_LOCATION`             | Fichier SQLite (vide = base en mémoire)                                     | —                  |
+| `DATABASE_URL`            | URL PostgreSQL (requise si `DB_TYPE=postgres`)                              | —                  |
+| `DB_SYNCHRONIZE`          | Création automatique du schéma ; `true` avec `sqljs`, `false` en production | `false`            |
+| `DB_LOGGING`              | Journalise les requêtes SQL                                                 | `false`            |
+| `JWT_SECRET`              | Secret de signature JWT (32 caractères minimum)                             | —                  |
+| `JWT_EXPIRES_IN`          | Durée de validité des jetons                                                | `1h`               |
+| `OBSERVE_APP_KEY`         | Clé NestJS Observe (optionnelle, avec le secret)                            | —                  |
+| `OBSERVE_APP_SECRET`      | Secret NestJS Observe (optionnel, avec la clé)                              | —                  |
+| `OBSERVE_SERVICE_ID`      | Identifiant du service dans Observe                                         | `kubagest-backend` |
+| `PLATFORM_ADMIN_EMAIL`    | Email du super administrateur plateforme (optionnel, avec le mot de passe)  | —                  |
+| `PLATFORM_ADMIN_PASSWORD` | Mot de passe du super administrateur (créé ou promu au démarrage)           | —                  |
 
 La télémétrie [NestJS Observe](https://observe.nestjs.com) n'est activée que si
 `OBSERVE_APP_KEY` et `OBSERVE_APP_SECRET` sont renseignées ensemble.
@@ -149,11 +149,11 @@ Avec `DB_SYNCHRONIZE=false`, l'application exécute automatiquement les
 migrations au démarrage. La CLI reste utile pour générer et annuler des
 migrations :
 
-| Script | Effet |
-| --- | --- |
-| `npm run migration:run` | applique les migrations en attente |
-| `npm run migration:show` | affiche l'état des migrations |
-| `npm run migration:revert` | annule la dernière migration |
+| Script                                                      | Effet                                          |
+| ----------------------------------------------------------- | ---------------------------------------------- |
+| `npm run migration:run`                                     | applique les migrations en attente             |
+| `npm run migration:show`                                    | affiche l'état des migrations                  |
+| `npm run migration:revert`                                  | annule la dernière migration                   |
 | `npm run migration:generate -- src/database/migrations/Nom` | génère une migration par diff avec les entités |
 
 La CLI lit `DATABASE_URL` depuis `.env` via `src/database/data-source.ts`.
@@ -190,7 +190,7 @@ Le dictionnaire complet et l'ordre des migrations se trouvent dans
 
 - L'activation accorde un **essai de 30 jours** : `subscriptions.ends_at` est
   fixée à `now() + 30 jours` (`TRIAL_PERIOD_DAYS` dans
-  `src/tenants/tenant.constants.ts`).
+  `src/core/tenants/tenant.constants.ts`).
 - Un tenant `suspended` ne peut **plus rien faire** : la connexion est refusée
   (`403`) et les jetons déjà émis sont rejetés à chaque requête, car
   `TenantGuard` relit le statut en base. Seul le super administrateur
@@ -211,35 +211,53 @@ sonde non versionnée utilisée par le client de bureau.
 
 ## Authentification
 
-| Méthode | Route                  | Accès            | Description                                 |
-| ------- | ---------------------- | ---------------- | ------------------------------------------- |
-| `GET`   | `/api/v1/health`       | Public           | État de l'API et de la base                 |
-| `POST`  | `/api/v1/auth/register`| Public           | Activer un établissement et son propriétaire |
-| `POST`  | `/api/v1/auth/login`   | Public           | Obtenir un jeton et un contexte tenant      |
-| `GET`   | `/api/v1/auth/me`      | Authentifié      | Profil et établissements rattachés          |
-| `GET`   | `/api/v1/tenants/current` | Authentifié (tenant) | Profil, établissements et abonnement    |
-| `PATCH` | `/api/v1/tenants/current` | Rôle `owner`     | Nom, devise de référence, adresse           |
-| `GET`   | `/api/v1/tenants/current/establishments` | Authentifié (tenant) | Établissements du tenant |
-| `GET`   | `/api/v1/users`        | Rôle `owner`     | Utilisateurs de l'établissement             |
-| `POST`  | `/api/v1/users`        | Rôle `owner`     | Créer un caissier ou gestionnaire de stock  |
-| `GET`   | `/api/v1/platform/tenants` | Super admin plateforme | Tenants et abonnements               |
-| `PATCH` | `/api/v1/platform/tenants/{id}/subscription` | Super admin plateforme | Formule, statut, échéance |
+| Méthode          | Route                                                 | Accès                  | Description                                            |
+| ---------------- | ----------------------------------------------------- | ---------------------- | ------------------------------------------------------ |
+| `GET`            | `/api/v1/health`                                      | Public                 | État de l'API et de la base                            |
+| `POST`           | `/api/v1/auth/register`                               | Public                 | Activer un établissement et son propriétaire           |
+| `POST`           | `/api/v1/auth/login`                                  | Public                 | Obtenir un jeton et un contexte tenant                 |
+| `GET`            | `/api/v1/auth/me`                                     | Authentifié            | Profil et établissements rattachés                     |
+| `GET`            | `/api/v1/tenants/current`                             | Authentifié (tenant)   | Profil, établissements et abonnement                   |
+| `PATCH`          | `/api/v1/tenants/current`                             | Rôle `owner`           | Nom, devise de référence, adresse                      |
+| `GET`            | `/api/v1/tenants/current/establishments`              | Authentifié (tenant)   | Établissements du tenant                               |
+| `GET`            | `/api/v1/users`                                       | Rôle `owner`           | Utilisateurs de l'établissement                        |
+| `POST`           | `/api/v1/users`                                       | Rôle `owner`           | Inviter un caissier ou gestionnaire de stock par email |
+| `POST`           | `/api/v1/auth/invitations/accept`                     | Public                 | Accepter l’invitation et choisir son mot de passe      |
+| `GET`            | `/api/v1/users/{membershipId}`                        | Rôle `owner`           | Consulter un membre du tenant                          |
+| `PATCH`          | `/api/v1/users/{membershipId}/role`                   | Rôle `owner`           | Modifier le rôle d'un employé                          |
+| `PATCH`          | `/api/v1/users/{membershipId}/status`                 | Rôle `owner`           | Suspendre ou réactiver un employé                      |
+| `POST`           | `/api/v1/users/{membershipId}/reset-password`         | Rôle `owner`           | Réinitialiser l'accès et révoquer les sessions         |
+| `GET`            | `/api/v1/users/permissions/catalog`                   | Rôle `owner`           | Permissions dérogatoires autorisées                    |
+| `GET/PUT/DELETE` | `/api/v1/users/{membershipId}/permissions[/{code}]`   | Rôle `owner`           | Consulter ou gérer les dérogations                     |
+| `GET/DELETE`     | `/api/v1/users/{membershipId}/sessions[/{sessionId}]` | Rôle `owner`           | Consulter ou révoquer les sessions                     |
+| `GET`            | `/api/v1/audit/tenant`                                | Rôle `owner`           | Journal établissement (équipe, droits, config locale)  |
+| `GET`            | `/api/v1/audit/platform`                              | Super admin plateforme | Journal plateforme (espaces, abonnements)              |
+| `GET`            | `/api/v1/platform/profile`                            | Super admin plateforme | Profil admin (identité, résumé, sécurité)              |
+| `PATCH`          | `/api/v1/platform/profile`                            | Super admin plateforme | Prénom, nom, téléphone                                 |
+| `POST`           | `/api/v1/platform/profile/avatar`                     | Super admin plateforme | Photo de profil (multipart)                            |
+| `DELETE`         | `/api/v1/platform/profile/avatar`                     | Super admin plateforme | Retirer la photo de profil                             |
+| `PATCH`          | `/api/v1/platform/profile`                            | Super admin plateforme | Prénom, nom, téléphone                                 |
+| `POST`           | `/api/v1/platform/profile/avatar`                     | Super admin plateforme | Photo de profil (multipart)                            |
+| `DELETE`         | `/api/v1/platform/profile/avatar`                     | Super admin plateforme | Retirer la photo de profil                             |
+| `GET`            | `/api/v1/platform/dashboard`                          | Super admin plateforme | KPI et agrégats du tableau de bord admin               |
+| `GET`            | `/api/v1/platform/tenants`                            | Super admin plateforme | Tenants et abonnements                                 |
+| `PATCH`          | `/api/v1/platform/tenants/{id}/subscription`          | Super admin plateforme | Formule, statut, échéance                              |
 
 ## Catalogue produits
 
-| Méthode | Route | Accès | Description |
-| ------- | ----- | ----- | ----------- |
-| `GET`   | `/api/v1/product-categories` | Authentifié (tenant) | Catégories du point de vente |
-| `POST`  | `/api/v1/product-categories` | Rôle `owner` | Créer une catégorie (nom unique, insensible à la casse) |
-| `PATCH` | `/api/v1/product-categories/{id}` | Rôle `owner` | Renommer ou désactiver |
-| `GET`   | `/api/v1/products` | Authentifié (tenant) | Catalogue ; filtres `search`, `categoryId`, `isActive` |
-| `GET`   | `/api/v1/products/{id}` | Authentifié (tenant) | Détail avec conditionnements, codes-barres et fiche médicament |
-| `POST`  | `/api/v1/products` | Rôle `owner` | Créer un article et son conditionnement de base |
-| `PATCH` | `/api/v1/products/{id}` | Rôle `owner` | Nom, SKU, unité, seuil, suivi, taxe, activation |
-| `POST`  | `/api/v1/products/{id}/packagings` | Rôle `owner` | Ajouter un conditionnement (facteur > 0) |
-| `PATCH` | `/api/v1/products/{id}/packagings/{packagingId}` | Rôle `owner` | Libellé, facteur, prix, activation, promotion en base |
-| `POST`  | `/api/v1/products/{id}/barcodes` | Rôle `owner` | Ajouter un code-barres (base par défaut) |
-| `DELETE`| `/api/v1/products/{id}/barcodes/{barcodeId}` | Rôle `owner` | Retirer un code-barres |
+| Méthode  | Route                                            | Accès                | Description                                                    |
+| -------- | ------------------------------------------------ | -------------------- | -------------------------------------------------------------- |
+| `GET`    | `/api/v1/product-categories`                     | Authentifié (tenant) | Catégories du point de vente                                   |
+| `POST`   | `/api/v1/product-categories`                     | Rôle `owner`         | Créer une catégorie (nom unique, insensible à la casse)        |
+| `PATCH`  | `/api/v1/product-categories/{id}`                | Rôle `owner`         | Renommer ou désactiver                                         |
+| `GET`    | `/api/v1/products`                               | Authentifié (tenant) | Catalogue ; filtres `search`, `categoryId`, `isActive`         |
+| `GET`    | `/api/v1/products/{id}`                          | Authentifié (tenant) | Détail avec conditionnements, codes-barres et fiche médicament |
+| `POST`   | `/api/v1/products`                               | Rôle `owner`         | Créer un article et son conditionnement de base                |
+| `PATCH`  | `/api/v1/products/{id}`                          | Rôle `owner`         | Nom, SKU, unité, seuil, suivi, taxe, activation                |
+| `POST`   | `/api/v1/products/{id}/packagings`               | Rôle `owner`         | Ajouter un conditionnement (facteur > 0)                       |
+| `PATCH`  | `/api/v1/products/{id}/packagings/{packagingId}` | Rôle `owner`         | Libellé, facteur, prix, activation, promotion en base          |
+| `POST`   | `/api/v1/products/{id}/barcodes`                 | Rôle `owner`         | Ajouter un code-barres (base par défaut)                       |
+| `DELETE` | `/api/v1/products/{id}/barcodes/{barcodeId}`     | Rôle `owner`         | Retirer un code-barres                                         |
 
 Règles appliquées :
 
@@ -298,6 +316,34 @@ renvoyée dans le contexte d'authentification des deux clients.
 Les routes d'authentification sont limitées en débit (5 inscriptions et
 10 connexions par minute et par adresse), et l'ensemble de l'API à 100 requêtes
 par minute.
+
+## Stock et valorisation (CUMP)
+
+| Méthode | Route                   | Accès                | Description                                                                    |
+| ------- | ----------------------- | -------------------- | ------------------------------------------------------------------------------ |
+| `GET`   | `/api/v1/stock`         | Authentifié (tenant) | Quantités, CUMP et valeur par article (entrepôt du point de vente)             |
+| `POST`  | `/api/v1/stock/entries` | `owner`, `cashier`   | Réception directe (quantité ; `unitCost` optionnel pour mettre à jour le CUMP) |
+
+Le **coût unitaire moyen pondéré** est tenu par combinaison
+`(tenant, entrepôt, article physique)` dans `product_valuations`. Chaque entrée
+valorise le stock, met à jour le CUMP et trace un mouvement avec `unit_cost` /
+`total_cost`. Les sorties (ventes) consomment le CUMP courant sans le modifier.
+
+## Achats et réceptions
+
+| Méthode | Route                                         | Accès                    | Description                              |
+| ------- | --------------------------------------------- | ------------------------ | ---------------------------------------- |
+| `POST`  | `/api/v1/purchasing/suppliers`                | `owner`                  | Fournisseur                              |
+| `POST`  | `/api/v1/purchasing/purchases`                | `owner`                  | Commande fournisseur (brouillon)         |
+| `POST`  | `/api/v1/purchasing/goods-receipts`           | `owner`, `stock_manager` | Bon de réception (brouillon)             |
+| `POST`  | `/api/v1/purchasing/goods-receipts/{id}/post` | `owner`, `stock_manager` | Valider : stock + CUMP + statut commande |
+
+Flux typique : commande → bon de réception (lignes avec `unitCost`) →
+`post` (transaction unique par ligne). Les quantités reçues cumulées ne
+peuvent pas dépasser la commande.
+
+Test e2e dédié : `npm run test:e2e -- test/purchasing.e2e-spec.ts`
+(scénario 10×5 USD + 10×7 USD → CUMP 6 USD).
 
 ## Docker
 

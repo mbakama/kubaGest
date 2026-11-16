@@ -16,6 +16,7 @@ export default defineConfig({
       DB_SYNCHRONIZE: 'true',
       SWAGGER_ENABLED: 'false',
       JWT_SECRET: 'test-secret-0123456789abcdef0123456789abcdef',
+      APP_PUBLIC_URL: 'http://localhost:4200',
     },
   },
 });

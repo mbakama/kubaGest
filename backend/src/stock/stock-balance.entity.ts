@@ -21,17 +21,11 @@ export enum StockBucket {
  * du journal `stock_movements` doit toujours lui être égale.
  */
 @Entity({ name: 'stock_balances' })
-@Unique('uq_stock_balances_scope', ['tenantId', 'establishmentId', 'id'])
-@Unique('uq_stock_balances_article', [
-  'tenantId',
-  'establishmentId',
-  'productId',
-  'bucket',
-])
+@Unique('uq_stock_balances_scope', ['tenantId', 'id'])
 @Index('idx_stock_balances_tenant', [
   'tenantId',
-  'establishmentId',
-  'productId',
+  'warehouseId',
+  'physicalProductId',
 ])
 export class StockBalance {
   @PrimaryGeneratedColumn('uuid')
@@ -40,11 +34,14 @@ export class StockBalance {
   @Column({ name: 'tenant_id', type: 'uuid' })
   tenantId: string;
 
-  @Column({ name: 'establishment_id', type: 'uuid' })
-  establishmentId: string;
+  @Column({ name: 'warehouse_id', type: 'uuid' })
+  warehouseId: string;
 
-  @Column({ name: 'product_id', type: 'uuid' })
-  productId: string;
+  @Column({ name: 'physical_product_id', type: 'uuid' })
+  physicalProductId: string;
+
+  @Column({ name: 'batch_id', type: 'uuid', nullable: true })
+  batchId: string | null;
 
   @Column({ type: 'varchar', length: 20, default: StockBucket.AVAILABLE })
   bucket: StockBucket;
@@ -56,6 +53,9 @@ export class StockBalance {
     transformer: bigintNumber,
   })
   quantityBase: number;
+
+  @Column({ type: 'bigint', default: 0, transformer: bigintNumber })
+  version: number;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

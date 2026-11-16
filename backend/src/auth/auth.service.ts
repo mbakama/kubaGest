@@ -1,3 +1,4 @@
+import { createHash, randomBytes } from 'node:crypto';
 import {
   ConflictException,
   ForbiddenException,
@@ -6,16 +7,18 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { DataSource } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { AuditService } from '../audit/audit.service.js';
 import { hashPassword, verifyPassword } from '../common/password.js';
-import { Establishment } from '../tenants/establishment.entity.js';
-import { Plan } from '../tenants/plan.entity.js';
-import { assertTenantUsable } from '../tenants/tenant-access.js';
-import { computeTrialEnd } from '../tenants/tenant.constants.js';
-import { Tenant } from '../tenants/tenant.entity.js';
-import { TenantPlan, TenantStatus } from '../tenants/tenant.enums.js';
-import { Subscription } from '../tenants/subscription.entity.js';
+import { Establishment } from '../tenants/entities/establishment.entity.js';
+import { Warehouse, WarehouseKind } from '../tenants/entities/warehouse.entity.js';
+import { Plan } from '../tenants/entities/plan.entity.js';
+import { assertTenantUsable } from '../core/tenants/tenant-access.js';
+import { computeTrialEnd } from '../core/tenants/tenant.constants.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
+import { TenantPlan, TenantStatus } from '../core/tenants/tenant.enums.js';
+import { Subscription } from '../tenants/entities/subscription.entity.js';
 import { Membership } from '../users/membership.entity.js';
 import { MembershipRole } from '../users/membership-role.enum.js';
 import { mapUserResponse, ProfileResponseDto } from '../users/user.mapper.js';
@@ -24,6 +27,8 @@ import { UsersService } from '../users/users.service.js';
 import { AuthContextDto, AuthResponseDto } from './dto/auth-response.dto.js';
 import { LoginDto } from './dto/login.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
+import { AuthSession } from './auth-session.entity.js';
+import { AuthClientType } from './auth-token.enums.js';
 import type { JwtPayload } from './jwt-payload.interface.js';
 
 @Injectable()
@@ -33,7 +38,16 @@ export class AuthService {
     private readonly jwtService: JwtService,
     private readonly dataSource: DataSource,
     private readonly audit: AuditService,
+    @InjectRepository(AuthSession)
+    private readonly authSessions: Repository<AuthSession>,
   ) {}
+
+  /** Disponibilité d’une adresse e-mail avant inscription (validation asynchrone UI). */
+  async isEmailAvailable(email: string): Promise<{ available: boolean }> {
+    const normalized = email.trim().toLowerCase();
+    const existing = await this.users.findByEmail(normalized);
+    return { available: !existing };
+  }
 
   /**
    * Inscription = activation d'un établissement (§4) : le tenant, son
@@ -88,16 +102,37 @@ export class AuthService {
         const establishment = await manager.save(
           manager.create(Establishment, {
             tenantId: tenant.id,
+            code: `EST-${tenant.id.replaceAll('-', '').slice(0, 8).toUpperCase()}`,
             name: dto.tenantName.trim(),
             activityType: dto.activityType,
           }),
         );
+
+        await manager.save([
+          manager.create(Warehouse, {
+            tenantId: tenant.id,
+            establishmentId: null,
+            code: 'CENTRAL',
+            name: 'Entrepôt central',
+            kind: WarehouseKind.CENTRAL,
+            isActive: true,
+          }),
+          manager.create(Warehouse, {
+            tenantId: tenant.id,
+            establishmentId: establishment.id,
+            code: `EST-${establishment.id.replaceAll('-', '').slice(0, 8).toUpperCase()}`,
+            name: `Entrepôt principal - ${establishment.name}`,
+            kind: WarehouseKind.SECONDARY,
+            isActive: true,
+          }),
+        ]);
 
         const user = await manager.save(
           manager.create(User, {
             email,
             firstName: dto.firstName.trim(),
             lastName: dto.lastName.trim(),
+            sex: dto.sex,
             phone: dto.phone?.trim() || null,
             passwordHash,
             isPlatformAdmin: false,
@@ -141,6 +176,8 @@ export class AuthService {
       role: membership.role,
     };
 
+    await this.openAuthSession(user.id);
+
     return {
       accessToken: await this.signToken({
         sub: user.id,
@@ -172,6 +209,7 @@ export class AuthService {
         );
       }
 
+      await this.openAuthSession(user.id);
       return {
         accessToken: await this.signToken({
           sub: user.id,
@@ -188,6 +226,7 @@ export class AuthService {
     if (!membership) {
       // Un administrateur plateforme n'a aucun accès métier implicite (§3).
       if (user.isPlatformAdmin && !dto.tenantId) {
+        await this.openAuthSession(user.id);
         return {
           accessToken: await this.signToken({
             sub: user.id,
@@ -214,6 +253,8 @@ export class AuthService {
         .getRepository(Tenant)
         .findOne({ where: { id: membership.tenantId } }),
     );
+
+    await this.openAuthSession(user.id);
 
     return {
       accessToken: await this.signToken({
@@ -248,5 +289,26 @@ export class AuthService {
 
   private signToken(payload: JwtPayload): Promise<string> {
     return this.jwtService.signAsync(payload);
+  }
+
+  /** Trace une connexion révocable (§28.5) pour le registre appareils. */
+  private async openAuthSession(
+    userId: string,
+    clientType: AuthClientType = AuthClientType.WEB,
+  ): Promise<void> {
+    const refreshToken = randomBytes(32).toString('base64url');
+    const refreshTokenHash = createHash('sha256')
+      .update(refreshToken)
+      .digest('hex');
+    const expiresAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
+    await this.authSessions.save(
+      this.authSessions.create({
+        userId,
+        clientType,
+        refreshTokenHash,
+        expiresAt,
+        lastSeenAt: new Date(),
+      }),
+    );
   }
 }

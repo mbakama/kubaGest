@@ -1,0 +1,263 @@
+<div class="flex w-full flex-col gap-space-lg pb-space-xl text-text-primary">
+  <header class="flex flex-col gap-space-md md:flex-row md:items-end md:justify-between">
+    <div class="space-y-1">
+      <nav
+        class="flex items-center gap-space-xs font-label-md text-label-md text-text-muted"
+        aria-label="Fil d'Ariane"
+      >
+        <a routerLink="/" class="inline-flex items-center gap-1 transition-colors hover:text-primary">
+          <i class="fa-solid fa-store text-[14px]" aria-hidden="true"></i>
+          Tableau de bord
+        </a>
+        <i class="fa-solid fa-chevron-right text-[10px] text-outline-variant" aria-hidden="true"></i>
+        <span class="font-semibold text-text-primary">Paramètres de l'établissement</span>
+      </nav>
+      <h1 class="font-headline-xl text-headline-xl tracking-tight text-text-primary">
+        Paramètres de l'établissement
+      </h1>
+      <p class="max-w-3xl font-body-md text-body-md text-text-muted">
+        Espace connecté à <strong class="text-text-primary">{{ tenantName() }}</strong> — profil du
+        compte, raccourcis d'administration et préférences (fonctions avancées en cours de branchement
+        sur l'API).
+      </p>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-1 items-start gap-gutter-desktop lg:grid-cols-12">
+    <!-- Profil & contexte tenant -->
+    <section
+      class="flex flex-col gap-space-md lg:col-span-5"
+      aria-labelledby="tenant-settings-profile-title"
+    >
+      <div class="relative overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+        <div class="flex flex-col items-center text-center">
+          <span
+            class="mb-space-sm flex size-24 items-center justify-center rounded-full bg-primary-fixed text-headline-xl font-bold text-primary shadow-md"
+            aria-hidden="true"
+            >{{ initials() }}</span
+          >
+          <h2 id="tenant-settings-profile-title" class="font-headline-lg text-headline-lg text-text-primary">
+            {{ displayName() }}
+          </h2>
+          <p class="mt-1 font-body-sm text-body-sm text-text-muted">{{ session()?.user.email }}</p>
+          <div class="mt-space-sm flex flex-wrap items-center justify-center gap-2">
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-0.5 font-label-sm font-semibold text-primary"
+            >
+              <i class="fa-solid fa-user-tag text-[12px]" aria-hidden="true"></i>
+              {{ roleLabel() }}
+            </span>
+            <span
+              class="inline-flex items-center gap-1 rounded-full bg-growth-green/15 px-2.5 py-0.5 font-label-sm font-semibold text-growth-green"
+            >
+              Compte actif
+            </span>
+          </div>
+          <p class="mt-space-md flex items-center justify-center gap-1.5 font-body-md text-text-muted">
+            <i class="fa-solid fa-shop text-retail-blue" aria-hidden="true"></i>
+            {{ tenantName() }}
+          </p>
+        </div>
+      </div>
+
+      <div class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm">
+        <h3 class="m-0 font-headline-sm text-headline-sm text-text-primary">Identité (lecture seule)</h3>
+        <p class="mt-1 font-body-sm text-body-sm text-text-muted">
+          La modification du profil collaborateur sera proposée ici dès que l'API établissement sera disponible.
+        </p>
+        <dl class="mt-space-md space-y-3 font-body-sm">
+          <div>
+            <dt class="font-label-sm text-text-muted">Prénom</dt>
+            <dd class="mt-0.5 font-medium text-text-primary">{{ session()?.user.firstName || '—' }}</dd>
+          </div>
+          <div>
+            <dt class="font-label-sm text-text-muted">Nom</dt>
+            <dd class="mt-0.5 font-medium text-text-primary">{{ session()?.user.lastName || '—' }}</dd>
+          </div>
+          <div>
+            <dt class="font-label-sm text-text-muted">E-mail de connexion</dt>
+            <dd class="mt-0.5 font-medium text-text-primary">{{ session()?.user.email }}</dd>
+          </div>
+          <div>
+            <dt class="font-label-sm text-text-muted">Identifiant technique</dt>
+            <dd class="mt-0.5 font-mono text-label-sm text-text-muted">
+              {{ session()?.user.id }}
+            </dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- Administration & à venir -->
+    <div class="flex flex-col gap-space-md lg:col-span-7">
+      @if (isOwner()) {
+        <section
+          class="rounded-xl border border-primary/20 bg-surface-container-lowest p-space-lg shadow-sm"
+          aria-labelledby="tenant-settings-admin-title"
+        >
+          <div class="flex items-start gap-space-sm">
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
+              aria-hidden="true"
+            >
+              <i class="fa-solid fa-users-gear text-[20px]"></i>
+            </span>
+            <div class="min-w-0 flex-1">
+              <h3 id="tenant-settings-admin-title" class="m-0 font-headline-sm text-headline-sm">
+                Administration de l'établissement
+              </h3>
+              <p class="mt-1 font-body-sm text-body-sm text-text-muted">
+                Équipe, droits, sessions collaborateurs et journal d'audit métier — réservé au gérant principal.
+              </p>
+              <div class="mt-space-md flex flex-wrap gap-2">
+                <a
+                  routerLink="/utilisateurs-roles"
+                  class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 font-label-md font-semibold text-on-primary shadow-sm transition-colors hover:bg-tertiary-container"
+                >
+                  <i class="fa-solid fa-user-shield" aria-hidden="true"></i>
+                  Utilisateurs &amp; rôles
+                </a>
+                <a
+                  routerLink="/utilisateurs-roles"
+                  fragment="journal-audit"
+                  class="inline-flex items-center gap-2 rounded-lg border border-outline-variant/50 bg-surface-container-low px-4 py-2.5 font-label-md font-semibold text-text-primary transition-colors hover:bg-surface-container"
+                >
+                  <i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i>
+                  Journal d'audit
+                </a>
+              </div>
+            </div>
+          </div>
+        </section>
+      } @else {
+        <p
+          class="rounded-xl bg-surface-container-low px-4 py-3 font-body-sm text-text-muted"
+          role="note"
+        >
+          Les paramètres sensibles de l'établissement (équipe, droits, audit) sont gérés par le gérant principal.
+          Pour un changement de rôle ou d'accès, contactez-le.
+        </p>
+      }
+
+      <section
+        id="appareils-sessions"
+        class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm"
+        aria-labelledby="tenant-settings-sessions-title"
+      >
+        <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+          <div>
+            <h3 id="tenant-settings-sessions-title" class="m-0 font-headline-sm text-headline-sm">
+              Appareils &amp; sessions
+            </h3>
+            <p class="mt-1 font-body-sm text-body-sm text-text-muted">
+              Connexions actives sur votre compte (web, mobile, poste de travail). Le gérant peut aussi
+              déconnecter un collaborateur depuis
+              <a routerLink="/utilisateurs-roles" class="font-semibold text-primary hover:underline"
+                >Utilisateurs &amp; rôles</a
+              >.
+            </p>
+          </div>
+          @if (!sessionsLoading()) {
+            <span
+              class="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-surface-container-high px-2.5 py-0.5 font-label-sm font-semibold text-text-primary"
+            >
+              {{ activeAuthSessions().length }} active(s)
+            </span>
+          }
+        </div>
+
+        @if (sessionsError()) {
+          <div
+            class="mt-space-md flex flex-wrap items-center gap-2 rounded-lg bg-alert-red/10 px-4 py-3 text-body-sm text-alert-red"
+            role="alert"
+          >
+            <span>{{ sessionsError() }}</span>
+            <button
+              type="button"
+              class="ml-auto font-semibold underline"
+              (click)="loadAuthSessions()"
+            >
+              Réessayer
+            </button>
+          </div>
+        } @else if (sessionsLoading()) {
+          <p class="mt-space-md font-body-sm text-text-muted" role="status">
+            <i class="fa-solid fa-circle-notch mr-2 animate-spin" aria-hidden="true"></i>
+            Chargement des sessions…
+          </p>
+        } @else if (authSessions().length === 0) {
+          <p class="mt-space-md rounded-lg bg-surface-container-low px-4 py-6 text-center font-body-sm text-text-muted">
+            Aucune session enregistrée pour le moment.
+          </p>
+        } @else {
+          <ul class="mt-space-md space-y-2">
+            @for (deviceSession of authSessions(); track deviceSession.id) {
+              <li
+                class="flex flex-col gap-3 rounded-xl border border-outline-variant/35 bg-surface-container-low p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div class="flex items-start gap-3">
+                  <span
+                    class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-retail-blue/10 text-retail-blue"
+                    aria-hidden="true"
+                  >
+                    <i [class]="sessionClientIcon(deviceSession.clientType)" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <p class="m-0 font-semibold text-text-primary">
+                      {{ sessionClientLabel(deviceSession.clientType) }}
+                    </p>
+                    <p class="mt-1 font-body-sm text-text-muted">
+                      Connecté le {{ deviceSession.createdAt | date: 'short' }}
+                      @if (deviceSession.lastSeenAt) {
+                        · Dernière activité {{ deviceSession.lastSeenAt | date: 'short' }}
+                      }
+                    </p>
+                  </div>
+                </div>
+                @if (!deviceSession.revokedAt) {
+                  <button
+                    type="button"
+                    class="shrink-0 rounded-lg border border-alert-red/40 bg-surface-container-lowest px-3 py-2 font-label-sm font-semibold text-alert-red transition-colors hover:bg-alert-red/10 disabled:cursor-wait disabled:opacity-60"
+                    [disabled]="sessionsSaving()"
+                    (click)="revokeAuthSession(deviceSession)"
+                  >
+                    Déconnecter
+                  </button>
+                } @else {
+                  <span class="font-body-sm font-medium text-text-muted">Session terminée</span>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </section>
+
+      <section
+        class="rounded-xl bg-surface-container-lowest p-space-lg shadow-sm"
+        aria-labelledby="tenant-settings-roadmap-title"
+      >
+        <h3 id="tenant-settings-roadmap-title" class="m-0 font-headline-sm text-headline-sm">
+          Bientôt dans cet espace
+        </h3>
+        <p class="mt-1 font-body-sm text-body-sm text-text-muted">
+          Ancienne maquette retirée — ces blocs correspondront au périmètre <strong>tenant</strong>, pas à la
+          console plateforme.
+        </p>
+        <ul class="mt-space-md space-y-3 font-body-sm text-text-primary">
+          <li class="flex gap-3 rounded-lg bg-surface-container-low p-3">
+            <i class="fa-solid fa-lock mt-0.5 text-primary" aria-hidden="true"></i>
+            <span><strong>Mot de passe &amp; sécurité</strong> — changement personnel, 2FA caisse, PIN maître.</span>
+          </li>
+          <li class="flex gap-3 rounded-lg bg-surface-container-low p-3">
+            <i class="fa-solid fa-bell mt-0.5 text-retail-amber" aria-hidden="true"></i>
+            <span><strong>Notifications</strong> — alertes caisse, stocks, clôtures.</span>
+          </li>
+          <li class="flex gap-3 rounded-lg bg-surface-container-low p-3">
+            <i class="fa-solid fa-file-contract mt-0.5 text-growth-green" aria-hidden="true"></i>
+            <span><strong>Licence &amp; points de vente</strong> — formule, renouvellement, établissements rattachés.</span>
+          </li>
+        </ul>
+      </section>
+    </div>
+  </div>
+</div>

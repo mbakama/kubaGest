@@ -1,0 +1,681 @@
+:host {
+  display: block;
+  min-height: 100dvh;
+  height: auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.register-page {
+  min-height: 100dvh;
+  background: #f8fafc;
+  color: #102033;
+}
+
+.register-stage {
+  min-height: 100dvh;
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.register-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  color: #fff;
+  background: linear-gradient(145deg, #1e3a8a 0%, #2563eb 48%, #0284c7 100%);
+}
+
+.register-hero__kuba-pattern {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0.15;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+.register-hero__glow {
+  position: absolute;
+  top: -20%;
+  right: -15%;
+  width: 55%;
+  height: 70%;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.12);
+  filter: blur(40px);
+  pointer-events: none;
+}
+
+.register-hero__wave {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 45%;
+  width: 100%;
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+.register-hero__brand {
+  position: relative;
+  z-index: 1;
+  color: #fff;
+  text-decoration: none;
+}
+
+.register-hero__brand .brand__mark {
+  background: rgb(255 255 255 / 0.18);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.25);
+}
+
+.register-hero__brand strong,
+.register-hero__brand small {
+  color: #fff;
+}
+
+.register-hero__brand small {
+  opacity: 0.82;
+}
+
+.register-hero__body {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: clamp(2rem, 8vh, 4rem);
+}
+
+.register-hero__eyebrow {
+  margin: 0 0 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgb(191 219 254 / 0.95);
+}
+
+.register-hero h1 {
+  margin: 0;
+  max-width: 16ch;
+  font-size: clamp(1.75rem, 4vw, 2.65rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.register-hero__lead {
+  margin: 1rem 0 0;
+  max-width: 38ch;
+  color: rgb(239 246 255 / 0.9);
+  font-size: 0.95rem;
+  line-height: 1.55;
+}
+
+.register-hero__features {
+  display: grid;
+  gap: 0.65rem;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.register-hero__features li {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.85rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 0.85rem;
+  background: rgb(255 255 255 / 0.08);
+  font-size: 0.88rem;
+  font-weight: 650;
+  backdrop-filter: blur(4px);
+}
+
+.register-hero__features i {
+  width: 1.25rem;
+  text-align: center;
+  opacity: 0.95;
+}
+
+.register-workspace {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: clamp(1rem, 3vw, 1.75rem);
+}
+
+.register-workspace__bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.register-workspace__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--color-primary);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.register-workspace__back:hover {
+  text-decoration: underline;
+}
+
+.register-card {
+  flex: 0 0 auto;
+  border: 1px solid rgb(226 232 240 / 0.9);
+  border-radius: 1.35rem;
+  background: #fff;
+  box-shadow: 0 1.25rem 3rem rgb(15 23 42 / 0.08);
+  padding: clamp(1.35rem, 3vw, 2.1rem);
+}
+
+.register-card__head h2 {
+  margin: 0;
+  font-size: clamp(1.45rem, 2.5vw, 1.85rem);
+  letter-spacing: -0.03em;
+}
+
+.register-card__head h2 span {
+  color: var(--color-primary);
+}
+
+.register-card__head p {
+  margin: 0.4rem 0 0;
+  color: #64748b;
+  font-size: 0.92rem;
+  line-height: 1.5;
+}
+
+:host ::ng-deep .register-stepper {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+:host ::ng-deep .register-stepper .p-step-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+:host ::ng-deep .register-stepper .p-step-number {
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+:host ::ng-deep .register-stepper .p-step-active .p-step-number {
+  border-color: var(--color-primary);
+  background: var(--color-primary-fixed);
+  color: var(--color-primary);
+}
+
+:host ::ng-deep .register-stepper .p-step-active .p-step-title {
+  color: var(--color-primary);
+}
+
+:host ::ng-deep .register-stepper .p-step-active .p-stepper-separator {
+  background: var(--color-primary);
+}
+
+:host ::ng-deep .register-stepper .register-step--complete .p-step-number {
+  border-color: var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+}
+
+:host ::ng-deep .register-stepper .register-step--complete .p-step-title {
+  color: var(--color-primary);
+}
+
+:host ::ng-deep .register-stepper .register-step--complete .p-stepper-separator {
+  background: var(--color-primary);
+}
+
+.register-form {
+  margin-top: 1.35rem;
+}
+
+.register-form__section + .register-form__section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.register-form__section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin: 0 0 1rem;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 750;
+}
+
+.register-form__section-title i {
+  color: var(--color-primary);
+}
+
+.register-form__grid {
+  display: grid;
+  gap: 0;
+}
+
+.register-form__grid--2 {
+  grid-template-columns: 1fr;
+}
+
+.register-form__grid--2 .field + .field {
+  margin-top: 1rem;
+}
+
+.register-form__grid + .register-form__grid {
+  margin-top: 1rem;
+}
+
+.field--sex {
+  margin: 1rem 0;
+}
+
+:host ::ng-deep .register-sex-select.p-select {
+  width: 100%;
+  min-height: 3.5rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  background: #fff;
+  box-shadow: none;
+}
+
+:host ::ng-deep .register-sex-select.p-select:not(.p-disabled):hover {
+  border-color: #94a3b8;
+}
+
+:host ::ng-deep .register-sex-select.p-select.p-focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 0.13);
+}
+
+:host ::ng-deep .register-sex-select .p-select-label {
+  display: flex;
+  align-items: center;
+  padding: 0 1rem;
+  color: #102033;
+}
+
+:host ::ng-deep .register-sex-select .p-select-dropdown {
+  width: 3rem;
+  color: #64748b;
+}
+
+:host ::ng-deep .register-select-panel.p-select-overlay {
+  overflow: hidden;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: 0.75rem;
+  box-shadow: 0 14px 32px rgb(15 23 42 / 0.12);
+}
+
+.register-optional {
+  color: #94a3b8;
+  font-size: 0.78rem;
+  font-weight: 500;
+}
+
+.field--email-availability .field__lead-icon {
+  width: 1.1rem;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.field__lead-icon--spin {
+  animation: submit-button-spin 0.75s linear infinite;
+}
+
+.field__trail-icon {
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 1.05rem;
+}
+
+.field__trail-icon--ok {
+  color: var(--color-primary);
+}
+
+.field__trail-icon--error {
+  color: #e53e3e;
+}
+
+.field__control--email-available {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgb(37 99 235 / 0.12);
+}
+
+.field__control--email-checking {
+  border-color: #cbd5e1;
+}
+
+.field__error--actions {
+  margin-top: 0.55rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.6rem;
+  border: 1px solid #fca5a5;
+  background: #fef2f2;
+  color: #991b1b;
+  line-height: 1.45;
+}
+
+.field__error--actions a {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-underline-offset: 3px;
+}
+
+.field__error--actions a:hover {
+  color: var(--color-on-primary-fixed);
+}
+
+.register-terms label {
+  cursor: pointer;
+}
+
+.field__error--phone {
+  margin-top: 0.45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #b91c1c;
+}
+
+.register-terms {
+  display: flex;
+  margin-top: 1.15rem;
+  align-items: flex-start;
+  line-height: 1.45;
+}
+
+.register-terms--invalid {
+  color: #b91c1c;
+}
+
+.register-form__footer {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.register-form__footer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  margin-bottom: 0.9rem;
+}
+
+.register-form__actions {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.65rem;
+}
+
+.register-form__footer app-auth-legal-notice {
+  flex: 1 1 100%;
+  width: 100%;
+}
+
+.register-form__footer .submit-button {
+  width: auto;
+  min-width: 9rem;
+  box-shadow: 0 2px 6px rgb(37 99 235 / 0.1);
+}
+
+.register-form__footer .submit-button:not(:disabled):hover {
+  transform: none;
+  box-shadow: 0 2px 8px rgb(37 99 235 / 0.12);
+}
+
+.wizard-button {
+  display: inline-flex;
+  min-height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.75rem;
+  padding: 0.7rem 1rem;
+  background: #fff;
+  color: #334155;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 750;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.wizard-button:hover {
+  border-color: #94a3b8;
+  background: #f8fafc;
+}
+
+.register-form__footer .signup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  min-height: 3rem;
+  min-width: 0;
+  line-height: 1.45;
+  text-align: left;
+  color: #64748b;
+  font-size: 0.9rem;
+}
+
+.register-form__footer .signup a {
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--color-primary);
+}
+
+.register-form__footer .signup a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .register-form__footer-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .register-form__footer .signup {
+    text-align: center;
+    justify-content: center;
+  }
+  .register-form__actions {
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: stretch;
+  }
+  .register-form__actions > * {
+    flex: 1 1 auto;
+  }
+  .register-form__footer .submit-button {
+    width: auto;
+  }
+}
+
+.register-card__success {
+  text-align: center;
+  padding: 2rem 0.5rem 0.5rem;
+}
+
+.register-card__success-icon {
+  color: var(--color-primary);
+  font-size: 2.75rem;
+}
+
+.register-card__success h2 {
+  margin: 0.85rem 0 0;
+}
+
+.register-card__success p {
+  margin: 0.5rem auto 1.5rem;
+  max-width: 36ch;
+  color: #64748b;
+}
+
+.field__control--select {
+  align-items: center;
+  padding: 0 0.9rem;
+}
+
+.field__control--select > i {
+  flex-shrink: 0;
+  width: 1em;
+  text-align: center;
+  color: var(--color-primary);
+}
+
+.field__select {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+:host ::ng-deep .field__select > p-select {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+:host ::ng-deep .field__select .register-activity-select.p-select {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  padding: 0;
+  align-items: center;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .field__select .register-activity-select.p-select.p-focus {
+  border-color: transparent;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .field__select .register-activity-select .p-select-label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  min-height: 0;
+  padding: 0;
+  font-size: inherit;
+  line-height: 1.25;
+  color: #102033;
+}
+
+:host ::ng-deep .field__select .register-activity-select .p-select-dropdown {
+  width: 2.5rem;
+  color: #475569;
+}
+
+:host ::ng-deep .field__control--select .register-activity-select.p-select,
+:host ::ng-deep .field__control--select .register-activity-select.p-inputwrapper {
+  min-height: 0;
+}
+
+@media (min-width: 640px) {
+  .register-form__grid--2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .register-form__grid--2 .field + .field {
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1024px) {
+  :host {
+    height: 100dvh;
+    overflow: hidden;
+  }
+
+  .register-stage {
+    grid-template-columns: minmax(18rem, 26rem) minmax(0, 1fr);
+    height: 100dvh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .register-hero {
+    min-height: 0;
+    height: 100%;
+    padding-bottom: 2.5rem;
+    overflow-y: auto;
+  }
+
+  .register-workspace {
+    min-height: 0;
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .register-card {
+    margin: 0 auto;
+    width: min(100%, clamp(44rem, 46vw, 52rem));
+  }
+
+  .register-form__footer .submit-button {
+    width: auto;
+    min-width: 14rem;
+  }
+
+  .register-form__footer .wizard-button {
+    min-width: 8.75rem;
+  }
+}
+
+@media (max-width: 1023px) {
+  .register-hero {
+    min-height: auto;
+  }
+
+  .register-hero__body {
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .register-hero__features {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 479px) {
+  .register-hero__features {
+    grid-template-columns: 1fr;
+  }
+
+  .register-workspace__back {
+    font-size: 0.8rem;
+  }
+}

@@ -1,0 +1,1387 @@
+<div class="flex w-full flex-col gap-space-lg pb-space-xl text-text-primary">
+  <div class="flex w-full flex-col gap-space-lg">
+    <!-- Top Context Header & Actions -->
+    <section class="flex flex-col gap-space-sm">
+      <div class="flex items-center gap-2 text-text-muted">
+        <span class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted"
+          >Paramètres</span
+        >
+        <i class="fa-solid fa-chevron-right text-[14px]" aria-hidden="true"></i>
+        <span
+          class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold"
+          >Équipe &amp; Droits d'accès</span
+        >
+      </div>
+      <div class="flex flex-col justify-between gap-space-md lg:flex-row lg:items-center">
+        <div class="min-w-0 max-w-3xl">
+          <h1 class="users-page-title font-bold tracking-tight text-text-primary">
+            Utilisateurs et rôles
+          </h1>
+          <p class="users-page-subtitle text-text-muted">
+            Gérez les utilisateurs, leurs rôles et leurs droits d’accès à Kubagest.
+          </p>
+        </div>
+        <div class="flex items-center gap-3 self-start lg:self-center shrink-0">
+          <button
+            class="h-10 px-4 rounded-lg bg-surface-container-lowest text-text-primary font-label-md text-label-md font-semibold shadow-sm hover:bg-surface-container transition-all flex items-center gap-2"
+            type="button"
+          >
+            <i class="fa-solid fa-table-cells text-[18px]" aria-hidden="true"></i>
+            <span>Exporter la matrice</span>
+          </button>
+          <button
+            class="h-10 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-md hover:bg-primary-container transition-all flex items-center gap-2"
+            type="button"
+            (click)="openCreate()"
+          >
+            <i class="fa-solid fa-user-plus text-[20px]" aria-hidden="true"></i>
+            <span>Ajouter un utilisateur</span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- MVP opérationnel : annuaire + fiche collaborateur branchés sur l’API ; matrice démo conservée plus bas. -->
+    <section
+      class="mb-space-md rounded-xl border border-outline-variant/30 bg-surface-container-lowest p-space-md shadow-sm"
+      aria-labelledby="mvp-members-title"
+    >
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h2
+              id="mvp-members-title"
+              class="font-headline-sm text-headline-sm font-bold text-text-primary"
+            >
+              Utilisateurs enregistrés
+            </h2>
+            <p class="font-body-sm text-body-sm text-text-muted">
+              {{ activeCount() }} compte(s) actif(s) sur {{ members().length }}
+            </p>
+          </div>
+          <div
+            class="flex w-full shrink-0 flex-col gap-2 sm:flex-row sm:items-center sm:justify-end lg:ml-auto lg:w-auto"
+          >
+            <p-inputgroup class="users-phone-group h-10 w-full sm:w-64">
+              <p-inputgroup-addon>
+                <i class="fa-solid fa-magnifying-glass text-text-muted" aria-hidden="true"></i>
+              </p-inputgroup-addon>
+              <input
+                type="search"
+                pInputText
+                fluid
+                placeholder="Nom ou e-mail"
+                aria-label="Rechercher un utilisateur"
+                [value]="search()"
+                (input)="search.set($any($event.target).value)"
+              />
+            </p-inputgroup>
+            <p-select
+              class="users-role-select w-full sm:w-56"
+              [options]="memberFilterRoleOptions"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="roleFilter()"
+              (ngModelChange)="roleFilter.set($event)"
+              appendTo="body"
+              ariaLabel="Filtrer par rôle"
+            />
+          </div>
+        </div>
+
+        @if (error()) {
+          <div
+            role="alert"
+            class="flex items-center justify-between gap-3 rounded-lg bg-alert-red/10 px-4 py-3 text-alert-red"
+          >
+            <span>{{ error() }}</span>
+            <button type="button" class="font-semibold underline" (click)="load()">
+              Réessayer
+            </button>
+          </div>
+        }
+
+        <p-table
+          class="users-members-table"
+          [value]="filteredMembers()"
+          [loading]="loading()"
+          dataKey="membershipId"
+          stripedRows
+          [paginator]="true"
+          [rows]="membersTablePageSize"
+          [rowsPerPageOptions]="membersTablePageSizeOptions"
+          [tableStyle]="membersTableStyle"
+          aria-labelledby="mvp-members-title"
+        >
+          <ng-template #header>
+            <tr>
+              <th scope="col">Utilisateur</th>
+              <th scope="col">Sexe</th>
+              <th scope="col">Rôle</th>
+              <th scope="col">Statut</th>
+              <th scope="col" class="text-right" style="width: 9rem">Actions</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-member>
+            <tr
+              [class.users-members-table-row--selected]="
+                selectedMember()?.membershipId === member.membershipId
+              "
+            >
+              <td>
+                <button
+                  type="button"
+                  class="cursor-pointer border-0 bg-transparent p-0 text-left"
+                  (click)="openEdit(member)"
+                >
+                  <span class="block font-semibold text-text-primary">{{
+                    memberName(member)
+                  }}</span>
+                  <span class="text-body-sm text-text-muted">
+                    {{ member.email }}
+                    @if (member.phone) {
+                      · {{ member.phone }}
+                    }
+                  </span>
+                </button>
+              </td>
+              <td>
+                <span class="text-body-sm text-text-primary">{{ sexLabel(member.sex) }}</span>
+              </td>
+              <td>
+                <span class="font-semibold text-text-primary">{{
+                  roleLabel(member.role, member.sex)
+                }}</span>
+              </td>
+              <td>
+                @if (member.invitationPending) {
+                  <span
+                    class="inline-flex items-center rounded-full bg-retail-amber/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-retail-amber"
+                  >
+                    Invitation envoyée
+                  </span>
+                } @else if (member.isActive) {
+                  <span
+                    class="inline-flex items-center rounded-full bg-growth-green/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-growth-green"
+                  >
+                    Actif
+                  </span>
+                } @else {
+                  <span
+                    class="inline-flex items-center rounded-full bg-alert-red/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-alert-red"
+                  >
+                    Suspendu
+                  </span>
+                }
+              </td>
+              <td style="width: 9rem">
+                <div class="flex items-center justify-end gap-1">
+                  <p-button
+                    type="button"
+                    [rounded]="true"
+                    [outlined]="true"
+                    severity="secondary"
+                    size="small"
+                    pTooltip="Modifier rôle et droits"
+                    tooltipPosition="left"
+                    ariaLabel="Modifier rôle et droits"
+                    (onClick)="openEdit(member)"
+                  >
+                    <ng-template #icon>
+                      <i class="fa-solid fa-pen text-sm" aria-hidden="true"></i>
+                    </ng-template>
+                  </p-button>
+                  @if (member.role !== 'owner') {
+                    @if (member.invitationPending) {
+                      <p-button
+                        type="button"
+                        [rounded]="true"
+                        [outlined]="true"
+                        severity="secondary"
+                        size="small"
+                        [disabled]="true"
+                        pTooltip="Invitation en attente"
+                        tooltipPosition="left"
+                        ariaLabel="Invitation en attente d’activation"
+                      >
+                        <ng-template #icon>
+                          <i class="fa-solid fa-clock text-sm" aria-hidden="true"></i>
+                        </ng-template>
+                      </p-button>
+                    } @else {
+                      <p-button
+                        type="button"
+                        [rounded]="true"
+                        [outlined]="true"
+                        severity="secondary"
+                        size="small"
+                        [disabled]="saving()"
+                        pTooltip="Réinitialiser le mot de passe"
+                        tooltipPosition="left"
+                        ariaLabel="Réinitialiser le mot de passe"
+                        (onClick)="resetPassword(member)"
+                      >
+                        <ng-template #icon>
+                          <i class="fa-solid fa-key text-sm" aria-hidden="true"></i>
+                        </ng-template>
+                      </p-button>
+                      <p-button
+                        type="button"
+                        [rounded]="true"
+                        [outlined]="true"
+                        [severity]="member.isActive ? 'danger' : 'success'"
+                        size="small"
+                        [disabled]="saving()"
+                        [pTooltip]="member.isActive ? 'Suspendre' : 'Réactiver'"
+                        tooltipPosition="left"
+                        [ariaLabel]="member.isActive ? 'Suspendre' : 'Réactiver'"
+                        (onClick)="toggleStatus(member)"
+                      >
+                        <ng-template #icon>
+                          @if (member.isActive) {
+                            <i class="fa-solid fa-circle-pause text-sm" aria-hidden="true"></i>
+                          } @else {
+                            <i class="fa-solid fa-circle-check text-sm" aria-hidden="true"></i>
+                          }
+                        </ng-template>
+                      </p-button>
+                    }
+                  }
+                </div>
+              </td>
+            </tr>
+          </ng-template>
+          <ng-template #emptymessage>
+            <tr>
+              <td colspan="5">
+                <p class="m-0 py-8 text-center text-text-muted" role="status">
+                  Aucun utilisateur ne correspond aux critères.
+                </p>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+
+      </div>
+    </section>
+    <!-- KPI Overview Grid -->
+    <section
+      class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter py-space-sm mb-space-md"
+    >
+      <!-- Card 1 -->
+      <div
+        class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between"
+      >
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md text-text-muted">Total Collaborateurs</span>
+          <div class="flex items-baseline gap-2">
+            <span class="font-headline-md text-headline-md text-text-primary font-bold"
+              >{{ activeCount() }} actif(s)</span
+            >
+            <span class="font-label-sm text-label-sm text-growth-green font-medium"
+              >sur {{ members().length }} compte(s)</span
+            >
+          </div>
+          <span class="font-body-sm text-body-sm text-text-muted"
+            >{{ rosterRoleCounts().owner }} gérant · {{ rosterRoleCounts().cashier }} caisse ·
+            {{ rosterRoleCounts().stock_manager }} stock</span
+          >
+        </div>
+        <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+          <i class="fa-solid fa-users text-primary text-[24px]" aria-hidden="true"></i>
+        </div>
+      </div>
+      <!-- Card 2 -->
+      <div
+        class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between"
+      >
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md text-text-muted"
+            >Sessions Actives en direct</span
+          >
+          <div class="flex items-baseline gap-2">
+            <span class="font-headline-md text-headline-md text-growth-green font-bold"
+              >2 Terminaux</span
+            >
+            <span class="flex h-2 w-2 relative">
+              <span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-growth-green opacity-75"
+              ></span>
+              <span class="relative inline-flex rounded-full h-2 w-2 bg-growth-green"></span>
+            </span>
+          </div>
+          <span class="font-body-sm text-body-sm text-text-muted">Caisse 01 + Terminal Stock</span>
+        </div>
+        <div
+          class="w-12 h-12 rounded-xl bg-retail-blue/10 flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-cash-register text-retail-blue text-[24px]" aria-hidden="true"></i>
+        </div>
+      </div>
+      <!-- Card 3 -->
+      <div
+        class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between"
+      >
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md text-text-muted"
+            >Sécurité &amp; Contrôle PIN</span
+          >
+          <div class="flex items-baseline gap-2">
+            <span class="font-headline-md text-headline-md text-text-primary font-bold"
+              >0 Anomalie</span
+            >
+            <span class="font-label-sm text-label-sm text-growth-green font-medium">Conforme</span>
+          </div>
+          <span class="font-body-sm text-body-sm text-text-muted"
+            >Dernier test PIN à 08:30 (Reçu)</span
+          >
+        </div>
+        <div
+          class="w-12 h-12 rounded-xl bg-growth-green/10 flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-id-card text-growth-green text-[24px]" aria-hidden="true"></i>
+        </div>
+      </div>
+      <!-- Card 4 -->
+      <div
+        class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between"
+      >
+        <div class="flex flex-col gap-1">
+          <span class="font-label-md text-label-md text-text-muted">Journal d'audit (24h)</span>
+          <div class="flex items-baseline gap-2">
+            @if (loading()) {
+              <span class="font-headline-md text-headline-md text-text-muted font-bold">—</span>
+            } @else {
+              <span class="font-headline-md text-headline-md text-text-primary font-bold">{{
+                auditLast24hHeadline()
+              }}</span>
+              @if (auditLast24hCount() > 0) {
+                <span class="font-label-sm text-label-sm text-retail-amber font-medium"
+                  >{{ auditActors24hCount() }} acteur{{
+                    auditActors24hCount() > 1 ? 's' : ''
+                  }}</span
+                >
+              }
+            }
+          </div>
+          <span class="font-body-sm text-body-sm text-text-muted">
+            @if (loading()) {
+              Chargement…
+            } @else if (auditLatestIn24h(); as latest) {
+              Dernière trace : {{ latest.occurredAt | date: 'dd/MM à HH:mm' }}
+            } @else {
+              Aucune trace sur les dernières 24 h
+            }
+          </span>
+        </div>
+        <div
+          class="w-12 h-12 rounded-xl bg-retail-purple/10 flex items-center justify-center shrink-0"
+        >
+          <i class="fa-solid fa-receipt text-retail-purple text-[24px]" aria-hidden="true"></i>
+        </div>
+      </div>
+    </section>
+  </div>
+  <!-- Annuaire + matrice + journal : même rythme vertical que les sections A / C -->
+  <div class="flex w-full flex-col gap-space-md">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter items-start">
+      <!-- LEFT COLUMN: Staff roster & role quick templates (~35%) -->
+      <div class="lg:col-span-4 xl:col-span-4 flex flex-col gap-space-md">
+        <!-- Search and filter container -->
+        <div
+          class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm"
+        >
+          <div class="relative w-full">
+            <i
+              class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px]"
+              aria-hidden="true"
+            ></i>
+            <input
+              class="w-full h-10 pl-9 pr-3 rounded-lg bg-surface font-body-md text-body-md text-text-primary placeholder:text-text-muted focus:outline-none focus:bg-surface-container-lowest transition-all"
+              placeholder="Rechercher par nom ou e-mail…"
+              type="search"
+              [value]="search()"
+              (input)="search.set($any($event.target).value)"
+            />
+          </div>
+          <div
+            class="grid grid-cols-2 gap-1 rounded-lg bg-surface-container p-1"
+            role="tablist"
+            aria-label="Filtrer par rôle"
+          >
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="roleFilter() === 'all'"
+              class="min-h-9 rounded-md px-2 py-1.5 text-center font-label-sm text-label-sm transition-colors"
+              [class]="
+                roleFilter() === 'all'
+                  ? 'bg-primary text-on-primary shadow-sm'
+                  : 'text-text-primary hover:bg-surface-container-high'
+              "
+              (click)="setRosterRoleFilter('all')"
+            >
+              Tous ({{ rosterRoleCounts().all }})
+            </button>
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="roleFilter() === 'cashier'"
+              class="min-h-9 rounded-md px-2 py-1.5 text-center font-label-sm text-label-sm transition-colors"
+              [class]="
+                roleFilter() === 'cashier'
+                  ? 'bg-primary text-on-primary shadow-sm'
+                  : 'text-text-primary hover:bg-surface-container-high'
+              "
+              (click)="setRosterRoleFilter('cashier')"
+            >
+              Caissiers ({{ rosterRoleCounts().cashier }})
+            </button>
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="roleFilter() === 'stock_manager'"
+              class="min-h-9 rounded-md px-2 py-1.5 text-center font-label-sm text-label-sm transition-colors"
+              [class]="
+                roleFilter() === 'stock_manager'
+                  ? 'bg-primary text-on-primary shadow-sm'
+                  : 'text-text-primary hover:bg-surface-container-high'
+              "
+              (click)="setRosterRoleFilter('stock_manager')"
+            >
+              Stocks ({{ rosterRoleCounts().stock_manager }})
+            </button>
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="roleFilter() === 'owner'"
+              class="min-h-9 rounded-md px-2 py-1.5 text-center font-label-sm text-label-sm transition-colors"
+              [class]="
+                roleFilter() === 'owner'
+                  ? 'bg-primary text-on-primary shadow-sm'
+                  : 'text-text-primary hover:bg-surface-container-high'
+              "
+              (click)="setRosterRoleFilter('owner')"
+            >
+              Gérants ({{ rosterRoleCounts().owner }})
+            </button>
+          </div>
+        </div>
+        <!-- Staff Member Cards -->
+        <div class="flex flex-col gap-space-sm">
+          @if (filteredMembers().length === 0) {
+            <p class="m-0 rounded-xl bg-surface-container-low p-4 text-center text-body-sm text-text-muted">
+              Aucun collaborateur ne correspond à la recherche.
+            </p>
+          }
+          @for (member of filteredMembers(); track member.membershipId) {
+            <button
+              type="button"
+              class="w-full cursor-pointer rounded-xl border p-space-md text-left transition-all"
+              [class]="
+                focusedMember()?.membershipId === member.membershipId
+                  ? 'border-primary bg-surface-container-lowest shadow-md'
+                  : 'border-transparent bg-surface-container-lowest shadow-sm hover:shadow-md'
+              "
+              (click)="selectFocusedMember(member)"
+            >
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-3">
+                  <span
+                    class="flex size-11 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-label-md font-bold text-primary"
+                    aria-hidden="true"
+                    >{{ memberInitials(member) }}</span
+                  >
+                  <div class="flex min-w-0 flex-col gap-1">
+                    <span class="truncate font-headline-sm text-headline-sm font-bold text-text-primary">{{
+                      memberName(member)
+                    }}</span>
+                    <span class="truncate font-label-sm text-label-sm text-text-muted">{{
+                      member.email
+                    }}</span>
+                  </div>
+                </div>
+                <div class="flex shrink-0 flex-col items-end gap-1.5">
+                  <span
+                    class="rounded bg-primary/15 px-2 py-0.5 font-label-sm text-label-sm font-semibold text-primary"
+                  >
+                    {{ roleLabel(member.role, member.sex) }}
+                  </span>
+                  @if (member.invitationPending) {
+                    <span
+                      class="inline-flex items-center rounded-full bg-retail-amber/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-retail-amber"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  } @else if (member.isActive) {
+                    <span
+                      class="inline-flex items-center rounded-full bg-growth-green/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-growth-green"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  } @else {
+                    <span
+                      class="inline-flex items-center rounded-full bg-alert-red/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-alert-red"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  }
+                </div>
+              </div>
+            </button>
+          }
+        </div>
+        <!-- Quick Role Templates Box -->
+        <div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-3">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <i
+                class="fa-solid fa-clipboard-check text-primary text-[20px]"
+                aria-hidden="true"
+              ></i>
+              <span class="font-headline-sm text-headline-sm text-text-primary font-bold"
+                >Modèles de Rôles Types</span
+              >
+            </div>
+            <span class="font-label-sm text-label-sm text-text-muted">3 Préréglages</span>
+          </div>
+          <p class="font-body-sm text-body-sm text-text-muted">
+            Applique les dérogations du catalogue au <strong class="text-text-primary">collaborateur
+            sélectionné</strong> (journalisé comme les autres changements).
+          </p>
+          <div class="flex flex-col gap-2">
+            @for (template of roleTemplates; track template.id) {
+              <div
+                class="flex items-center justify-between rounded-lg bg-surface-container-lowest p-2.5 transition-colors hover:bg-surface-container"
+              >
+                <div class="min-w-0 flex flex-col pr-2">
+                  <span class="font-label-md text-label-md font-semibold text-text-primary">{{
+                    template.title
+                  }}</span>
+                  <span class="font-label-sm text-label-sm text-text-muted">{{
+                    template.subtitle
+                  }}</span>
+                </div>
+                @if (activeRoleTemplateId() === template.id) {
+                  <span
+                    class="shrink-0 rounded bg-primary px-2.5 py-1 font-label-sm text-label-sm text-on-primary shadow-sm"
+                  >
+                    Actif
+                  </span>
+                } @else {
+                  <button
+                    type="button"
+                    class="shrink-0 rounded bg-surface-container px-2.5 py-1 font-label-sm text-label-sm text-text-primary transition-all hover:bg-primary hover:text-on-primary disabled:cursor-not-allowed disabled:opacity-55"
+                    [disabled]="roleTemplateApplyDisabled(template)"
+                    [title]="roleTemplateDisabledHint(template) ?? ''"
+                    (click)="applyRoleTemplate(template)"
+                  >
+                    Appliquer
+                  </button>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <!-- RIGHT COLUMN: fiche collaborateur + matrice (démo) -->
+      <div class="lg:col-span-8 xl:col-span-8 flex flex-col gap-space-md">
+        @if (focusedMember(); as member) {
+          <div
+            class="flex flex-col gap-space-md overflow-hidden rounded-xl bg-surface-container-lowest p-space-lg shadow-sm"
+          >
+            <div
+              class="flex min-w-0 flex-col gap-space-md xl:flex-row xl:items-start xl:justify-between"
+            >
+            <div class="flex min-w-0 items-center gap-space-md">
+              <span
+                class="flex size-16 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-headline-sm font-bold text-primary shadow-sm"
+                aria-hidden="true"
+                >{{ memberInitials(member) }}</span
+              >
+              <div class="flex flex-col">
+                <div class="flex flex-wrap items-center gap-2">
+                  <h2 class="font-headline-md text-headline-md font-bold text-text-primary">
+                    {{ memberName(member) }}
+                  </h2>
+                  @if (member.invitationPending) {
+                    <span
+                      class="inline-flex items-center rounded-full bg-retail-amber/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-retail-amber"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  } @else if (member.isActive) {
+                    <span
+                      class="inline-flex items-center rounded-full bg-growth-green/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-growth-green"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  } @else {
+                    <span
+                      class="inline-flex items-center rounded-full bg-alert-red/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-alert-red"
+                    >
+                      {{ memberStatusLabel(member) }}
+                    </span>
+                  }
+                  <span
+                    class="rounded bg-surface-container px-2 py-0.5 font-label-sm text-label-sm text-text-muted"
+                  >
+                    ID : {{ shortMembershipId(member.membershipId) }}
+                  </span>
+                </div>
+                <div class="mt-1 flex flex-wrap items-center gap-4 font-body-sm text-body-sm text-text-muted">
+                  @if (member.phone) {
+                    <span class="flex items-center gap-1">
+                      <i class="fa-solid fa-phone text-[16px]" aria-hidden="true"></i>
+                      {{ member.phone }}
+                    </span>
+                  }
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-envelope text-[16px]" aria-hidden="true"></i>
+                    {{ member.email }}
+                  </span>
+                  <span class="flex items-center gap-1">
+                    <i class="fa-solid fa-user-tag text-[16px]" aria-hidden="true"></i>
+                    {{ roleLabel(member.role, member.sex) }}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div
+              class="flex min-w-0 flex-col gap-2 sm:flex-row sm:flex-wrap xl:max-w-[26rem] xl:justify-end"
+            >
+              <button
+                type="button"
+                class="inline-flex h-10 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-primary px-3 font-label-md text-label-md font-medium text-on-primary transition-colors hover:bg-primary-container sm:w-auto"
+                (click)="openEdit(member)"
+              >
+                <i class="fa-solid fa-sliders text-[18px]" aria-hidden="true"></i>
+                <span>Gérer droits &amp; sessions</span>
+              </button>
+              @if (member.role !== 'owner') {
+                <button
+                  type="button"
+                  class="inline-flex h-10 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg bg-surface-container px-3 font-label-md text-label-md font-medium text-text-primary transition-colors hover:bg-surface-container-high sm:w-auto"
+                  (click)="resetPassword(member)"
+                >
+                  <i class="fa-solid fa-key text-[18px]" aria-hidden="true"></i>
+                  <span>Réinitialiser mot de passe</span>
+                </button>
+                <button
+                  type="button"
+                  class="inline-flex h-10 w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-lg border border-alert-red/35 bg-alert-red/10 px-3 font-label-md text-label-md font-medium text-alert-red transition-colors hover:bg-alert-red/20 sm:w-auto"
+                  (click)="toggleStatus(member)"
+                >
+                  <i class="fa-solid fa-circle-pause text-[18px]" aria-hidden="true"></i>
+                  <span>{{ member.isActive ? 'Suspendre' : 'Réactiver' }}</span>
+                </button>
+              }
+            </div>
+            </div>
+          </div>
+        } @else {
+          <div
+            class="rounded-xl bg-surface-container-low p-space-lg text-center text-body-sm text-text-muted"
+          >
+            Sélectionnez un collaborateur dans la liste pour afficher sa fiche.
+          </div>
+        }
+        @if (focusedMember(); as matrixMember) {
+          <div class="flex flex-col gap-space-md" aria-live="polite">
+            @if (matrixPermissionsReadOnly(matrixMember)) {
+              <div
+                class="rounded-xl border border-outline-variant/35 bg-surface-container-low px-4 py-3 text-body-sm text-text-muted"
+                role="note"
+              >
+                Le gérant dispose de tous les droits métier. La matrice est affichée à titre
+                informatif : les interrupteurs sont désactivés.
+              </div>
+            }
+              @for (group of permissionMatrixGroups(); track group.id) {
+                <section
+                  class="flex flex-col gap-space-md rounded-xl bg-surface-container-lowest p-space-lg shadow-sm"
+                  [attr.aria-labelledby]="'perm-group-' + group.id"
+                >
+                  <div
+                    class="flex items-center justify-between rounded-lg bg-surface-container-low px-3 py-2"
+                  >
+                    <div class="flex items-center gap-2.5">
+                      <div
+                        class="flex h-8 w-8 items-center justify-center rounded-lg"
+                        [class]="matrixGroupIconShell(group.id)"
+                      >
+                        <i
+                          class="fa-solid text-[20px]"
+                          [class]="matrixGroupIcon(group.id)"
+                          aria-hidden="true"
+                        ></i>
+                      </div>
+                      <div class="flex flex-col">
+                        <h3
+                          [id]="'perm-group-' + group.id"
+                          class="font-headline-sm text-headline-sm font-bold text-text-primary"
+                        >
+                          {{ matrixGroupTitle(group.id) }}
+                        </h3>
+                        <p class="font-body-sm text-body-sm text-text-muted">
+                          {{ matrixGroupSubtitle(group.id) }}
+                        </p>
+                      </div>
+                    </div>
+                    <span
+                      class="rounded px-2.5 py-1 font-label-sm text-label-sm font-semibold"
+                      [class]="matrixGroupBadgeClass(group.id)"
+                    >
+                      {{ matrixGroupAuthorizedSummary(group.id) }}
+                    </span>
+                  </div>
+                  <div class="flex flex-col gap-3">
+                    @for (permission of group.items; track permission.code) {
+                      <div
+                        class="flex items-center justify-between rounded-lg bg-surface p-3 transition-colors"
+                        [ngClass]="{
+                          'hover:bg-surface-container-low': !matrixPermissionsReadOnly(matrixMember),
+                          'opacity-90': matrixPermissionsReadOnly(matrixMember),
+                          'ring-2': permissionDraft()?.code === permission.code,
+                          'ring-primary/30': permissionDraft()?.code === permission.code,
+                        }"
+                      >
+                        <div class="flex min-w-0 flex-col pr-4">
+                          <div class="flex flex-wrap items-center gap-2">
+                            <span class="font-label-lg text-label-lg font-semibold text-text-primary">
+                              {{ permission.label }}
+                            </span>
+                            @if (permission.badge; as badge) {
+                              <span
+                                class="rounded px-2 py-0.5 font-label-sm text-label-sm font-semibold"
+                                [class]="permissionBadgeClass(badge.tone)"
+                              >
+                                {{ badge.text }}
+                              </span>
+                            }
+                          </div>
+                          <span class="font-body-sm text-body-sm text-text-muted">
+                            {{ permissionHelp(permission.code) }}
+                          </span>
+                          <span class="mt-1 font-label-sm text-label-sm text-primary">
+                            {{ permissionStateLabel(permission.code) }}
+                          </span>
+                          @if (permissionRecord(permission.code)?.reason; as savedReason) {
+                            <span class="mt-0.5 font-body-sm text-body-sm text-text-muted">
+                              Motif : « {{ savedReason }} »
+                            </span>
+                          }
+                        </div>
+                        <label
+                          class="relative inline-flex shrink-0 items-center"
+                          [class.cursor-pointer]="!matrixPermissionsReadOnly(matrixMember)"
+                          [class.cursor-not-allowed]="matrixPermissionsReadOnly(matrixMember)"
+                        >
+                          <input
+                            type="checkbox"
+                            class="peer sr-only"
+                            [checked]="permissionEffectiveAllowed(permission.code)"
+                            [disabled]="
+                              matrixPermissionsReadOnly(matrixMember) ||
+                              saving() ||
+                              permissionDraft()?.code === permission.code
+                            "
+                            (change)="onMatrixPermissionToggle(permission, $event)"
+                            [attr.aria-label]="permission.label"
+                            [attr.aria-readonly]="matrixPermissionsReadOnly(matrixMember)"
+                          />
+                          <div
+                            class="relative h-6 w-11 rounded-full bg-surface-container-highest after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:bg-surface-container-lowest after:transition-all after:content-[''] peer-checked:bg-primary peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-disabled:opacity-50"
+                          ></div>
+                        </label>
+                      </div>
+                    }
+                  </div>
+                </section>
+              }
+
+              @if (permissionDraft(); as draft) {
+                @if (!matrixPermissionsReadOnly(matrixMember)) {
+                <div
+                  class="sticky bottom-4 z-20 flex flex-col gap-space-sm rounded-xl bg-surface-container-lowest p-space-md shadow-md sm:flex-row sm:items-end sm:justify-between"
+                  role="region"
+                  aria-label="Confirmer la dérogation"
+                >
+                  <label class="flex min-w-0 flex-1 flex-col gap-1.5">
+                    <span class="font-body-sm text-body-sm text-text-primary">
+                      @if (draft.allowed) {
+                        Vous allez <strong>autoriser</strong> « {{ draft.label }} » pour
+                        {{ memberName(matrixMember) }}.
+                      } @else {
+                        Vous allez <strong>interdire</strong> « {{ draft.label }} » pour
+                        {{ memberName(matrixMember) }}.
+                      }
+                    </span>
+                    <span class="text-label-md font-medium text-text-primary"
+                      >Motif (obligatoire, journalisé)</span
+                    >
+                    <textarea
+                      class="min-h-20 w-full resize-y rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-3 py-2 text-body-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none"
+                      rows="2"
+                      [value]="permissionReasonDraft()"
+                      (input)="permissionReasonDraft.set($any($event.target).value)"
+                      placeholder="Ex. Remplacement caisse le matin, validation gérant."
+                    ></textarea>
+                  </label>
+                  <div class="flex w-full shrink-0 justify-end gap-2 sm:w-auto">
+                    <button
+                      type="button"
+                      class="h-10 rounded-lg bg-surface-container px-4 font-label-md text-label-md font-semibold text-text-primary transition-colors hover:bg-surface-container-high"
+                      [disabled]="saving()"
+                      (click)="cancelPermissionDraft()"
+                    >
+                      Annuler
+                    </button>
+                    <button
+                      type="button"
+                      class="flex h-10 items-center gap-2 rounded-lg bg-primary px-5 font-label-md text-label-md font-semibold text-on-primary shadow-md transition-all hover:bg-primary-container"
+                      [disabled]="saving()"
+                      (click)="submitPermissionDraft()"
+                    >
+                      <i class="fa-solid fa-circle-check text-[20px]" aria-hidden="true"></i>
+                      <span>Enregistrer la dérogation</span>
+                    </button>
+                  </div>
+                </div>
+                }
+              }
+          </div>
+        }
+      </div><!-- colonne droite (matrice) -->
+    </section>
+    <p-card
+      id="journal-audit"
+      styleClass="users-audit-card"
+      role="region"
+      aria-labelledby="business-audit-title"
+    >
+      <ng-template pTemplate="header">
+        <div
+          class="flex w-full flex-col justify-between gap-2 md:flex-row md:items-center md:gap-3"
+        >
+          <div class="flex min-w-0 flex-col gap-0.5">
+            <div class="flex items-center gap-2">
+              <i
+                class="fa-solid fa-clock-rotate-left text-[22px] text-primary"
+                aria-hidden="true"
+              ></i>
+              <h3
+                id="business-audit-title"
+                class="m-0 font-headline-sm text-headline-sm font-bold text-text-primary"
+              >
+                Journal d'Audit &amp; Traçabilité des Actions Métier
+              </h3>
+            </div>
+            <p class="m-0 font-body-sm text-body-sm text-text-muted">
+              Historique immuable des opérations sensibles enregistré par le serveur. Mise à jour
+              automatique tant que cette page est ouverte.
+            </p>
+          </div>
+          <div class="users-audit-toolbar flex shrink-0 flex-wrap items-center gap-1.5">
+            <p-datepicker
+              [(ngModel)]="today"
+              class="users-audit-date"
+              inputId="audit-journal-date"
+              [readonlyInput]="true"
+              [showOnFocus]="false"
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              iconDisplay="input"
+              ariaLabel="Date de consultation"
+            />
+            <p-select
+              inputId="audit-journal-actor"
+              class="users-audit-actor-select"
+              [options]="auditActorFilterOptions()"
+              optionLabel="label"
+              optionValue="value"
+              [ngModel]="auditActorFilter()"
+              (ngModelChange)="auditActorFilter.set($event)"
+              appendTo="body"
+              ariaLabel="Filtrer le journal par collaborateur"
+            />
+          </div>
+        </div>
+      </ng-template>
+
+      @if (loading()) {
+        <div class="rounded-lg bg-surface px-4 py-10 text-center text-text-muted" role="status">
+          <i class="fa-solid fa-circle-notch mr-2 animate-spin" aria-hidden="true"></i>
+          Chargement du journal d’audit…
+        </div>
+      } @else if (filteredAuditEntries().length === 0) {
+        <div class="rounded-lg bg-surface px-4 py-10 text-center">
+          <i
+            class="fa-solid fa-shield-halved mb-3 text-[24px] text-text-muted"
+            aria-hidden="true"
+          ></i>
+          <p class="m-0 font-semibold text-text-primary">Aucune action métier enregistrée</p>
+          <p class="mt-1 text-body-sm text-text-muted">
+            Les prochaines opérations sensibles apparaîtront automatiquement ici.
+          </p>
+        </div>
+      } @else {
+        <p-table
+          class="users-audit-table"
+          [value]="filteredAuditEntries()"
+          dataKey="id"
+          stripedRows
+          [paginator]="true"
+          [rows]="auditTablePageSize"
+          [rowsPerPageOptions]="auditTablePageSizeOptions"
+          [showCurrentPageReport]="true"
+          [currentPageReportTemplate]="auditTablePageReport"
+          [tableStyle]="auditTableStyle"
+          paginatorDropdownAppendTo="body"
+          aria-labelledby="business-audit-title"
+        >
+          <ng-template #header>
+            <tr>
+              <th scope="col">Horodatage</th>
+              <th scope="col">Collaborateur</th>
+              <th scope="col">Opération &amp; contexte</th>
+              <th scope="col">Domaine métier</th>
+              <th scope="col" class="text-right" style="width: 8.5rem">Traçabilité</th>
+            </tr>
+          </ng-template>
+          <ng-template #body let-entry>
+            <tr>
+              <td class="whitespace-nowrap text-text-muted">
+                <time [attr.datetime]="entry.occurredAt">
+                  {{ entry.occurredAt | date: 'dd/MM/yyyy HH:mm:ss' }}
+                </time>
+              </td>
+              <td class="whitespace-nowrap">
+                <div class="flex items-center gap-2">
+                  <span
+                    class="flex h-7 w-7 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary"
+                    aria-hidden="true"
+                  >
+                    {{ auditActorInitials(entry) }}
+                  </span>
+                  <span class="font-label-md text-label-md font-semibold text-text-primary">
+                    {{ auditActorName(entry) }}
+                  </span>
+                </div>
+              </td>
+              <td>
+                <div class="flex min-w-64 flex-col">
+                  <span class="font-medium text-text-primary">{{ auditActionLabel(entry) }}</span>
+                  @if (entry.reason) {
+                    <span class="text-[11px] text-text-muted">{{ entry.reason }}</span>
+                  }
+                </div>
+              </td>
+              <td class="whitespace-nowrap text-text-muted">{{ auditEntityLabel(entry) }}</td>
+              <td class="text-right">
+                <span
+                  class="inline-flex items-center gap-1 rounded-full bg-growth-green/15 px-2.5 py-0.5 font-label-sm text-label-sm font-semibold text-growth-green"
+                >
+                  <i class="fa-solid fa-circle-check text-[13px]" aria-hidden="true"></i>
+                  Enregistré
+                </span>
+              </td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p class="m-0 pt-2 font-body-sm text-body-sm text-text-muted">
+          <i class="fa-solid fa-database mr-1.5 text-[14px]" aria-hidden="true"></i>
+          {{ auditEntries().length }} événement(s) chargé(s) depuis le serveur (100 maximum).
+        </p>
+      }
+    </p-card>
+  </div>
+</div>
+
+<p-dialog
+  header="Ajouter un utilisateur"
+  [visible]="createOpen()"
+  (visibleChange)="onCreateDialogVisibleChange($event)"
+  [modal]="true"
+  [closable]="!saving() && !confirmingCreate()"
+  [closeOnEscape]="!saving() && !confirmingCreate()"
+  [dismissableMask]="!saving() && !confirmingCreate()"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: 'min(36rem, calc(100vw - 2rem))' }"
+  styleClass="utilisateurs-dialog"
+>
+  <form
+    class="grid gap-4 sm:grid-cols-2"
+    [formGroup]="createForm"
+    (ngSubmit)="createMember()"
+    novalidate
+  >
+    @if (createError()) {
+      <div class="sm:col-span-2 rounded-lg bg-alert-red/10 px-4 py-3 text-alert-red" role="alert">
+        <i class="fa-solid fa-circle-exclamation mr-2" aria-hidden="true"></i>{{ createError() }}
+      </div>
+    }
+    <label class="flex flex-col gap-1">
+      <span>Prénom</span>
+      <input
+        pInputText
+        class="h-10 w-full bg-surface px-3"
+        formControlName="firstName"
+        autocomplete="given-name"
+        placeholder="Ex. Nelly"
+        aria-describedby="member-first-name-error"
+        [invalid]="fieldInvalid('firstName')"
+      />
+      @if (fieldError('firstName')) {
+        <small id="member-first-name-error" class="text-alert-red" role="alert">{{
+          fieldError('firstName')
+        }}</small>
+      }
+    </label>
+    <label class="flex flex-col gap-1">
+      <span>Nom</span>
+      <input
+        pInputText
+        class="h-10 w-full bg-surface px-3"
+        formControlName="lastName"
+        autocomplete="family-name"
+        placeholder="Ex. Kalonji"
+        aria-describedby="member-last-name-error"
+        [invalid]="fieldInvalid('lastName')"
+      />
+      @if (fieldError('lastName')) {
+        <small id="member-last-name-error" class="text-alert-red" role="alert">{{
+          fieldError('lastName')
+        }}</small>
+      }
+    </label>
+    <label class="flex flex-col gap-1 sm:col-span-2">
+      <span>E-mail</span>
+      <input
+        pInputText
+        class="h-10 w-full bg-surface px-3"
+        type="email"
+        formControlName="email"
+        autocomplete="email"
+        placeholder="nelly.kalonji@exemple.cd"
+        aria-describedby="member-email-error"
+        [invalid]="fieldInvalid('email')"
+      />
+      @if (fieldError('email')) {
+        <small id="member-email-error" class="text-alert-red" role="alert">{{
+          fieldError('email')
+        }}</small>
+      }
+    </label>
+    <label class="flex flex-col gap-1">
+      <span>Téléphone <small class="text-text-muted">(facultatif)</small></span>
+      <p-inputgroup
+        class="users-phone-group"
+        [class.users-phone-group--invalid]="!!phoneFieldError()"
+      >
+        <p-inputgroup-addon id="member-phone-dial">+243</p-inputgroup-addon>
+        <input
+          pInputText
+          class="h-10 w-full bg-surface px-3"
+          type="tel"
+          inputmode="tel"
+          autocomplete="tel"
+          placeholder="81 234 56 78"
+          aria-describedby="member-phone-dial member-phone-error"
+          [invalid]="!!phoneFieldError()"
+          [value]="phoneLocalValue()"
+          (input)="onPhoneInput($event)"
+          (blur)="onPhoneBlur()"
+        />
+      </p-inputgroup>
+      @if (phoneFieldError()) {
+        <small id="member-phone-error" class="text-alert-red" role="alert">{{
+          phoneFieldError()
+        }}</small>
+      }
+    </label>
+    <label class="flex flex-col gap-1">
+      <span>Sexe</span>
+      <p-select
+        class="users-role-select"
+        formControlName="sex"
+        [options]="sexOptions"
+        optionLabel="label"
+        optionValue="value"
+        [fluid]="true"
+        appendTo="body"
+        ariaLabel="Sexe de l’utilisateur"
+      />
+    </label>
+    <label class="flex flex-col gap-1 sm:col-span-2">
+      <span>Rôle</span>
+      <p-select
+        class="users-role-select"
+        formControlName="role"
+        [options]="assignableRoleOptions"
+        optionLabel="label"
+        optionValue="value"
+        [fluid]="true"
+        appendTo="body"
+        ariaLabel="Rôle de l’utilisateur"
+      />
+    </label>
+    <div class="sm:col-span-2 flex gap-3 rounded-lg bg-retail-blue/10 p-3 text-retail-blue">
+      <i class="fa-solid fa-envelope-circle-check mt-0.5" aria-hidden="true"></i>
+      <p class="m-0 text-body-sm">
+        Un lien personnel valable 48 heures sera envoyé à cette adresse. L’utilisateur choisira
+        lui-même son mot de passe avant d’accéder à l’établissement.
+      </p>
+    </div>
+    <div class="flex justify-end gap-3 sm:col-span-2">
+      <button
+        type="button"
+        class="h-10 rounded-lg bg-surface px-4 font-semibold"
+        (click)="closeCreate()"
+        [disabled]="saving() || confirmingCreate()"
+      >
+        Annuler
+      </button>
+      <button
+        type="submit"
+        class="h-10 rounded-lg bg-primary px-4 font-semibold text-on-primary"
+        [disabled]="saving() || confirmingCreate()"
+      >
+        {{ saving() ? 'Création…' : 'Créer l’utilisateur' }}
+      </button>
+    </div>
+  </form>
+</p-dialog>
+
+<p-dialog
+  [header]="editDialogHeader()"
+  [visible]="editOpen()"
+  (visibleChange)="onEditDialogVisibleChange($event)"
+  [modal]="true"
+  [closable]="!saving()"
+  [closeOnEscape]="!saving()"
+  [dismissableMask]="!saving()"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: 'min(42rem, calc(100vw - 2rem))' }"
+  styleClass="utilisateurs-dialog users-edit-dialog"
+>
+  @if (selectedMember(); as member) {
+    <div class="users-edit-dialog__body flex max-h-[min(72vh,40rem)] flex-col gap-space-md overflow-y-auto pr-1">
+      <p class="m-0 text-body-sm leading-relaxed text-text-muted">
+        Vérifiez l’identité du collaborateur, ajustez des <strong class="text-text-primary">droits exceptionnels</strong>
+        (avec motif tracé) et déconnectez les appareils si besoin.
+      </p>
+
+      <article
+        class="users-edit-dialog__identity flex gap-4 rounded-xl border border-outline-variant/40 bg-surface-container-low p-4"
+      >
+        <span
+          class="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary-fixed text-label-lg font-bold text-primary"
+          aria-hidden="true"
+          >{{ memberInitials(member) }}</span
+        >
+        <div class="min-w-0 flex-1 space-y-2">
+          <p class="m-0 text-headline-sm font-semibold text-text-primary">{{ memberName(member) }}</p>
+          <p class="m-0 text-body-sm text-text-muted">
+            {{ member.email }}
+            @if (member.phone) {
+              · {{ member.phone }}
+            }
+          </p>
+          <div class="flex flex-wrap gap-2">
+            <span
+              class="inline-flex rounded-full bg-surface-container px-2.5 py-0.5 text-label-sm font-semibold text-text-primary"
+            >
+              {{ roleLabel(member.role, member.sex) }}
+            </span>
+            <span
+              class="inline-flex rounded-full px-2.5 py-0.5 text-label-sm font-semibold"
+              [class]="
+                member.isActive
+                  ? 'bg-growth-green/15 text-growth-green'
+                  : 'bg-alert-red/15 text-alert-red'
+              "
+            >
+              {{ member.isActive ? 'Compte actif' : 'Compte suspendu' }}
+            </span>
+          </div>
+        </div>
+      </article>
+
+      @if (member.role === 'owner') {
+        <div
+          class="rounded-xl border border-outline-variant/40 bg-surface-container-low px-4 py-3 text-body-sm text-text-muted"
+          role="note"
+        >
+          Le gérant principal dispose de tous les droits. Les exceptions et la gestion fine des sessions
+          concernent les autres rôles.
+        </div>
+      }
+
+      @if (member.role !== 'owner') {
+        <section class="users-edit-dialog__section" aria-labelledby="edit-permissions-title">
+          <h3 id="edit-permissions-title" class="users-edit-dialog__section-title">Droits exceptionnels</h3>
+          <p class="mb-3 text-body-sm text-text-muted">
+            Par défaut, chaque droit suit le <strong class="text-text-primary">rôle</strong>. Vous ne changez
+            le comportement qu’en cas particulier (autoriser ou interdire), avec un motif enregistré.
+          </p>
+          <div class="space-y-3">
+            @for (permission of permissionCatalog(); track permission.code) {
+              <article
+                class="rounded-xl border border-outline-variant/35 bg-surface-container-lowest p-4"
+                [ngClass]="{
+                  'ring-2': permissionDraft()?.code === permission.code,
+                  'ring-primary/40': permissionDraft()?.code === permission.code,
+                }"
+              >
+                <div class="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                  <div class="min-w-0">
+                    <p class="m-0 font-semibold text-text-primary">{{ permission.label }}</p>
+                    <p class="mt-1 text-body-sm text-text-muted">{{ permissionHelp(permission.code) }}</p>
+                    <p class="mt-2 text-label-sm font-semibold text-primary">
+                      Situation actuelle : {{ permissionStateLabel(permission.code) }}
+                    </p>
+                    @if (permissionRecord(permission.code)?.reason; as savedReason) {
+                      <p class="mt-1 text-body-sm text-text-muted">
+                        Dernier motif : « {{ savedReason }} »
+                      </p>
+                    }
+                  </div>
+                  <div class="flex shrink-0 flex-col gap-2 sm:items-end">
+                    @if (permissionValue(permission.code) !== null) {
+                      <p-button
+                        type="button"
+                        label="Revenir au rôle"
+                        size="small"
+                        severity="secondary"
+                        [outlined]="true"
+                        [disabled]="saving()"
+                        (onClick)="resetPermissionToRole(permission.code, permission.label)"
+                      />
+                    }
+                    <div class="flex flex-wrap gap-2">
+                      <p-button
+                        type="button"
+                        label="Autoriser en exception"
+                        size="small"
+                        severity="success"
+                        [outlined]="permissionValue(permission.code) !== true"
+                        [disabled]="saving()"
+                        (onClick)="beginPermissionChange(permission.code, true, permission.label)"
+                      />
+                      <p-button
+                        type="button"
+                        label="Interdire en exception"
+                        size="small"
+                        severity="danger"
+                        [outlined]="permissionValue(permission.code) !== false"
+                        [disabled]="saving()"
+                        (onClick)="beginPermissionChange(permission.code, false, permission.label)"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </article>
+            }
+          </div>
+
+          @if (permissionDraft(); as draft) {
+            <div
+              class="mt-4 rounded-xl border border-primary/30 bg-primary-fixed/35 p-4"
+              role="region"
+              aria-label="Confirmation de l’exception"
+            >
+              <p class="m-0 font-semibold text-text-primary">
+                @if (draft.allowed) {
+                  Vous allez <strong>autoriser</strong> « {{ draft.label }} » pour ce collaborateur.
+                } @else {
+                  Vous allez <strong>interdire</strong> « {{ draft.label }} » pour ce collaborateur.
+                }
+              </p>
+              <label class="mt-3 flex flex-col gap-1.5">
+                <span class="text-label-md font-medium text-text-primary"
+                  >Motif (obligatoire, conservé dans le journal)</span
+                >
+                <textarea
+                  class="min-h-20 w-full resize-y rounded-lg border border-outline-variant/50 bg-surface-container-lowest px-3 py-2 text-body-sm text-text-primary placeholder:text-text-muted focus:border-primary focus:outline-none"
+                  rows="3"
+                  [value]="permissionReasonDraft()"
+                  (input)="permissionReasonDraft.set($any($event.target).value)"
+                  placeholder="Ex. Remplacement du responsable stocks pour la matinée du 14/11."
+                ></textarea>
+              </label>
+              <div class="mt-3 flex flex-wrap justify-end gap-2">
+                <p-button
+                  type="button"
+                  label="Annuler"
+                  severity="secondary"
+                  [outlined]="true"
+                  [disabled]="saving()"
+                  (onClick)="cancelPermissionDraft()"
+                />
+                <p-button
+                  type="button"
+                  label="Enregistrer l’exception"
+                  [loading]="saving()"
+                  [disabled]="saving()"
+                  (onClick)="submitPermissionDraft()"
+                />
+              </div>
+            </div>
+          }
+        </section>
+      }
+
+      <section class="users-edit-dialog__section" aria-labelledby="edit-sessions-title">
+        <h3 id="edit-sessions-title" class="users-edit-dialog__section-title">Appareils connectés</h3>
+        <p class="mb-3 text-body-sm text-text-muted">
+          Chaque ligne correspond à une connexion active ou passée. « Déconnecter » coupe l’accès sur cet
+          appareil immédiatement.
+        </p>
+        @if (memberSessions().length === 0) {
+          <p class="m-0 rounded-lg bg-surface-container-low px-4 py-3 text-body-sm text-text-muted">
+            Aucune session enregistrée pour le moment.
+          </p>
+        } @else {
+          <div class="space-y-2">
+            @for (deviceSession of memberSessions(); track deviceSession.id) {
+              <article
+                class="flex flex-col gap-3 rounded-xl border border-outline-variant/35 bg-surface-container-lowest p-4 sm:flex-row sm:items-center sm:justify-between"
+              >
+                <div>
+                  <p class="m-0 font-semibold text-text-primary">
+                    {{ sessionClientLabel(deviceSession.clientType) }}
+                  </p>
+                  <p class="mt-1 text-body-sm text-text-muted">
+                    Connecté le {{ deviceSession.createdAt | date: 'short' }}
+                    @if (deviceSession.lastSeenAt) {
+                      · Dernière activité {{ deviceSession.lastSeenAt | date: 'short' }}
+                    }
+                  </p>
+                </div>
+                @if (!deviceSession.revokedAt) {
+                  <p-button
+                    type="button"
+                    label="Déconnecter"
+                    size="small"
+                    severity="danger"
+                    [outlined]="true"
+                    [disabled]="saving()"
+                    (onClick)="revokeSession(deviceSession.id)"
+                  />
+                } @else {
+                  <span class="text-body-sm font-medium text-text-muted">Déjà déconnectée</span>
+                }
+              </article>
+            }
+          </div>
+        }
+      </section>
+
+      <div class="flex justify-end border-t border-outline-variant/40 pt-4">
+        <p-button type="button" label="Fermer" severity="secondary" [disabled]="saving()" (onClick)="closeEdit()" />
+      </div>
+    </div>
+  }
+</p-dialog>

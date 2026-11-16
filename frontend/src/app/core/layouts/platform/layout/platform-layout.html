@@ -1,0 +1,11 @@
+<div class="platform-shell">
+  <app-platform-sidebar />
+
+  <div class="platform-shell__workspace">
+    <app-platform-topbar (logoutClick)="logout()" />
+    <main class="platform-shell__content">
+      <router-outlet />
+    </main>
+    <app-layout-footer />
+  </div>
+</div>

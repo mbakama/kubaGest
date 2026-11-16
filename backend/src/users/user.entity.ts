@@ -20,6 +20,9 @@ export class User {
   @Column({ name: 'last_name', type: 'varchar', length: 80, nullable: true })
   lastName: string | null;
 
+  @Column({ type: 'varchar', length: 6, nullable: true })
+  sex: 'male' | 'female' | null;
+
   @Column({ name: 'password_hash', type: 'varchar', length: 255 })
   passwordHash: string;
 
@@ -28,6 +31,9 @@ export class User {
 
   @Column({ name: 'avatar_key', type: 'text', nullable: true })
   avatarKey: string | null;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  localisation: string | null;
 
   /**
    * Activation du compte. Une désactivation conserve l'identité et

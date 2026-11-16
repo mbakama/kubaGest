@@ -1,0 +1,52 @@
+@mixin app-sidebar-chrome {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 0.85rem;
+  background: linear-gradient(
+    180deg,
+    var(--color-sidebar-from, #1a4338) 0%,
+    var(--color-sidebar-to, #15352c) 100%
+  );
+  color: var(--color-sidebar-fg, #e8f2ec);
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+@mixin app-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-sidebar-divider);
+}
+
+@mixin app-sidebar-logo-mark {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 1rem;
+  background: var(--color-sidebar-mark-bg);
+}
+
+@mixin app-sidebar-logo-text {
+  strong {
+    display: block;
+    font-size: 1rem;
+  }
+
+  small {
+    font-size: 0.72rem;
+    opacity: 0.75;
+  }
+}
+
+@mixin app-sidebar-nav {
+  flex: 1;
+  overflow: auto;
+  margin: 0 -0.15rem;
+}

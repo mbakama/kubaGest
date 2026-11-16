@@ -10,6 +10,7 @@ describe('Ventes, caisse et stock (e2e)', () => {
   const owner = {
     firstName: 'Hector',
     lastName: 'Kabeya',
+    sex: 'male',
     tenantName: 'Boutique Caisse',
     activityType: 'boutique',
     currency: 'usd',
@@ -17,6 +18,7 @@ describe('Ventes, caisse et stock (e2e)', () => {
     password: 'SuperSecret123!',
   };
   const cashier = {
+    sex: 'male',
     email: 'sales-cashier@kubagest.io',
     password: 'CaissierSecret123!',
     role: 'cashier',

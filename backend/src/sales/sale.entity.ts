@@ -43,6 +43,12 @@ export class Sale {
   @Column({ name: 'establishment_id', type: 'uuid' })
   establishmentId: string;
 
+  @Column({ name: 'warehouse_id', type: 'uuid' })
+  warehouseId: string;
+
+  @Column({ name: 'terminal_id', type: 'uuid', nullable: true })
+  terminalId: string | null;
+
   @Column({ type: 'varchar', length: 60 })
   number: string;
 

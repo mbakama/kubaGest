@@ -1,7 +1,7 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Plan } from './plan.entity.js';
+import { Plan } from './entities/plan.entity.js';
 
 /**
  * Garantit la présence des formules de référence (dictionnaire §3). La

@@ -1,6 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ActivityType } from '../activity-type.enum.js';
-import { TenantStatus } from '../tenant.enums.js';
+import { ActivityType } from '../../core/tenants/activity-type.enum.js';
+import { TenantStatus } from '../../core/tenants/tenant.enums.js';
+import { WarehouseKind } from '../entities/warehouse.entity.js';
 
 export class SubscriptionResponseDto {
   @ApiProperty({ example: 'essential', description: 'Code de la formule' })
@@ -25,6 +26,9 @@ export class EstablishmentResponseDto {
   @ApiProperty({ format: 'uuid' })
   id: string;
 
+  @ApiProperty({ example: 'GOMBE' })
+  code: string;
+
   @ApiProperty({ example: 'Boutique Kintambo' })
   name: string;
 
@@ -39,6 +43,26 @@ export class EstablishmentResponseDto {
 
   @ApiProperty({ type: String, format: 'date-time' })
   updatedAt: Date;
+}
+
+export class WarehouseResponseDto {
+  @ApiProperty({ format: 'uuid' })
+  id: string;
+
+  @ApiProperty({ format: 'uuid', nullable: true })
+  establishmentId: string | null;
+
+  @ApiProperty({ example: 'CENTRAL' })
+  code: string;
+
+  @ApiProperty({ example: 'Entrepôt central' })
+  name: string;
+
+  @ApiProperty({ enum: WarehouseKind })
+  kind: WarehouseKind;
+
+  @ApiProperty()
+  isActive: boolean;
 }
 
 export class TenantResponseDto {

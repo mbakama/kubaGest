@@ -32,7 +32,7 @@ export class MailService {
 
   constructor(private readonly config: ConfigService<Environment, true>) {}
 
-  async send(mail: OutgoingMail): Promise<void> {
+  async send(mail: OutgoingMail): Promise<{ messageId: string }> {
     const driver = this.config.get('MAIL_DRIVER', { infer: true });
     const host = this.config.get('MAIL_HOST', { infer: true });
     const port = this.config.get('MAIL_PORT', { infer: true });
@@ -64,17 +64,18 @@ export class MailService {
       secure: implicitTls,
       requireTLS: !implicitTls,
       auth: { user, pass: password },
-      connectionTimeout: 10_000,
-      socketTimeout: 15_000,
+      connectionTimeout: 15_000,
+      socketTimeout: 30_000,
     });
 
     try {
-      await transport.sendMail({
+      const info = await transport.sendMail({
         from: formatFrom(fromAddress, fromName),
         to: mail.to,
         subject: mail.subject,
         text: mail.text,
       });
+      return { messageId: info.messageId ?? '' };
     } catch (error) {
       this.logger.error(
         `Envoi SMTP impossible : ${error instanceof Error ? error.message : 'erreur inconnue'}`,
@@ -83,7 +84,15 @@ export class MailService {
         "Le message n'a pas pu être envoyé. Réessayez.",
       );
     } finally {
-      transport.close();
+      try {
+        transport.close();
+      } catch (closeError) {
+        this.logger.warn(
+          `Fermeture SMTP après envoi : ${
+            closeError instanceof Error ? closeError.message : 'erreur inconnue'
+          }`,
+        );
+      }
     }
   }
 }

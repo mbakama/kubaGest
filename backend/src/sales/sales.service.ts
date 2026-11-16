@@ -5,7 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import type { EntityManager } from 'typeorm';
-import { DataSource, In } from 'typeorm';
+import { DataSource, In, IsNull } from 'typeorm';
 import { AuditService } from '../audit/audit.service.js';
 import { CashRegister } from '../cash/cash-register.entity.js';
 import { CashSession } from '../cash/cash-session.entity.js';
@@ -13,7 +13,9 @@ import { CashService } from '../cash/cash.service.js';
 import { CashMovementKind } from '../cash/cash-movement.entity.js';
 import { CatalogService } from '../catalog/catalog.service.js';
 import { ProductPackaging } from '../catalog/product-packaging.entity.js';
-import { Product } from '../catalog/product.entity.js';
+import { EstablishmentProduct } from '../catalog/establishment-product.entity.js';
+import { PhysicalProduct } from '../catalog/physical-product.entity.js';
+import { ProductPrice } from '../catalog/product-price.entity.js';
 import { periodInZone } from '../common/date.js';
 import {
   addMoney,
@@ -29,8 +31,9 @@ import { CreditSale } from '../credits/credit-sale.entity.js';
 import { Customer } from '../credits/customer.entity.js';
 import { DocumentNumberService } from '../documents/document-number.service.js';
 import { StockService } from '../stock/stock.service.js';
-import { Establishment } from '../tenants/establishment.entity.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Establishment } from '../tenants/entities/establishment.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
+import { Warehouse, WarehouseKind } from '../tenants/entities/warehouse.entity.js';
 import { SaleItem } from './sale-item.entity.js';
 import {
   PaymentDirection,
@@ -46,7 +49,7 @@ import {
 } from './dto/sale.dto.js';
 
 type PricedLine = {
-  product: Product;
+  product: PhysicalProduct;
   packaging: ProductPackaging;
   quantityPackages: number;
   quantityBase: number;
@@ -101,8 +104,26 @@ export class SalesService {
     const created = await this.dataSource.transaction(async (manager) => {
       const tenant = await manager.findOne(Tenant, { where: { id: tenantId } });
       if (!tenant) throw new NotFoundException('Commerce introuvable');
+      const warehouse = await manager.findOne(Warehouse, {
+        where: {
+          tenantId,
+          establishmentId: establishment.id,
+          kind: WarehouseKind.SECONDARY,
+          isActive: true,
+        },
+        order: { createdAt: 'ASC' },
+      });
+      if (!warehouse)
+        throw new NotFoundException(
+          "Aucun entrepôt actif pour l'établissement",
+        );
 
-      const lines = await this.priceLines(manager, tenantId, establishment, dto);
+      const lines = await this.priceLines(
+        manager,
+        tenantId,
+        establishment,
+        dto,
+      );
 
       const subtotal = lines.reduce(
         (sum, line) => sum + toUnits(line.netAmount),
@@ -146,6 +167,7 @@ export class SalesService {
         manager.create(Sale, {
           tenantId,
           establishmentId: establishment.id,
+          warehouseId: warehouse.id,
           number: await this.numbers.next(
             manager,
             tenantId,
@@ -173,7 +195,7 @@ export class SalesService {
             establishmentId: establishment.id,
             saleId: sale.id,
             lineNumber: index + 1,
-            productId: line.product.id,
+            physicalProductId: line.product.id,
             packagingId: line.packaging.id,
             skuSnapshot: line.product.sku,
             nameSnapshot: line.product.name,
@@ -330,7 +352,9 @@ export class SalesService {
     const creditBySale = new Map(
       credits.map((credit) => [credit.saleId as string, credit]),
     );
-    const customerIds = [...new Set(credits.map((credit) => credit.customerId))];
+    const customerIds = [
+      ...new Set(credits.map((credit) => credit.customerId)),
+    ];
     const customers =
       customerIds.length > 0
         ? await manager.find(Customer, { where: { id: In(customerIds) } })
@@ -376,7 +400,10 @@ export class SalesService {
     establishment: Establishment,
     dto: CreateSaleDto,
   ): Promise<PricedLine[]> {
-    const merged = new Map<string, { productId: string; packagingId: string; quantity: number }>();
+    const merged = new Map<
+      string,
+      { productId: string; packagingId: string; quantity: number }
+    >();
     for (const item of dto.items) {
       const key = `${item.productId}:${item.packagingId}`;
       const current = merged.get(key);
@@ -398,35 +425,58 @@ export class SalesService {
     }
 
     const rows = [...merged.values()];
-    const products = await manager.find(Product, {
+    const products = await manager.find(PhysicalProduct, {
       where: {
         tenantId,
-        establishmentId: establishment.id,
         id: In([...new Set(rows.map((row) => row.productId))]),
       },
     });
-    const productById = new Map(products.map((product) => [product.id, product]));
+    const activations = await manager.find(EstablishmentProduct, {
+      where: {
+        tenantId,
+        establishmentId: establishment.id,
+        physicalProductId: In([...new Set(rows.map((row) => row.productId))]),
+        isActive: true,
+      },
+    });
+    const activationByProduct = new Map(
+      activations.map((row) => [row.physicalProductId, row]),
+    );
+    const productById = new Map(
+      products.map((product) => [product.id, product]),
+    );
 
     const packagings = await manager.find(ProductPackaging, {
       where: {
         tenantId,
-        establishmentId: establishment.id,
         id: In([...new Set(rows.map((row) => row.packagingId))]),
       },
     });
     const packagingById = new Map(
       packagings.map((packaging) => [packaging.id, packaging]),
     );
+    const prices = await manager.find(ProductPrice, {
+      where: {
+        tenantId,
+        establishmentId: establishment.id,
+        packagingId: In([...new Set(rows.map((row) => row.packagingId))]),
+        validTo: IsNull(),
+      },
+    });
+    const priceByPackaging = new Map(
+      prices.map((price) => [price.packagingId, price.salePrice]),
+    );
 
     return rows.map((row) => {
       const product = productById.get(row.productId);
-      if (!product || !product.isActive) {
+      const activation = activationByProduct.get(row.productId);
+      if (!product || !product.isActive || !activation) {
         throw new NotFoundException(
           'Un article du ticket est introuvable ou inactif.',
         );
       }
       const packaging = packagingById.get(row.packagingId);
-      if (!packaging || packaging.productId !== product.id) {
+      if (!packaging || packaging.physicalProductId !== product.id) {
         throw new BadRequestException(
           `Le conditionnement choisi ne correspond pas à ${product.name}.`,
         );
@@ -439,8 +489,14 @@ export class SalesService {
 
       const quantityBase = row.quantity * packaging.factorToBase;
 
-      const netAmount = multiplyMoney(packaging.salePrice, row.quantity);
-      const taxRate = product.taxRate ?? '0';
+      const salePrice = priceByPackaging.get(packaging.id);
+      if (salePrice === undefined) {
+        throw new BadRequestException(
+          `Aucun prix actif pour « ${packaging.label} ».`,
+        );
+      }
+      const netAmount = multiplyMoney(salePrice, row.quantity);
+      const taxRate = activation.taxRate ?? '0';
       const taxAmount = applyRate(netAmount, taxRate);
 
       return {
@@ -448,7 +504,7 @@ export class SalesService {
         packaging,
         quantityPackages: row.quantity,
         quantityBase,
-        unitPrice: fromUnits(toUnits(packaging.salePrice)),
+        unitPrice: fromUnits(toUnits(salePrice)),
         netAmount,
         taxRate: fromUnits(toUnits(taxRate)),
         taxAmount,
@@ -519,7 +575,7 @@ export class SalesService {
     const lines: SaleLineResponseDto[] = items
       .sort((left, right) => left.lineNumber - right.lineNumber)
       .map((item) => ({
-        productId: item.productId,
+        productId: item.physicalProductId,
         name: item.nameSnapshot,
         packaging: item.packagingSnapshot,
         quantity: item.quantityPackages,

@@ -13,11 +13,7 @@ import {
  */
 @Entity({ name: 'product_barcodes' })
 @Index('idx_product_barcodes_tenant', ['tenantId', 'code'], { unique: true })
-@Index('idx_product_barcodes_product', [
-  'tenantId',
-  'establishmentId',
-  'productId',
-])
+@Index('idx_product_barcodes_product', ['tenantId', 'physicalProductId'])
 export class ProductBarcode {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -25,11 +21,8 @@ export class ProductBarcode {
   @Column({ name: 'tenant_id', type: 'uuid' })
   tenantId: string;
 
-  @Column({ name: 'establishment_id', type: 'uuid' })
-  establishmentId: string;
-
-  @Column({ name: 'product_id', type: 'uuid' })
-  productId: string;
+  @Column({ name: 'physical_product_id', type: 'uuid' })
+  physicalProductId: string;
 
   @Column({ name: 'packaging_id', type: 'uuid' })
   packagingId: string;

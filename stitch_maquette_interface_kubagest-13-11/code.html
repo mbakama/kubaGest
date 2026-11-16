@@ -1,0 +1,522 @@
+<!DOCTYPE html><html class="dark" lang="fr"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><meta content="web_dashboard" name="shell-type"><link href="https://fonts.googleapis.com" rel="preconnect"><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"><link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;family=JetBrains+Mono:wght@400;500;700&amp;display=swap" rel="stylesheet"><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"primary":"#10b981","primary-focus":"#059669","primary-tint":"#34d399","surface-dark":"#051424","surface-card":"#0d1c2d","surface-hover":"#15273b","surface-border":"rgba(255,255,255,0.08)","text-main":"#f8fafc","text-muted":"#94a3b8","retail-blue":"#38bdf8","retail-amber":"#fbbf24","growth-green":"#34d399","alert-red":"#f87171"},fontFamily:{"sans":["Geist","sans-serif"],"display":["Space Grotesk","sans-serif"],"mono":["JetBrains Mono","monospace"]}}}}</script></head><body class="bg-surface-dark font-sans text-text-main antialiased selection:bg-emerald-500/30 selection:text-emerald-300"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-card border-r border-surface-border z-50 flex flex-col justify-between shadow-2xl"><div class="flex flex-col flex-1"><div class="h-16 flex items-center gap-3 px-6 bg-surface-card border-b border-surface-border"><img alt="Logo moderne KubaGest" class="h-8 w-auto object-contain brightness-110 drop-shadow-[0_0_8px_rgba(16,185,129,0.3)]" src="https://lh3.googleusercontent.com/aida/ALJJyrAxrkQ3MHKXbLTEQmDHBMA-tWXgYjEJqq5ZsAHbtJ0iZf4Zvw33QdFvQbZ991Gn7o9cOtsEUxVC920RrvZlO353WvTWuRz73Yudbpf4QR9OCUvw74EEfs9zubwjwMe7OxDpktRt6-T6rsAqQY_WaklVOutymcSDfqM-p5bP0aoQmk3y6CGDJvgQnkuj43b9LSYP_BeiByRRrBcClL1UI0TBHXs2NKeo5L7xjuHPruej48MvvysHEnTV9d4"><div class="flex flex-col"><span class="font-display font-bold text-lg text-white tracking-tight leading-none">KubaGest</span><span class="font-mono text-[11px] text-emerald-400 font-semibold tracking-wide uppercase mt-1">Retail POS ERP</span></div></div><div class="px-4 py-3"><div class="bg-[#051424] border border-surface-border rounded-xl p-3 flex items-center justify-between shadow-inner"><div class="flex items-center gap-2.5"><span class="material-symbols-outlined text-emerald-400 text-[20px]">store</span><div class="flex flex-col"><span class="font-sans font-semibold text-sm text-slate-100 leading-tight">La Victoire</span><span class="font-mono text-xs text-text-muted">Kinshasa RDC</span></div></div><span class="material-symbols-outlined text-text-muted text-[18px]">expand_more</span></div></div><nav class="flex-1 px-4 py-2 space-y-1.5 overflow-y-auto"><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="tableau-de-bord" href="#"><span class="material-symbols-outlined text-[20px] text-emerald-400">dashboard</span><span>Tableau de bord</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="point-de-vente" href="#"><span class="material-symbols-outlined text-[20px]">point_of_sale</span><span>Point de Vente (POS)</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="stocks-et-fefo" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Stocks &amp; FEFO</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="clotures-et-caisses" href="#"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span><span>Clôtures &amp; Caisses</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="historique-des-transactions" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Historique des Transactions</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="rapports-et-marges" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span>Rapports &amp; Marges</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="utilisateurs-et-roles" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Utilisateurs &amp; Rôles</span></a><a class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-slate-400 hover:bg-surface-hover hover:text-slate-100 transition-colors text-sm font-medium" data-path="parametres" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Paramètres</span></a></nav></div><div class="p-4 bg-surface-card border-t border-surface-border"><div class="bg-[#051424] p-3 rounded-xl border border-surface-border/80"><div class="flex items-center justify-between mb-1"><span class="font-sans text-xs text-text-muted">Mode Hybride P2P</span><span class="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] inline-block animate-pulse"></span></div><span class="font-sans font-semibold text-xs text-slate-200 block">Synchro Locale Active</span><span class="font-sans text-[11px] text-slate-400">Tolérance coupure web</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-card/95 backdrop-blur-md border-b border-surface-border z-40 flex items-center justify-between px-8"><div class="flex items-center gap-4"><div class="flex items-center gap-2 bg-[#051424] border border-surface-border px-3.5 py-1.5 rounded-lg"><span class="material-symbols-outlined text-sky-400 text-[18px]">currency_exchange</span><span class="font-sans text-xs text-slate-400">BCC :</span><span class="font-mono text-xs font-semibold text-slate-200">1 USD = 2 850 FC</span></div><div class="hidden lg:flex items-center gap-2 bg-[#051424] border border-surface-border px-3.5 py-1.5 rounded-lg"><span class="material-symbols-outlined text-emerald-400 text-[18px]">cloud_done</span><span class="font-sans text-xs text-slate-400">Synchro P2P/Cloud :</span><span class="font-mono text-xs font-bold text-emerald-400">99.9%</span></div></div><div class="flex items-center gap-4"><div class="relative flex items-center justify-center p-2 text-slate-300 hover:text-white cursor-pointer rounded-full hover:bg-surface-hover transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500 shadow-[0_0_6px_#f43f5e]"></span></div><div class="flex items-center bg-[#051424] border border-surface-border p-1 rounded-full gap-1 shadow-inner" title="Basculer le thème"><button type="button" class="p-1.5 rounded-full text-slate-400 hover:text-slate-200 transition-colors flex items-center justify-center cursor-pointer" aria-label="Mode Jour"><span class="material-symbols-outlined text-[16px]">light_mode</span></button><button type="button" class="px-2 py-1 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 shadow-[0_0_8px_#34d399] flex items-center gap-1 transition-all cursor-pointer" aria-label="Mode Nuit actif"><span class="material-symbols-outlined text-[16px]">dark_mode</span><span class="font-label-code text-[11px] font-medium">Nuit</span></button></div><div class="h-7 w-px bg-surface-border"></div><div class="flex items-center gap-3"><div class="text-right hidden sm:block"><span class="font-sans font-semibold text-xs text-slate-100 block leading-tight">Papa Léon Kabamba</span><span class="font-mono text-[11px] text-sky-400 block font-medium">Gérant Principal</span></div><div class="w-8 h-8 rounded-full bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-300 shadow-[0_0_10px_rgba(16,185,129,0.2)]"><span class="material-symbols-outlined text-[18px]">person</span></div></div></div></header><main class="relative pt-16 bg-surface-dark min-h-screen px-8 py-6"><div class="flex flex-col w-full gap-6 pb-10">
+<!-- Command Strip & Operational Status -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-6 shadow-xl">
+<div class="absolute -right-24 -top-24 h-64 w-64 rounded-full bg-gradient-to-br from-primary-container/10 via-primary/5 to-transparent blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
+<div class="flex flex-col gap-2">
+<div class="flex items-center gap-3 flex-wrap">
+<div class="inline-flex items-center gap-2 rounded-full bg-surface-container-high px-3 py-1 shadow-inner">
+<span class="h-2 w-2 rounded-full bg-primary shadow-[0_0_8px_#34d399] animate-pulse"></span>
+<span class="font-label-caps text-label-caps uppercase text-primary">Session Live Active</span>
+</div>
+<div class="inline-flex items-center gap-2 rounded-full bg-surface-container-highest px-3 py-1">
+<span class="material-symbols-outlined text-secondary text-[16px]">point_of_sale</span>
+<span class="font-body-sm text-body-sm text-on-surface">Poste Caisse Kinshasa #01 &amp; #02</span>
+</div>
+<div class="inline-flex items-center gap-2 rounded-full bg-surface-container-highest px-3 py-1">
+<span class="material-symbols-outlined text-primary text-[16px]">sync_saved_locally</span>
+<span class="font-label-code text-label-code text-on-surface-variant">Mesh P2P Synchro 99.9%</span>
+</div>
+</div>
+<div class="flex items-baseline gap-3">
+<h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Tableau de Bord Exécutif</h2>
+<span class="font-label-code text-label-code text-primary">BCC : 1 USD = 2 850 FC</span>
+</div>
+</div>
+<div class="flex items-center gap-3 flex-wrap">
+<button class="inline-flex items-center gap-2 rounded-xl bg-primary-container hover:bg-secondary px-5 py-3 font-headline-sm text-body-md font-semibold text-on-primary-fixed shadow-[0_0_20px_rgba(16,185,129,0.3)] hover:shadow-[0_0_25px_rgba(52,211,153,0.5)] transition-all cursor-pointer" id="btn-quick-sale">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span>
+<span>Nouvelle Vente</span>
+<span class="rounded bg-on-primary-fixed/20 px-1.5 py-0.5 font-label-code text-body-sm">F2</span>
+</button>
+<button class="inline-flex items-center gap-2 rounded-xl bg-surface-container-high hover:bg-surface-container-highest px-4 py-3 font-headline-sm text-body-md text-on-surface transition-all cursor-pointer" id="btn-close-register">
+<span class="material-symbols-outlined text-[18px] text-error">lock_clock</span>
+<span>Clôturer Caisse (Z)</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Key Operational Metric Tiles -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- Tile 1: Daily Revenue -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-5 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Chiffre d'Affaires Brut</span>
+<span class="font-label-code text-label-code text-primary mt-0.5 block">188 Tickets Validés</span>
+</div>
+<div class="h-10 w-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-primary shadow-inner">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+</div>
+<div class="my-4">
+<div class="flex items-baseline gap-2">
+<span class="font-label-numeric text-headline-xl text-on-surface leading-none">$1,480.00</span>
+<span class="font-label-code text-label-code text-on-surface-variant">USD</span>
+</div>
+<span class="font-label-code text-body-sm text-on-surface-variant block mt-1">~4 218 000 CDF</span>
+</div>
+<div class="flex items-center justify-between pt-3 bg-surface-container-lowest/40 -mx-5 -mb-5 px-5 py-2.5 rounded-b-xl">
+<span class="inline-flex items-center gap-1 font-label-code text-body-sm text-primary font-semibold">
+<span class="material-symbols-outlined text-[16px]">trending_up</span> +14.2% vs hier
+        </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Obj. journalier: 82%</span>
+</div>
+</div>
+<!-- Tile 2: Cash Drawer Real Position -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-5 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Encaissements Espèces</span>
+<span class="font-label-code text-label-code text-secondary mt-0.5 block">Contrôle Strict Physique</span>
+</div>
+<div class="h-10 w-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-secondary shadow-inner">
+<span class="material-symbols-outlined text-[22px]">account_balance_wallet</span>
+</div>
+</div>
+<div class="my-4">
+<div class="flex items-baseline gap-2">
+<span class="font-label-numeric text-headline-xl text-on-surface leading-none">$920.00</span>
+<span class="font-label-code text-label-code text-on-surface-variant">USD</span>
+</div>
+<span class="font-label-code text-body-sm text-on-surface-variant block mt-1">+1 596 000 CDF en tiroir</span>
+</div>
+<div class="flex items-center justify-between pt-3 bg-surface-container-lowest/40 -mx-5 -mb-5 px-5 py-2.5 rounded-b-xl">
+<span class="inline-flex items-center gap-1.5 font-label-code text-body-sm text-primary font-semibold">
+<span class="h-1.5 w-1.5 rounded-full bg-primary"></span> 0 FC Écart / Conforme
+        </span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Billetterie validée</span>
+</div>
+</div>
+<!-- Tile 3: Gross Margin / Profitability -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-5 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Marge Brute (PUMP)</span>
+<span class="font-label-code text-label-code text-tertiary mt-0.5 block">Prix Unitaire Moyen Pondéré</span>
+</div>
+<div class="h-10 w-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-tertiary shadow-inner">
+<span class="material-symbols-outlined text-[22px]">monitoring</span>
+</div>
+</div>
+<div class="my-4">
+<div class="flex items-baseline gap-2">
+<span class="font-label-numeric text-headline-xl text-on-surface leading-none">$415.00</span>
+<span class="font-label-code text-label-code text-on-surface-variant">USD</span>
+</div>
+<span class="font-label-code text-body-sm text-on-surface-variant block mt-1">~1 182 750 CDF (Marge Nette 28.0%)</span>
+</div>
+<div class="flex items-center justify-between pt-3 bg-surface-container-lowest/40 -mx-5 -mb-5 px-5 py-2.5 rounded-b-xl">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Coefficient cible : 1.39</span>
+<span class="font-label-code text-body-sm text-primary font-semibold">+2.1 pts vs N-1</span>
+</div>
+</div>
+<!-- Tile 4: Stock & FEFO Anomalies -->
+<div class="relative overflow-hidden rounded-xl bg-surface-container-low p-5 shadow-lg flex flex-col justify-between">
+<div class="flex items-start justify-between">
+<div>
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase tracking-wider block">Alertes Stocks &amp; FEFO</span>
+<span class="font-label-code text-label-code text-error mt-0.5 block">Dépôt Kinshasa Victoire</span>
+</div>
+<div class="h-10 w-10 rounded-xl bg-error-container/30 flex items-center justify-center text-error shadow-inner">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+</div>
+<div class="my-4">
+<div class="flex items-baseline gap-3">
+<div class="flex items-baseline gap-1">
+<span class="font-label-numeric text-headline-xl text-error leading-none">4</span>
+<span class="font-body-sm text-body-sm text-error">ruptures</span>
+</div>
+<span class="font-label-numeric text-headline-md text-on-surface-variant leading-none">|</span>
+<div class="flex items-baseline gap-1">
+<span class="font-label-numeric text-headline-xl text-secondary-fixed leading-none">2</span>
+<span class="font-body-sm text-body-sm text-secondary-fixed">&lt;30j</span>
+</div>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant block mt-1">2 lots alimentaires sous vigilance</span>
+</div>
+<div class="flex items-center justify-between pt-3 bg-surface-container-lowest/40 -mx-5 -mb-5 px-5 py-2.5 rounded-b-xl">
+<span class="font-body-sm text-body-sm text-error font-medium">Reassort requis</span>
+<span class="material-symbols-outlined text-error text-[18px]">arrow_forward</span>
+</div>
+</div>
+</div>
+<!-- Operational Charts Split (7:5 Ratio) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Chart Left: Hourly Activity & Sales Velocity -->
+<div class="lg:col-span-7 rounded-xl bg-surface-container-low p-6 shadow-xl flex flex-col justify-between">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+<div>
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Activité Horaire &amp; Volumes</h3>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Période d'ouverture : 08h00 — 18h00 (Heure de Kinshasa)</span>
+</div>
+<div class="flex items-center gap-4 bg-surface-container-highest px-3 py-1.5 rounded-lg">
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Panier Moyen</span>
+<span class="font-label-numeric text-body-md text-primary">$7.87 USD</span>
+</div>
+<div class="h-6 w-px bg-surface-container"></div>
+<div class="flex flex-col">
+<span class="font-label-caps text-label-caps text-on-surface-variant uppercase">Vitesse Caisse</span>
+<span class="font-label-numeric text-body-md text-on-surface">1m 12s</span>
+</div>
+</div>
+</div>
+<!-- Histogram Visualization (SVG) -->
+<div class="relative w-full pt-4">
+<svg class="w-full h-56 overflow-visible" preserveAspectRatio="none" viewBox="0 0 600 200">
+<defs>
+<linearGradient id="barEmeraldGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#4edea3" stop-opacity="0.95"></stop>
+<stop offset="100%" stop-color="#10b981" stop-opacity="0.25"></stop>
+</linearGradient>
+<linearGradient id="peakGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#68fcbf" stop-opacity="1"></stop>
+<stop offset="100%" stop-color="#00bd85" stop-opacity="0.3"></stop>
+</linearGradient>
+</defs>
+<!-- Guide Grid Lines -->
+<line class="text-surface-container-highest" stroke="currentColor" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="600" y1="30" y2="30"></line>
+<line class="text-surface-container-highest" stroke="currentColor" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="600" y1="80" y2="80"></line>
+<line class="text-surface-container-highest" stroke="currentColor" stroke-dasharray="4,4" stroke-width="1" x1="0" x2="600" y1="130" y2="130"></line>
+<line class="text-surface-container-highest" stroke="currentColor" stroke-width="1.5" x1="0" x2="600" y1="180" y2="180"></line>
+<!-- Bars: 08h, 09h, 10h, 11h, 12h (peak), 13h, 14h, 15h (peak), 16h, 17h, 18h -->
+<!-- 08h -->
+<rect fill="url(#barEmeraldGrad)" height="35" rx="4" width="28" x="25" y="145"></rect>
+<!-- 09h -->
+<rect fill="url(#barEmeraldGrad)" height="55" rx="4" width="28" x="78" y="125"></rect>
+<!-- 10h -->
+<rect fill="url(#barEmeraldGrad)" height="90" rx="4" width="28" x="131" y="90"></rect>
+<!-- 11h -->
+<rect fill="url(#barEmeraldGrad)" height="120" rx="4" width="28" x="184" y="60"></rect>
+<!-- 12h Peak -->
+<rect class="filter drop-shadow-[0_0_8px_rgba(78,222,163,0.5)]" fill="url(#peakGrad)" height="155" rx="4" width="28" x="237" y="25"></rect>
+<!-- 13h -->
+<rect fill="url(#barEmeraldGrad)" height="95" rx="4" width="28" x="290" y="85"></rect>
+<!-- 14h -->
+<rect fill="url(#barEmeraldGrad)" height="85" rx="4" width="28" x="343" y="95"></rect>
+<!-- 15h Peak -->
+<rect class="filter drop-shadow-[0_0_8px_rgba(78,222,163,0.4)]" fill="url(#peakGrad)" height="145" rx="4" width="28" x="396" y="35"></rect>
+<!-- 16h -->
+<rect fill="url(#barEmeraldGrad)" height="110" rx="4" width="28" x="449" y="70"></rect>
+<!-- 17h -->
+<rect fill="url(#barEmeraldGrad)" height="75" rx="4" width="28" x="502" y="105"></rect>
+<!-- 18h -->
+<rect fill="url(#barEmeraldGrad)" height="30" rx="4" width="28" x="555" y="150"></rect>
+<!-- Peak indicators -->
+<circle class="fill-primary animate-ping" cx="251" cy="25" r="3.5"></circle>
+<circle class="fill-on-primary-fixed" cx="251" cy="25" r="3"></circle>
+<circle class="fill-secondary animate-ping" cx="410" cy="35" r="3.5"></circle>
+<circle class="fill-on-primary-fixed" cx="410" cy="35" r="3"></circle>
+</svg>
+<div class="flex justify-between font-label-code text-body-sm text-on-surface-variant pt-2 px-2">
+<span>08h</span>
+<span>09h</span>
+<span>10h</span>
+<span>11h</span>
+<span class="text-primary font-bold">12h (Pic)</span>
+<span>13h</span>
+<span>14h</span>
+<span class="text-secondary font-bold">15h (Pic)</span>
+<span>16h</span>
+<span>17h</span>
+<span>18h</span>
+</div>
+</div>
+<div class="flex items-center justify-between text-body-sm text-on-surface-variant mt-4 pt-3 bg-surface-container-lowest/30 rounded-lg p-3">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span>Capacité horaire max atteinte à 12h14 (34 articles/min)</span>
+</span>
+<span class="font-label-code text-primary font-semibold">Flux Nominal</span>
+</div>
+</div>
+<!-- Chart Right: Multi-Currency Tender Breakdown -->
+<div class="lg:col-span-5 rounded-xl bg-surface-container-low p-6 shadow-xl flex flex-col justify-between">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Modes de Paiement</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ventilation Bidevise &amp; Mobile</span>
+</div>
+<button class="inline-flex items-center gap-1 rounded bg-surface-container-highest hover:bg-surface-bright px-2.5 py-1 text-on-surface font-label-code text-body-sm transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px]">file_download</span> Export
+        </button>
+</div>
+<!-- Segmented Bar Visualization -->
+<div class="space-y-4">
+<div class="flex h-5 w-full overflow-hidden rounded-full bg-surface-container-lowest p-0.5 shadow-inner">
+<div class="h-full rounded-l-full bg-primary shadow-[0_0_8px_rgba(78,222,163,0.4)]" style="width: 52%" title="Espèces USD: 52%"></div>
+<div class="h-full bg-secondary-container" style="width: 38%" title="Espèces CDF: 38%"></div>
+<div class="h-full rounded-r-full bg-tertiary-fixed" style="width: 10%" title="Mobile Money: 10%"></div>
+</div>
+<div class="space-y-3 pt-2">
+<!-- Row 1: Espèces USD -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest/50">
+<div class="flex items-center gap-3">
+<span class="h-3 w-3 rounded-full bg-primary shadow-[0_0_6px_#4edea3]"></span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Espèces Dollar (USD)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Billetage $100, $50, $20, $10</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-numeric text-body-md text-on-surface block">$770.00</span>
+<span class="font-label-code text-body-sm text-primary">52% du total</span>
+</div>
+</div>
+<!-- Row 2: Espèces CDF -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest/50">
+<div class="flex items-center gap-3">
+<span class="h-3 w-3 rounded-full bg-secondary-container"></span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Espèces Franc Congolais (CDF)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">1 601 700 CDF perçus</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-numeric text-body-md text-on-surface block">$562.00</span>
+<span class="font-label-code text-secondary">38% du total</span>
+</div>
+</div>
+<!-- Row 3: Mobile Money -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-lowest/50">
+<div class="flex items-center gap-3">
+<span class="h-3 w-3 rounded-full bg-tertiary-fixed"></span>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Mobile Money (M-Pesa / Airtel)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Push API Instantané validé</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-numeric text-body-md text-on-surface block">$148.00</span>
+<span class="font-label-code text-tertiary">10% du total</span>
+</div>
+</div>
+</div>
+</div>
+<div class="pt-4 flex items-center justify-between font-label-code text-body-sm text-on-surface-variant">
+<span>Total Converti en Coffre :</span>
+<span class="font-label-numeric text-body-md text-on-surface font-bold">$1,480.00 USD</span>
+</div>
+</div>
+</div>
+<!-- Operational Dual Execution Sections (Realtime Register Ledger & Critical FEFO Table) -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+<!-- Left Section: Cash Registers Live Surveillance -->
+<div class="lg:col-span-6 rounded-xl bg-surface-container-low p-6 shadow-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[20px]">storefront</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Sessions de Caisse &amp; Postes en Direct</h3>
+</div>
+<span class="font-label-code text-label-code text-primary uppercase bg-primary-container/20 px-2 py-0.5 rounded">2 Caisses Ouvertes</span>
+</div>
+<div class="space-y-3">
+<!-- Register 1: Nelly -->
+<div class="rounded-xl bg-surface-container p-4 flex flex-col gap-3 shadow-md hover:bg-surface-container-high transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-surface-container-highest flex items-center justify-center font-headline-sm text-body-md text-primary font-bold">
+                  NK
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-body-lg text-body-md text-on-surface font-semibold">Nelly Kalonji</span>
+<span class="rounded bg-primary-container/20 px-2 py-0.2 font-label-code text-body-sm text-primary">Caisse 01</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Comptoir Principal (Détail) • Ouvert 07h45</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-numeric text-headline-sm text-on-surface block leading-tight">$1,110.00</span>
+<span class="font-label-code text-body-sm text-on-surface-variant">142 tickets</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-lowest/50 -mx-4 -mb-4 px-4 py-2 rounded-b-xl">
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-label-code text-body-sm text-on-surface">Écart Théorique / Réel : <span class="text-primary font-bold">0 FC</span></span>
+</div>
+<button class="font-label-code text-body-sm text-primary hover:underline flex items-center gap-1 cursor-pointer">
+<span>Détail session</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Register 2: Junior Mukendi -->
+<div class="rounded-xl bg-surface-container p-4 flex flex-col gap-3 shadow-md hover:bg-surface-container-high transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-3">
+<div class="h-10 w-10 rounded-full bg-surface-container-highest flex items-center justify-center font-headline-sm text-body-md text-secondary font-bold">
+                  JM
+                </div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-body-lg text-body-md text-on-surface font-semibold">Junior Mukendi</span>
+<span class="rounded bg-secondary-container/20 px-2 py-0.2 font-label-code text-body-sm text-secondary">Caisse 02</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dépôt Gros &amp; Demi-Gros • Ouvert 08h10</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-numeric text-headline-sm text-on-surface block leading-tight">$370.00</span>
+<span class="font-label-code text-body-sm text-on-surface-variant">46 tickets</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2 bg-surface-container-lowest/50 -mx-4 -mb-4 px-4 py-2 rounded-b-xl">
+<div class="flex items-center gap-2">
+<span class="h-2 w-2 rounded-full bg-primary"></span>
+<span class="font-label-code text-body-sm text-on-surface">Écart Théorique / Réel : <span class="text-primary font-bold">0 FC</span></span>
+</div>
+<button class="font-label-code text-body-sm text-primary hover:underline flex items-center gap-1 cursor-pointer">
+<span>Détail session</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-4 flex items-center justify-between bg-surface-container-lowest/30 rounded-lg p-3">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Contrôle contradictoire de mi-journée actif</span>
+<span class="font-label-code text-body-sm text-primary">Intégrité 100% ($1,480.00)</span>
+</div>
+</div>
+<!-- Right Section: Critical Inventory & FEFO Alerts -->
+<div class="lg:col-span-6 rounded-xl bg-surface-container-low p-6 shadow-xl flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-[20px]">crisis_alert</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Alertes Prioritaires Stocks &amp; FEFO</h3>
+</div>
+<span class="font-label-code text-body-sm text-on-surface-variant">Priorité Dépôt Central</span>
+</div>
+<div class="space-y-2.5">
+<!-- Item 1: Simba Oil (Stock Out Risk) -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-lg bg-error-container/30 flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[20px]">production_quantity_limits</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Huile Végétale Simba 5L</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">SKU: HUI-SIM-5L • Seuil mini: 15 bidons</span>
+</div>
+</div>
+<div class="text-right">
+<span class="rounded bg-error-container/40 px-2 py-0.5 font-label-code text-body-sm text-error font-bold">Reste: 3 bidons</span>
+<span class="font-body-sm text-body-sm text-error block mt-0.5">Rupture imminente</span>
+</div>
+</div>
+<!-- Item 2: Nido Milk (FEFO < 30 days) -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-lg bg-surface-container-highest flex items-center justify-center text-secondary-fixed">
+<span class="material-symbols-outlined text-[20px]">event_busy</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Lait en Poudre Nido 400g</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Lot #NK-2025-09 • FEFO Prioritaire</span>
+</div>
+</div>
+<div class="text-right">
+<span class="rounded bg-surface-container-highest px-2 py-0.5 font-label-code text-body-sm text-secondary-fixed font-bold">Exp: 18/04/2026</span>
+<span class="font-body-sm text-body-sm text-secondary-fixed block mt-0.5">22 jours restants</span>
+</div>
+</div>
+<!-- Item 3: Farine Froment Azam (Low Stock) -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container hover:bg-surface-container-high transition-colors">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-md text-body-md text-on-surface font-medium">Farine Froment Azam 25kg</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">SKU: FAR-AZM-25 • 6 sacs en réserve</span>
+</div>
+</div>
+<div class="text-right">
+<span class="rounded bg-surface-container-highest px-2 py-0.5 font-label-code text-body-sm text-on-surface-variant">Seuil bas (8)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant block mt-0.5">Commande sug. 30 sacs</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-4 pt-3 flex items-center justify-between">
+<button class="inline-flex items-center gap-2 rounded-lg bg-primary hover:bg-primary-tint px-4 py-2 font-body-md text-body-md font-semibold text-on-primary-fixed shadow-md transition-all cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Créer un Bon de Commande Fournisseur</span>
+</button>
+<a class="font-label-code text-body-sm text-on-surface-variant hover:text-on-surface" href="#">Voir les 6 alertes →</a>
+</div>
+</div>
+</div>
+<!-- Quick Command Tray & Local Mesh Infrastructure Shortcuts -->
+<div class="rounded-xl bg-surface-container-lowest p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-inner">
+<div class="flex items-center gap-3">
+<div class="h-9 w-9 rounded-full bg-primary/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">terminal</span>
+</div>
+<div>
+<span class="font-body-md text-body-md text-on-surface font-semibold block">Raccourcis Opérationnels Magasin</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Exécution rapide sans quitter l'interface</span>
+</div>
+</div>
+<div class="flex items-center gap-2 flex-wrap">
+<button class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest px-3 py-2 font-label-code text-body-sm text-on-surface transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">qr_code_scanner</span>
+<span>Inventaire Rapide</span>
+</button>
+<button class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest px-3 py-2 font-label-code text-body-sm text-on-surface transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-secondary">request_quote</span>
+<span>Sortie Menue Dépense</span>
+</button>
+<button class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest px-3 py-2 font-label-code text-body-sm text-on-surface transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[16px] text-primary">sync</span>
+<span>Forcer Synchro P2P</span>
+</button>
+<a class="inline-flex items-center gap-1.5 rounded-lg bg-surface-container-highest hover:bg-surface-bright px-3 py-2 font-label-code text-body-sm text-primary transition-colors" href="https://wa.me/243992270245" target="_blank">
+<span class="material-symbols-outlined text-[16px]">support_agent</span>
+<span>Assistance 24/7 (+243 992 270 245)</span>
+</a>
+</div>
+</div>
+</div>
+<script>
+  // Simple micro-interactions for keyboard triggers and feedback
+  document.addEventListener('keydown', function(event) {
+    if (event.key === 'F2') {
+      event.preventDefault();
+      const btn = document.getElementById('btn-quick-sale');
+      if (btn) {
+        btn.classList.add('scale-95');
+        setTimeout(() => btn.classList.remove('scale-95'), 150);
+        window.location.hash = '#point-de-vente';
+      }
+    }
+  });
+
+  const btnSale = document.getElementById('btn-quick-sale');
+  if (btnSale) {
+    btnSale.addEventListener('click', () => {
+      window.location.hash = '#point-de-vente';
+    });
+  }
+
+  const btnClose = document.getElementById('btn-close-register');
+  if (btnClose) {
+    btnClose.addEventListener('click', () => {
+      if (confirm('Voulez-vous générer le rapport Z contradictoire de clôture pour Kinshasa La Victoire ?')) {
+        window.location.hash = '#clotures-et-caisses';
+      }
+    });
+  }
+</script></main></div>
+
+</body></html>

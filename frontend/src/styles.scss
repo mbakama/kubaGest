@@ -12,6 +12,16 @@
   background: var(--canvas);
   font-synthesis: none;
 }
+
+html.dark {
+  color-scheme: dark;
+  --canvas: #051424;
+  --surface: #15273b;
+  --ink: #f8fafc;
+  --muted: #94a3b8;
+  --line: rgba(255, 255, 255, 0.12);
+  --accent-soft: #15273b;
+}
 * {
   box-sizing: border-box;
 }
@@ -30,9 +40,17 @@ button,
 a {
   -webkit-tap-highlight-color: transparent;
 }
-:focus-visible {
-  outline: 3px solid #a86424;
-  outline-offset: 4px;
+/* Focus clavier : vert marque ; les champs gèrent leur propre halo (border / ring). */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: none;
 }
 h1,
 h2,

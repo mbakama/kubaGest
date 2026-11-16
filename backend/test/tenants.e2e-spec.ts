@@ -14,6 +14,7 @@ describe('Tenants et abonnements (e2e)', () => {
   const ownerA = {
     firstName: 'Hector',
     lastName: 'Kabeya',
+    sex: 'male',
     tenantName: 'Boutique Kintambo',
     activityType: 'boutique',
     currency: 'usd',
@@ -24,6 +25,7 @@ describe('Tenants et abonnements (e2e)', () => {
   const ownerB = {
     firstName: 'Amina',
     lastName: 'Ilunga',
+    sex: 'female',
     tenantName: 'Pharmacie Gombe',
     activityType: 'pharmacie',
     email: 'tenant-b@kubagest.io',
@@ -34,6 +36,7 @@ describe('Tenants et abonnements (e2e)', () => {
     password: 'PlateformeSecret123!',
   };
   const cashier = {
+    sex: 'male',
     email: 'tenant-cashier@kubagest.io',
     password: 'CaissierSecret123!',
     role: 'cashier',
@@ -120,6 +123,7 @@ describe('Tenants et abonnements (e2e)', () => {
       .send({
         firstName: 'Jean',
         lastName: 'Mukendi',
+        sex: 'male',
         tenantName: 'Alimentation Matete',
         activityType: 'alimentation',
         currency: 'cdf',
@@ -235,6 +239,121 @@ describe('Tenants et abonnements (e2e)', () => {
     const ids = response.body.map((tenant: { id: string }) => tenant.id);
     expect(ids).toContain(tenantAId);
     expect(response.body[0]).toHaveProperty('subscription');
+  });
+
+  it('expose le tableau de bord plateforme au super administrateur', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/platform/dashboard')
+      .set('Authorization', `Bearer ${platformToken}`)
+      .expect(200);
+
+    expect(response.body).toMatchObject({
+      kpis: {
+        userCount: expect.any(Number),
+        tenantCount: expect.any(Number),
+        activeSubscriptions: expect.any(Number),
+        monthlyRevenue: { available: false },
+      },
+    });
+    expect(response.body.planDistribution).toEqual(expect.any(Array));
+    expect(response.body.creationsByMonth).toHaveLength(11);
+    expect(response.body.recentTenants.length).toBeGreaterThan(0);
+    expect(response.body.recentActivity).toEqual(expect.any(Array));
+  });
+
+  it('expose le registre d’audit plateforme au super administrateur', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/audit/platform')
+      .set('Authorization', `Bearer ${platformToken}`)
+      .expect(200);
+
+    expect(response.body).toEqual(expect.any(Array));
+  });
+
+  it('refuse le journal d’audit plateforme à un propriétaire', async () => {
+    await request(app.getHttpServer())
+      .get('/api/v1/audit/platform')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .expect(403);
+  });
+
+  it('refuse le tableau de bord plateforme à un propriétaire', async () => {
+    await request(app.getHttpServer())
+      .get('/api/v1/platform/dashboard')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .expect(403);
+  });
+
+  it('expose le profil plateforme au super administrateur', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/api/v1/platform/profile')
+      .set('Authorization', `Bearer ${platformToken}`)
+      .expect(200);
+
+    expect(response.body).toMatchObject({
+      user: {
+        email: platformAdmin.email,
+      },
+      identity: {
+        displayId: expect.stringMatching(/^ADM-\d{4}$/),
+        roleLabel: 'Super Administrateur',
+        status: 'active',
+        managedSpacesCount: expect.any(Number),
+      },
+      personal: {
+        roleLabel: 'Super Administrateur',
+        email: platformAdmin.email,
+        organization: 'KubaGest',
+        location: null,
+      },
+      accountSummary: {
+        userCount: expect.any(Number),
+        tenantCount: expect.any(Number),
+        activeSubscriptions: expect.any(Number),
+        monthlyRevenue: { available: false },
+      },
+      security: {
+        twoFactor: { available: false, enabled: false },
+        recoveryEmail: platformAdmin.email,
+      },
+    });
+  });
+
+  it('refuse le profil plateforme à un propriétaire', async () => {
+    await request(app.getHttpServer())
+      .get('/api/v1/platform/profile')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .expect(403);
+  });
+
+  it('met à jour les coordonnées du super administrateur', async () => {
+    const response = await request(app.getHttpServer())
+      .patch('/api/v1/platform/profile')
+      .set('Authorization', `Bearer ${platformToken}`)
+      .send({
+        firstName: 'Plateforme',
+        lastName: 'Admin',
+        phone: '+243999000111',
+      })
+      .expect(200);
+
+    expect(response.body.personal).toMatchObject({
+      fullName: 'Plateforme Admin',
+      phone: '+243999000111',
+      email: platformAdmin.email,
+    });
+    expect(response.body.user).toMatchObject({
+      firstName: 'Plateforme',
+      lastName: 'Admin',
+    });
+  });
+
+  it('refuse la mise à jour du profil plateforme à un propriétaire', async () => {
+    await request(app.getHttpServer())
+      .patch('/api/v1/platform/profile')
+      .set('Authorization', `Bearer ${tokenA}`)
+      .send({ firstName: 'Intrus' })
+      .expect(403);
   });
 
   it('paramètre la formule, le statut et l’échéance d’un tenant', async () => {

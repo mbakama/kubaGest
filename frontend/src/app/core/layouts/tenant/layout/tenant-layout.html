@@ -1,0 +1,11 @@
+<div class="tenant-shell">
+  <app-tenant-sidebar />
+
+  <div class="tenant-shell__workspace">
+    <app-tenant-topbar (logoutClick)="logout()" />
+    <main class="tenant-shell__content" id="content" tabindex="-1">
+      <router-outlet />
+    </main>
+    <app-layout-footer />
+  </div>
+</div>

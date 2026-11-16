@@ -1,0 +1,182 @@
+<div class="platform-dashboard__head">
+  <h1>Tableau de bord Administrateur</h1>
+  <p>Supervision des espaces, abonnements et santé de la plateforme KubaGest.</p>
+</div>
+
+@if (loadError()) {
+  <p class="platform-dashboard__error" role="alert">{{ loadError() }}</p>
+}
+
+<section class="platform-dashboard__kpis" aria-label="Indicateurs clés">
+  <article class="platform-dashboard__kpi">
+    <div class="platform-dashboard__kpi-icon platform-dashboard__kpi-icon--users">
+      <i class="fa-solid fa-users" aria-hidden="true"></i>
+    </div>
+    <div>
+      <small>Utilisateurs</small>
+      <strong>{{ loading() ? '…' : userCount() }}</strong>
+      <span>comptes actifs</span>
+    </div>
+  </article>
+  <article class="platform-dashboard__kpi">
+    <div class="platform-dashboard__kpi-icon platform-dashboard__kpi-icon--spaces">
+      <i class="fa-solid fa-building" aria-hidden="true"></i>
+    </div>
+    <div>
+      <small>Espaces / Entreprises</small>
+      <strong>{{ loading() ? '…' : spaceCount() }}</strong>
+      <span>{{ loading() ? '' : 'inscrits' }}</span>
+    </div>
+  </article>
+  <article class="platform-dashboard__kpi">
+    <div class="platform-dashboard__kpi-icon platform-dashboard__kpi-icon--subs">
+      <i class="fa-solid fa-file-lines" aria-hidden="true"></i>
+    </div>
+    <div>
+      <small>Abonnements actifs</small>
+      <strong>{{ loading() ? '…' : activeSubscriptions() }}</strong>
+      <span>essai ou actif</span>
+    </div>
+  </article>
+  <article class="platform-dashboard__kpi">
+    <div class="platform-dashboard__kpi-icon platform-dashboard__kpi-icon--revenue">
+      <i class="fa-solid fa-coins" aria-hidden="true"></i>
+    </div>
+    <div>
+      <small>Revenus (ce mois)</small>
+      <strong>—</strong>
+      <span>Paiements à venir</span>
+    </div>
+  </article>
+</section>
+
+<div class="platform-dashboard__grid">
+  <section class="platform-dashboard__card" aria-labelledby="evolution-title">
+    <h2 id="evolution-title">Évolution des espaces créés</h2>
+    @if (loading()) {
+      <p>Chargement…</p>
+    } @else {
+      <div
+        class="platform-dashboard__chart"
+        role="img"
+        aria-label="Histogramme du nombre d’espaces créés par mois"
+      >
+        <p-chart type="bar" [data]="creationChartData()" [options]="creationChartOptions" />
+      </div>
+    }
+  </section>
+
+  <section class="platform-dashboard__card" aria-labelledby="plan-title">
+    <h2 id="plan-title">Répartition des formules</h2>
+    @if (loading()) {
+      <p>Chargement…</p>
+    } @else if (planDistribution().length === 0) {
+      <p class="platform-dashboard__empty">Aucune formule à répartir pour le moment.</p>
+    } @else {
+      <div
+        class="platform-dashboard__polar-chart"
+        role="img"
+        aria-label="Répartition du nombre d’espaces par formule"
+      >
+        <p-chart type="polarArea" [data]="polarAreaData()" [options]="polarAreaOptions()" />
+      </div>
+    }
+  </section>
+</div>
+
+<div class="platform-dashboard__bottom">
+  <section class="platform-dashboard__card" aria-labelledby="recent-spaces-title">
+    <h2 id="recent-spaces-title">Derniers espaces créés</h2>
+    @if (loading()) {
+      <p>Chargement…</p>
+    } @else if (recentTenants().length === 0) {
+      <p>Aucun espace pour le moment.</p>
+    } @else {
+      <div class="platform-dashboard__table-wrap">
+        <table class="platform-dashboard__table">
+          <thead>
+            <tr>
+              <th scope="col">Espace / Entreprise</th>
+              <th scope="col">Formule</th>
+              <th scope="col">Date de création</th>
+              <th scope="col">Statut</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (tenant of recentTenants(); track tenant.id) {
+              <tr>
+                <td>{{ tenant.name }}</td>
+                <td>{{ tenant.subscription?.plan ?? '—' }}</td>
+                <td>{{ formatDate(tenant.createdAt) }}</td>
+                <td>
+                  <span class="platform-dashboard__status">{{ tenant.status }}</span>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+
+  <section class="platform-dashboard__card" aria-labelledby="activity-title">
+    <div class="platform-dashboard__card-head">
+      <h2 id="activity-title">Activités récentes</h2>
+      <a routerLink="/journal-activite">Voir tout le journal</a>
+    </div>
+    @if (loading()) {
+      <p>Chargement…</p>
+    } @else if (activityFeed().length === 0) {
+      <p>Aucune activité récente.</p>
+    } @else {
+      <div class="platform-dashboard__activity-table-wrap">
+        <table class="platform-dashboard__activity-table">
+          <thead>
+            <tr>
+              <th>Auteur</th>
+              <th>Action</th>
+              <th>Cible</th>
+              <th>Date</th>
+              <th><span class="sr-only">Détail</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of activityFeed(); track item.id) {
+              <tr>
+                <td data-label="Auteur">
+                  <div class="platform-dashboard__activity-author">
+                    <span>{{ item.actorInitials }}</span
+                    ><strong>{{ item.actor }}</strong>
+                  </div>
+                </td>
+                <td data-label="Action">
+                  <div class="platform-dashboard__activity-action">
+                    <i class="fa-solid" [class]="item.icon" aria-hidden="true"></i
+                    ><strong>{{ item.title }}</strong>
+                  </div>
+                </td>
+                <td data-label="Cible">
+                  <span>{{ item.detail }}</span>
+                </td>
+                <td data-label="Date">
+                  <time [attr.datetime]="item.occurredAt"
+                    >{{ item.when }}<small>{{ item.occurredAt }}</small></time
+                  >
+                </td>
+                <td>
+                  <a
+                    class="platform-dashboard__activity-link"
+                    routerLink="/journal-activite"
+                    [queryParams]="{ entree: item.id }"
+                    [attr.aria-label]="'Voir la trace de ' + item.title"
+                    ><i class="fa-solid fa-arrow-right" aria-hidden="true"></i
+                  ></a>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  </section>
+</div>

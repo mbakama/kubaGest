@@ -15,12 +15,7 @@ import { numericString } from '../common/decimal.js';
  * l'historique.
  */
 @Entity({ name: 'sale_items' })
-@Unique('uq_sale_items_scope', [
-  'tenantId',
-  'establishmentId',
-  'saleId',
-  'id',
-])
+@Unique('uq_sale_items_scope', ['tenantId', 'establishmentId', 'saleId', 'id'])
 @Unique('uq_sale_items_identity', ['tenantId', 'establishmentId', 'id'])
 @Unique('uq_sale_items_line', ['saleId', 'lineNumber'])
 @Index('idx_sale_items_sale', ['tenantId', 'saleId'])
@@ -40,8 +35,8 @@ export class SaleItem {
   @Column({ name: 'line_number', type: 'integer' })
   lineNumber: number;
 
-  @Column({ name: 'product_id', type: 'uuid' })
-  productId: string;
+  @Column({ name: 'physical_product_id', type: 'uuid' })
+  physicalProductId: string;
 
   @Column({ name: 'packaging_id', type: 'uuid' })
   packagingId: string;
@@ -84,6 +79,16 @@ export class SaleItem {
     transformer: numericString(6),
   })
   unitPrice: string;
+
+  @Column({
+    name: 'unit_cost',
+    type: 'numeric',
+    precision: 20,
+    scale: 6,
+    nullable: true,
+    transformer: numericString(6),
+  })
+  unitCost: string | null;
 
   @Column({
     name: 'discount_amount',

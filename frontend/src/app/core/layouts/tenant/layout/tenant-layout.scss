@@ -1,0 +1,30 @@
+@use '../../layout-shell.scss' as shell;
+
+:host {
+  display: block;
+  font-family: Inter, 'Segoe UI', sans-serif;
+}
+
+.tenant-shell {
+  min-height: 100dvh;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
+}
+
+.tenant-shell__workspace {
+  @include shell.shell-workspace-footer;
+  @include shell.shell-workspace-sidebar-offset(shell.$tenant-sidebar-width);
+  padding-top: shell.$layout-topbar-height;
+}
+
+.tenant-shell__content {
+  @include shell.shell-page-content;
+}
+
+@media (max-width: 768px) {
+  .tenant-shell__workspace {
+    margin-left: 0;
+    width: 100%;
+    padding-top: 0;
+  }
+}

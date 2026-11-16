@@ -6,6 +6,7 @@ import type { Environment } from '../config/env.validation.js';
 import { MailModule } from '../mail/mail.module.js';
 import { UsersModule } from '../users/users.module.js';
 import { AccessToken } from './access-token.entity.js';
+import { AuthSession } from './auth-session.entity.js';
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 import { JwtAuthGuard, TenantGuard } from './guards/jwt-auth.guard.js';
@@ -17,7 +18,7 @@ import { PlatformAdminBootstrap } from './platform-admin.bootstrap.js';
   imports: [
     UsersModule,
     MailModule,
-    TypeOrmModule.forFeature([AccessToken]),
+    TypeOrmModule.forFeature([AccessToken, AuthSession]),
     JwtModule.registerAsync({
       global: true,
       inject: [ConfigService],

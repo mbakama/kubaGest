@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><meta content="web_dashboard" name="shell-type"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"text-primary":"#0B1E33","secondary":"#495f82","on-primary-container":"#a3ffd2","on-primary-fixed":"#002114","surface":"#f7f9fb","retail-blue":"#0284C7","growth-green":"#10B981","primary-fixed-dim":"#79d9ad","surface-container-high":"#e6e8ea","surface-container-highest":"#e0e3e5","surface-dim":"#d8dadc","secondary-fixed-dim":"#b1c7f0","secondary-fixed":"#d5e3ff","inverse-surface":"#2d3133","border-subtle":"#E2E8F0","on-secondary-container":"#465c7f","on-tertiary-container":"#aaffc4","inverse-primary":"#79d9ad","on-tertiary":"#ffffff","tertiary":"#006035","error-container":"#ffdad6","on-surface-variant":"#3e4943","on-tertiary-fixed":"#00210f","on-background":"#191c1e","on-tertiary-fixed-variant":"#00522c","tertiary-container":"#007b45","error":"#ba1a1a","on-surface":"#191c1e","alert-red":"#EF4444","midnight-dark":"#091E3A","outline":"#6e7a72","surface-container-low":"#f2f4f6","primary-container":"#007a55","surface-bright":"#f7f9fb","secondary-container":"#bfd5fe","tertiary-fixed":"#64fea5","surface-container":"#eceef0","inverse-on-surface":"#eff1f3","on-primary-fixed-variant":"#005137","text-muted":"#64748B","on-error-container":"#93000a","on-primary":"#ffffff","on-secondary-fixed":"#001c3b","on-secondary-fixed-variant":"#314769","background":"#f7f9fb","retail-amber":"#F59E0B","primary":"#005f41","surface-variant":"#e0e3e5","surface-container-lowest":"#ffffff","retail-purple":"#8B5CF6","primary-fixed":"#95f6c8","tertiary-fixed-dim":"#41e18b","on-error":"#ffffff","outline-variant":"#bdc9c1","on-secondary":"#ffffff","surface-tint":"#006c4b"},borderRadius:{DEFAULT:"0.25rem",lg:"0.5rem",xl:"0.75rem",full:"9999px"},spacing:{"margin":"1rem","gutter":"1rem","margin-desktop":"2rem","gutter-desktop":"1.5rem","space-xs":"0.25rem","space-xl":"2rem","space-md":"1rem","space-sm":"0.5rem","space-lg":"1.5rem"},fontFamily:{"headline-xl-mobile":["Inter"],"label-lg":["Inter"],"headline-sm":["Inter"],"label-sm":["Inter"],"label-md":["Inter"],"headline-xl":["Inter"],"body-sm":["Inter"],"body-lg":["Inter"],"headline-lg":["Inter"],"headline-md":["Inter"],"body-md":["Inter"]},fontSize:{"headline-xl-mobile":["26px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"700"}],"label-lg":["15px",{lineHeight:"20px",letterSpacing:"0.01em",fontWeight:"600"}],"headline-sm":["16px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"600"}],"label-sm":["11px",{lineHeight:"14px",letterSpacing:"0.02em",fontWeight:"600"}],"label-md":["13px",{lineHeight:"18px",letterSpacing:"0.01em",fontWeight:"500"}],"headline-xl":["32px",{lineHeight:"40px",letterSpacing:"-0.02em",fontWeight:"700"}],"body-sm":["12px",{lineHeight:"16px",letterSpacing:"0em",fontWeight:"400"}],"body-lg":["16px",{lineHeight:"24px",letterSpacing:"0em",fontWeight:"400"}],"headline-lg":["24px",{lineHeight:"32px",letterSpacing:"-0.015em",fontWeight:"600"}],"headline-md":["20px",{lineHeight:"28px",letterSpacing:"-0.01em",fontWeight:"600"}],"body-md":["14px",{lineHeight:"20px",letterSpacing:"0em",fontWeight:"400"}]}}}}</script></head><body class="bg-surface font-body-md text-on-surface"><aside class="fixed left-0 top-0 h-full w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between"><div class="flex flex-col flex-1"><div class="h-16 flex items-center gap-3 px-margin-desktop bg-surface-container-lowest"><img alt="Logo moderne pour KubaGest, solution de caisse et de gestion commerciale. Monogramme 'K' stylisé avec des formes géométriques raffinées et un subtil symbole de caisse enregistreuse ou de croissance financière, dans les tons vert émeraude foncé et bleu sarcelle.. Brand logo. - Primary color: #115e59
+- Font: inter
+- Mode: light
+- Roundness: rounded-sm
+" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/ALJJyrAxrkQ3MHKXbLTEQmDHBMA-tWXgYjEJqq5ZsAHbtJ0iZf4Zvw33QdFvQbZ991Gn7o9cOtsEUxVC920RrvZlO353WvTWuRz73Yudbpf4QR9OCUvw74EEfs9zubwjwMe7OxDpktRt6-T6rsAqQY_WaklVOutymcSDfqM-p5bP0aoQmk3y6CGDJvgQnkuj43b9LSYP_BeiByRRrBcClL1UI0TBHXs2NKeo5L7xjuHPruej48MvvysHEnTV9d4"/><div class="flex flex-col"><span class="font-headline-sm text-headline-sm text-text-primary tracking-tight leading-none">KubaGest</span><span class="font-label-sm text-label-sm text-text-muted mt-space-xs">Retail POS ERP</span></div></div><div class="px-space-md py-space-sm"><div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between"><div class="flex items-center gap-space-sm"><span class="material-symbols-outlined text-tertiary-container text-[18px]">store</span><div class="flex flex-col"><span class="font-label-md text-label-md text-text-primary leading-tight">La Victoire</span><span class="font-label-sm text-label-sm text-text-muted">Kinshasa RDC</span></div></div><span class="material-symbols-outlined text-on-surface-variant text-[16px]">expand_more</span></div></div><nav class="flex-1 px-space-md py-space-sm space-y-1 overflow-y-auto" data-active-classes="bg-primary-container text-on-primary-container font-label-md rounded-lg"><a aria-current="page" class="flex items-center gap-space-sm px-space-md py-space-sm transition-colors bg-primary-container text-on-primary-container font-label-md rounded-lg" data-path="tableau-de-bord" href="#"><span class="material-symbols-outlined text-[20px]">dashboard</span><span>Tableau de bord</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="point-de-vente" href="#"><span class="material-symbols-outlined text-[20px]">point_of_sale</span><span>Point de Vente (POS)</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="stocks-et-fefo" href="#"><span class="material-symbols-outlined text-[20px]">inventory_2</span><span>Stocks &amp; FEFO</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="clotures-et-caisses" href="#"><span class="material-symbols-outlined text-[20px]">account_balance_wallet</span><span>Clôtures &amp; Caisses</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="historique-des-transactions" href="#"><span class="material-symbols-outlined text-[20px]">receipt_long</span><span>Historique des Transactions</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="rapports-et-marges" href="#"><span class="material-symbols-outlined text-[20px]">analytics</span><span>Rapports &amp; Marges</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="utilisateurs-et-roles" href="#"><span class="material-symbols-outlined text-[20px]">badge</span><span>Utilisateurs &amp; Rôles</span></a><a class="flex items-center gap-space-sm px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-colors font-label-md text-label-md" data-path="parametres" href="#"><span class="material-symbols-outlined text-[20px]">settings</span><span>Paramètres</span></a></nav></div><div class="p-space-md bg-surface-container-low"><div class="bg-surface-container-lowest p-space-sm rounded-lg shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="flex items-center justify-between mb-space-xs"><span class="font-label-sm text-label-sm text-text-muted">Mode Hybride P2P</span><span class="h-2 w-2 rounded-full bg-growth-green inline-block"></span></div><span class="font-label-md text-label-md text-text-primary block">Synchro Locale Active</span><span class="font-body-sm text-body-sm text-text-muted">Tolérance coupure web</span></div></div></aside><div class="pl-64"><header class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-gutter-desktop"><div class="flex items-center gap-gutter"><div class="flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-xs rounded-lg"><span class="material-symbols-outlined text-retail-blue text-[18px]">currency_exchange</span><span class="font-label-sm text-label-sm text-text-muted">BCC :</span><span class="font-label-md text-label-md text-text-primary">1 USD = 2 850 FC</span></div><div class="hidden lg:flex items-center gap-space-sm bg-surface-container-low px-space-md py-space-xs rounded-lg"><span class="material-symbols-outlined text-growth-green text-[18px]">cloud_done</span><span class="font-label-sm text-label-sm text-text-muted">Synchro P2P/Cloud :</span><span class="font-label-md text-label-md text-growth-green">99.9%</span></div></div><div class="flex items-center gap-space-md"><div class="relative flex items-center justify-center p-space-sm text-on-surface-variant hover:text-on-surface cursor-pointer rounded-full hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined text-[22px]">notifications</span><span class="absolute top-1 right-1 h-2 w-2 rounded-full bg-alert-red"></span></div><div class="h-8 w-px bg-surface-container-highest"></div><div class="flex items-center gap-space-sm"><div class="text-right hidden sm:block"><span class="font-label-md text-label-md text-text-primary block leading-tight">Papa Léon Kabamba</span><span class="font-label-sm text-label-sm text-retail-blue block">Gérant Principal</span></div><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="relative pt-16 bg-surface min-h-screen px-gutter-desktop py-space-lg"><div class="flex flex-col w-full space-y-space-lg pb-space-xl">
+<!-- Internal Executive Header -->
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div class="flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-sm">
+<span class="font-headline-lg text-headline-lg text-text-primary tracking-tight">Bonjour, Papa Léon</span>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-primary-fixed text-on-primary-fixed">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+          Session Live Active
+        </span>
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-label-sm font-label-sm bg-surface-container-high text-on-surface-variant">
+<span class="material-symbols-outlined text-[14px] text-retail-blue">storefront</span>
+          Alimentation La Victoire Kinshasa
+        </span>
+</div>
+<p class="font-body-md text-body-md text-text-muted">
+        Supervision générale de l'activité commerciale en temps réel • Devise de référence : USD / CDF
+      </p>
+</div>
+<!-- Quick Actions & Date Filters -->
+<div class="flex flex-wrap items-center gap-space-sm">
+<!-- Period Selector -->
+<div class="inline-flex items-center bg-surface-container-low p-1 rounded-lg">
+<button class="px-3 py-1.5 rounded-md font-label-sm text-label-sm bg-surface-container-lowest text-text-primary shadow-sm">Aujourd'hui</button>
+<button class="px-3 py-1.5 rounded-md font-label-sm text-label-sm text-text-muted hover:text-text-primary transition-colors">7 jours</button>
+<button class="px-3 py-1.5 rounded-md font-label-sm text-label-sm text-text-muted hover:text-text-primary transition-colors">Ce mois</button>
+<button class="px-3 py-1.5 rounded-md font-label-sm text-label-sm text-text-muted hover:text-text-primary transition-colors">2026</button>
+</div>
+<!-- Action Buttons -->
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center gap-1.5 bg-primary text-on-primary px-4 py-2 rounded-lg font-label-md text-label-md hover:bg-primary-container transition-colors shadow-sm cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">add_circle</span>
+<span>Nouvelle Vente</span>
+<span class="bg-primary-fixed text-on-primary-fixed px-1.5 py-0.5 rounded text-label-sm font-label-sm ml-0.5">F2</span>
+</button>
+<button class="inline-flex items-center gap-1 bg-surface-container-low text-alert-red hover:bg-error-container hover:text-error px-3.5 py-2 rounded-lg font-label-md text-label-md transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">lock_clock</span>
+<span class="hidden sm:inline">Clôturer (Z)</span>
+</button>
+<!-- Rate pill badge -->
+<div class="hidden xl:flex items-center gap-1.5 bg-surface-container-low px-3 py-2 rounded-lg" title="Ajuster le taux du jour">
+<span class="material-symbols-outlined text-[16px] text-retail-blue">tune</span>
+<span class="font-label-sm text-label-sm text-text-muted">BCC:</span>
+<span class="font-label-md text-label-md text-text-primary">2 850 FC</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Primary Metric Cards (Bidevise & Financial Oversight) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter-desktop">
+<!-- Card 1: Chiffre d'Affaires -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-full bg-primary-fixed flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[22px]">payments</span>
+</div>
+<span class="inline-flex items-center gap-0.5 text-label-sm font-label-sm text-growth-green bg-surface-container-low px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">trending_up</span>
+          +14.2% vs hier
+        </span>
+</div>
+<div class="mt-space-md">
+<span class="font-label-md text-label-md text-text-muted block">Chiffre d'Affaires du Jour</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-text-primary">$1,480.00</span>
+<span class="font-label-md text-label-md text-retail-blue">USD</span>
+</div>
+<div class="flex items-center justify-between mt-1 text-text-muted font-body-sm text-body-sm">
+<span>≈ 4,218,000 CDF</span>
+<span class="text-on-surface-variant font-label-sm">188 tickets</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 74%"></div>
+</div>
+</div>
+<!-- Card 2: Espèces en Tiroir -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed flex items-center justify-center text-retail-blue">
+<span class="material-symbols-outlined text-[22px]">point_of_sale</span>
+</div>
+<span class="inline-flex items-center gap-0.5 text-label-sm font-label-sm text-tertiary-container bg-tertiary-fixed/30 px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px]">verified</span>
+          0 FC Écart
+        </span>
+</div>
+<div class="mt-space-md">
+<span class="font-label-md text-label-md text-text-muted block">Encaissements Espèces Réels</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-text-primary">$920.00</span>
+<span class="font-label-md text-label-md text-retail-blue">USD</span>
+</div>
+<div class="flex items-center justify-between mt-1 text-text-muted font-body-sm text-body-sm">
+<span>+ 1,596,000 CDF</span>
+<span class="text-growth-green font-label-sm">Conforme</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-retail-blue h-full rounded-full" style="width: 82%"></div>
+</div>
+</div>
+<!-- Card 3: Marge Brute PUMP -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[22px]">finance_mode</span>
+</div>
+<span class="inline-flex items-center gap-0.5 text-label-sm font-label-sm text-text-primary bg-surface-container px-2 py-0.5 rounded-full">
+<span class="material-symbols-outlined text-[14px] text-growth-green">north_east</span>
+          +2.4 pts
+        </span>
+</div>
+<div class="mt-space-md">
+<span class="font-label-md text-label-md text-text-muted block">Marge Brute Estimée (PUMP)</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-text-primary">$415.00</span>
+<span class="font-label-md text-label-md text-retail-blue">USD</span>
+</div>
+<div class="flex items-center justify-between mt-1 text-text-muted font-body-sm text-body-sm">
+<span>≈ 1,182,750 CDF</span>
+<span class="text-tertiary font-label-sm">28.0% Marge Nette</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-growth-green h-full rounded-full" style="width: 68%"></div>
+</div>
+</div>
+<!-- Card 4: Alertes Stocks & Ruptures -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div class="flex items-start justify-between">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center text-error">
+<span class="material-symbols-outlined text-[22px]">warning</span>
+</div>
+<span class="inline-flex items-center gap-0.5 text-label-sm font-label-sm text-alert-red bg-error-container px-2 py-0.5 rounded-full font-label-sm">
+          Action Urgente
+        </span>
+</div>
+<div class="mt-space-md">
+<span class="font-label-md text-label-md text-text-muted block">Alertes Ruptures &amp; FEFO</span>
+<div class="flex items-baseline gap-2 mt-1">
+<span class="font-headline-xl text-headline-xl text-text-primary">4</span>
+<span class="font-label-md text-label-md text-alert-red">en rupture</span>
+</div>
+<div class="flex items-center justify-between mt-1 text-text-muted font-body-sm text-body-sm">
+<span class="text-retail-amber font-label-sm">2 lots &lt; 30j péremption</span>
+<span class="text-text-muted font-label-sm">Kinshasa Dépôt</span>
+</div>
+</div>
+<div class="w-full bg-surface-container-high h-1.5 rounded-full mt-3 overflow-hidden">
+<div class="bg-alert-red h-full rounded-full" style="width: 45%"></div>
+</div>
+</div>
+</div>
+<!-- Central Analytics Section (2/3 & 1/3 Bento Distribution) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter-desktop">
+<!-- Left Column: Activity Chart by Hour (2/3) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm mb-space-lg">
+<div>
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider block">Rythme d'Encaissement</span>
+<h2 class="font-headline-md text-headline-md text-text-primary tracking-tight">Activité Horaire &amp; Volumes (08h00 - 18h00)</h2>
+</div>
+<div class="flex items-center gap-space-sm">
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-text-muted">
+<span class="w-3 h-3 rounded-sm bg-primary"></span>
+<span>Ventes ($)</span>
+</div>
+<div class="flex items-center gap-1.5 font-label-sm text-label-sm text-text-muted">
+<span class="w-3 h-3 rounded-sm bg-primary-fixed"></span>
+<span>Pic affluence</span>
+</div>
+<a class="font-label-sm text-label-sm text-retail-blue hover:underline ml-2 flex items-center gap-0.5" href="#">
+            Tickets
+            <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- Stylized Bar Histogram -->
+<div class="relative w-full h-56 flex items-end justify-between gap-2 pt-6 pb-2 px-1">
+<!-- Horizontal Guide Lines -->
+<div class="absolute inset-x-0 top-6 border-b border-surface-container-high border-dashed opacity-70 pointer-events-none"></div>
+<div class="absolute inset-x-0 top-24 border-b border-surface-container-high border-dashed opacity-70 pointer-events-none"></div>
+<div class="absolute inset-x-0 top-40 border-b border-surface-container-high border-dashed opacity-70 pointer-events-none"></div>
+<!-- 08:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 25%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$65</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">08h</span>
+</div>
+<!-- 09:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 40%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$110</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">09h</span>
+</div>
+<!-- 10:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 60%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$175</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">10h</span>
+</div>
+<!-- 11:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 72%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$220</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">11h</span>
+</div>
+<!-- 12:00 (Peak 1) -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-growth-green rounded-t-md hover:brightness-110 transition-all flex items-center justify-center shadow-sm" style="height: 95%">
+<span class="material-symbols-outlined text-[14px] text-surface-container-lowest -mt-2">star</span>
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$310 (Max)</div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-primary">12h</span>
+</div>
+<!-- 13:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 55%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$150</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">13h</span>
+</div>
+<!-- 14:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 48%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$130</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">14h</span>
+</div>
+<!-- 15:00 (Peak 2) -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-growth-green rounded-t-md hover:brightness-110 transition-all flex items-center justify-center shadow-sm" style="height: 88%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$270</div>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-primary">15h</span>
+</div>
+<!-- 16:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center" style="height: 35%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$90</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">16h</span>
+</div>
+<!-- 17:00 -->
+<div class="flex-1 flex flex-col items-center gap-2 h-full justify-end group">
+<div class="relative w-full max-w-[36px] bg-primary rounded-t-md hover:bg-primary-container transition-all flex items-center justify-center opacity-70" style="height: 20%">
+<div class="absolute -top-7 hidden group-hover:flex bg-inverse-surface text-inverse-on-surface text-label-sm px-1.5 py-0.5 rounded shadow z-10">$45</div>
+</div>
+<span class="font-label-sm text-label-sm text-text-muted">17h</span>
+</div>
+</div>
+<div class="flex flex-wrap items-center justify-between pt-space-md border-t border-surface-container-high mt-space-sm gap-2">
+<div class="flex items-center gap-space-md font-body-sm text-body-sm text-text-muted">
+<span>Panier Moyen : <strong class="text-text-primary font-label-md">$7.87 USD</strong> (22 430 FC)</span>
+<span>•</span>
+<span>Vitesse Caisse : <strong class="text-growth-green font-label-md">1m 12s</strong> / client</span>
+</div>
+<button class="font-label-sm text-label-sm text-primary hover:text-primary-container inline-flex items-center gap-1 font-semibold cursor-pointer">
+          Afficher le journal de caisse Détaillé
+          <span class="material-symbols-outlined text-[16px]">navigate_next</span>
+</button>
+</div>
+</div>
+<!-- Right Column: Multi-Currency Payment Mix (1/3) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div>
+<span class="font-label-sm text-label-sm text-text-muted uppercase tracking-wider block">Trésorerie Entrante</span>
+<h2 class="font-headline-md text-headline-md text-text-primary tracking-tight">Modes de Paiement</h2>
+</div>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-text-muted hover:text-text-primary">
+<span class="material-symbols-outlined text-[18px]">pie_chart</span>
+</button>
+</div>
+<!-- Progress/Distribution Bar Stack -->
+<div class="w-full h-3 rounded-full bg-surface-container-high flex overflow-hidden my-space-md">
+<div class="bg-primary h-full" style="width: 52%" title="Espèces USD: 52%"></div>
+<div class="bg-retail-blue h-full" style="width: 38%" title="Espèces CDF: 38%"></div>
+<div class="bg-retail-amber h-full" style="width: 10%" title="Mobile Money: 10%"></div>
+</div>
+<!-- Breakdown List -->
+<div class="space-y-space-md mt-space-md">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-primary"></span>
+<div>
+<span class="font-label-md text-label-md text-text-primary block">Espèces USD</span>
+<span class="font-body-sm text-body-sm text-text-muted">En coupures $5, $10, $20, $50</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-text-primary block">$770.00</span>
+<span class="font-label-sm text-label-sm text-growth-green font-semibold">52.0%</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-retail-blue"></span>
+<div>
+<span class="font-label-md text-label-md text-text-primary block">Espèces CDF (Francs)</span>
+<span class="font-body-sm text-body-sm text-text-muted">1,596,000 CDF (@2,850)</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-text-primary block">$562.00</span>
+<span class="font-label-sm text-label-sm text-retail-blue font-semibold">38.0%</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-retail-amber"></span>
+<div>
+<span class="font-label-md text-label-md text-text-primary block">Mobile Money</span>
+<span class="font-body-sm text-body-sm text-text-muted">M-Pesa &amp; Airtel Money</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-label-lg text-label-lg text-text-primary block">$148.00</span>
+<span class="font-label-sm text-label-sm text-retail-amber font-semibold">10.0%</span>
+</div>
+</div>
+</div>
+</div>
+<div class="mt-space-lg pt-space-sm">
+<button class="w-full bg-surface-container-high hover:bg-surface-container-highest text-text-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+          Exporter Rapport Trésorerie
+        </button>
+</div>
+</div>
+</div>
+<!-- Lower Operational Grid: Live POS Sessions & Stocks/FEFO Priority -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter-desktop">
+<!-- Left Panel: Live Cashier Surveillance -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">badge</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Sessions de Caisse &amp; Postes en Direct</h3>
+<p class="font-body-sm text-body-sm text-text-muted">Surveillance temps réel des postes d'encaissement</p>
+</div>
+</div>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm bg-surface-container px-2.5 py-1 rounded-full text-text-primary">
+            2 Caisses Ouvertes
+          </span>
+</div>
+<!-- Cash Register Station 1 -->
+<div class="bg-surface-container-low p-space-md rounded-xl mb-space-md hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-label-lg font-bold">
+                  NK
+                </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-growth-green ring-2 ring-surface-container-lowest"></span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-text-primary">Nelly Kalonji</span>
+<span class="bg-surface-container-lowest text-text-primary text-[11px] font-semibold px-2 py-0.5 rounded">Caisse 01 - Comptoir Principal</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Ouverte à 07:30 • 146 tickets émis</span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm text-text-primary block">$1,110.00</span>
+<span class="font-label-sm text-label-sm text-growth-green font-semibold">0 FC écart (OK)</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between text-body-sm text-text-muted">
+<span class="text-label-sm">Fond de tiroir certifié: $50 / 100 000 FC</span>
+<button class="font-label-sm text-retail-blue hover:underline cursor-pointer">Auditer la caisse</button>
+</div>
+</div>
+<!-- Cash Register Station 2 -->
+<div class="bg-surface-container-low p-space-md rounded-xl hover:bg-surface-container transition-colors">
+<div class="flex items-start justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="relative">
+<div class="w-10 h-10 rounded-full bg-secondary-fixed text-secondary flex items-center justify-center font-label-lg font-bold">
+                  JM
+                </div>
+<span class="absolute bottom-0 right-0 w-3 h-3 rounded-full bg-retail-amber ring-2 ring-surface-container-lowest"></span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-text-primary">Junior Mukendi</span>
+<span class="bg-surface-container-lowest text-text-primary text-[11px] font-semibold px-2 py-0.5 rounded">Caisse 02 - Dépôt Gros</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Ouverte à 08:15 • <span class="text-retail-amber font-semibold">En pause déjeuner</span></span>
+</div>
+</div>
+<div class="text-right">
+<span class="font-headline-sm text-headline-sm text-text-primary block">$370.00</span>
+<span class="font-label-sm text-label-sm text-text-muted">42 tickets émis</span>
+</div>
+</div>
+<div class="mt-space-sm pt-space-xs flex items-center justify-between text-body-sm text-text-muted">
+<span class="text-label-sm">Fond de tiroir certifié: $30 / 100 000 FC</span>
+<button class="font-label-sm text-retail-blue hover:underline cursor-pointer">Auditer la caisse</button>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm flex items-center justify-between text-label-sm text-text-muted">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-growth-green">lock</span>
+          Contrôle d'intégrité contradictoire actif
+        </span>
+<span class="font-semibold text-text-primary">Total tiroirs : $1,480.00</span>
+</div>
+</div>
+<!-- Right Panel: Priority Stocks & FEFO Batch Alerts -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-alert-red">
+<span class="material-symbols-outlined text-[20px]">notification_important</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-text-primary">Alertes Prioritaires Stocks &amp; FEFO</h3>
+<p class="font-body-sm text-body-sm text-text-muted">Sortie par date d'expiration la plus proche</p>
+</div>
+</div>
+<button class="font-label-sm text-label-sm text-retail-blue hover:underline cursor-pointer">
+            Voir le stock (240 ref)
+          </button>
+</div>
+<div class="space-y-space-sm">
+<!-- Item 1: Severe Shortage -->
+<div class="p-space-sm rounded-lg bg-error-container/40 flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-alert-red">
+<span class="material-symbols-outlined text-[18px]">inventory</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-text-primary">Huile Végétale Simba 5L</span>
+<span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-alert-red text-on-error">Rupture imminente</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Reste 3 bidons (Seuil mini: 10) • Épuisement estimé : ~4h</span>
+</div>
+</div>
+<button class="bg-primary text-on-primary px-3 py-1 rounded text-label-sm font-label-sm hover:bg-primary-container transition-colors cursor-pointer">
+              Commander
+            </button>
+</div>
+<!-- Item 2: FEFO Close Expiration -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-retail-amber">
+<span class="material-symbols-outlined text-[18px]">event_busy</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-text-primary">Lait Poudre Nido 400g</span>
+<span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-retail-amber/20 text-retail-amber">FEFO &lt; 30j</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">Lot EXP: 18/04/2026 (Dans 22 jours) • 8 boîtes restantes</span>
+</div>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-text-primary px-3 py-1 rounded text-label-sm font-label-sm transition-colors cursor-pointer">
+              Placer Devant
+            </button>
+</div>
+<!-- Item 3: Threshold warning -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<div class="flex items-center gap-space-sm">
+<div class="w-8 h-8 rounded-md bg-surface-container-lowest flex items-center justify-center text-text-muted">
+<span class="material-symbols-outlined text-[18px]">layers</span>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="font-label-md text-label-md text-text-primary">Farine Froment Azam 25kg</span>
+<span class="text-[10px] font-bold px-1.5 py-0.2 rounded bg-surface-container-high text-on-surface-variant">Seuil bas</span>
+</div>
+<span class="font-body-sm text-body-sm text-text-muted">5 sacs restants au dépôt • Minoterie KIN pré-remplie</span>
+</div>
+</div>
+<button class="bg-surface-container-high hover:bg-surface-container-highest text-text-primary px-3 py-1 rounded text-label-sm font-label-sm transition-colors cursor-pointer">
+              Valider BC
+            </button>
+</div>
+</div>
+</div>
+<div class="mt-space-md pt-space-sm">
+<button class="w-full bg-primary hover:bg-primary-container text-on-primary py-2.5 rounded-lg font-label-md text-label-md flex items-center justify-center gap-2 transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-[18px]">post_add</span>
+          Créer un Bon de Commande Fournisseur
+        </button>
+</div>
+</div>
+</div>
+<!-- Operational Shortcuts & WhatsApp Support Banner -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-md w-full md:w-auto">
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high px-4 py-2.5 rounded-lg font-label-md text-label-md text-text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-retail-blue text-[20px]">qr_code_scanner</span>
+<span>Inventaire Rapide (Carton / Pièce)</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high px-4 py-2.5 rounded-lg font-label-md text-label-md text-text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-alert-red text-[20px]">receipt_long</span>
+<span>Sortie Menue Dépense Caisse</span>
+</button>
+<button class="flex items-center gap-2 bg-surface-container-low hover:bg-surface-container-high px-4 py-2.5 rounded-lg font-label-md text-label-md text-text-primary transition-colors cursor-pointer">
+<span class="material-symbols-outlined text-primary text-[20px]">sync_saved_locally</span>
+<span>Forcer Synchro Peer-to-Peer</span>
+</button>
+</div>
+<!-- Direct Support Line -->
+<a class="flex items-center gap-2.5 bg-growth-green/10 hover:bg-growth-green/20 text-growth-green px-4 py-2 rounded-lg font-label-md text-label-md transition-colors w-full md:w-auto justify-center cursor-pointer" href="https://wa.me/243992270245" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+<span>Assistance KubaGest RDC (WhatsApp 24/7)</span>
+<span class="font-mono text-label-sm font-bold ml-1">+243 992 270 245</span>
+</a>
+</div>
+</div></main></div></body></html>

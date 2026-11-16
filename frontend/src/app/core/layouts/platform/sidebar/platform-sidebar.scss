@@ -1,0 +1,60 @@
+@use '../../layout-shell.scss' as shell;
+@use '../../sidebar-shell.scss' as sidebar;
+
+:host {
+  display: block;
+}
+
+.platform-sidebar {
+  @include shell.shell-sidebar-fixed(shell.$platform-sidebar-width);
+  @include sidebar.app-sidebar-chrome;
+}
+
+:host-context(html.dark) .platform-sidebar {
+  background: var(--color-surface-container-lowest);
+  border-right: 1px solid var(--color-border-subtle);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.55);
+  color: var(--color-sidebar-fg);
+}
+
+:host-context(html.dark) {
+  .platform-sidebar__logo strong {
+    color: #f8fafc;
+  }
+
+  .platform-sidebar__logo small {
+    color: #94a3b8;
+    opacity: 1;
+  }
+
+  .platform-sidebar__logo-mark {
+    border: 1px solid rgba(96, 165, 250, 0.4);
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.28);
+    color: var(--color-primary);
+  }
+}
+
+.platform-sidebar__logo {
+  @include sidebar.app-sidebar-logo;
+  margin-bottom: 0.5rem;
+  padding-bottom: 1.25rem;
+  @include sidebar.app-sidebar-logo-text;
+}
+
+.platform-sidebar__logo-mark {
+  @include sidebar.app-sidebar-logo-mark;
+}
+
+.platform-sidebar__nav {
+  @include sidebar.app-sidebar-nav;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .platform-sidebar {
+    position: static;
+    width: 100%;
+    height: auto;
+    max-height: none;
+  }
+}

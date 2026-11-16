@@ -1,0 +1,13 @@
+.tenant-dashboard__chart {
+  position: relative;
+  height: 14rem;
+  min-width: 0;
+}
+
+:host ::ng-deep .tenant-dashboard__chart p-chart,
+:host ::ng-deep .tenant-dashboard__chart .p-chart,
+:host ::ng-deep .tenant-dashboard__chart canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

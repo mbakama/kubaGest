@@ -71,6 +71,8 @@ Le prénom et le nom sont exigés à la création du compte, y compris pour un e
 
 Les permissions autorisées sont définies par le serveur : remise exceptionnelle, ajustement de stock, annulation, remboursement, libération de quarantaine et, si validé, stock négatif. Les droits effectifs combinent rôle et dérogation, sans pouvoir contourner le contexte tenant. Chaque changement est audité.
 
+**Lecture du journal** : `GET /api/v1/audit/tenant` (gérant) et `GET /api/v1/audit/platform` (super admin). Les actions affichées sont filtrées selon `backend/src/audit/audit-visibility.ts` (établissement vs plateforme). L’écriture reste centralisée via `AuditService`.
+
 ### auth_sessions — sessions révocables bureau/mobile (§28.5)
 
 `user_id uuid → users`, `refresh_token_hash text UNIQUE`, `client_type varchar(20) CHECK IN ('desktop','mobile','web')`, `expires_at timestamptz`, `last_seen_at timestamptz?`, `revoked_at timestamptz?`, `replaced_by_id uuid? → auth_sessions`, `C`.

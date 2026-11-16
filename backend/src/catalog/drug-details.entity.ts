@@ -12,7 +12,7 @@ import {
  * Aucune ordonnance ni donnée patient n'est stockée (§11).
  */
 @Entity({ name: 'drug_details' })
-@Unique('uq_drug_details_scope', ['tenantId', 'establishmentId', 'productId'])
+@Unique('uq_drug_details_scope', ['tenantId', 'physicalProductId'])
 export class DrugDetails {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -20,11 +20,8 @@ export class DrugDetails {
   @Column({ name: 'tenant_id', type: 'uuid' })
   tenantId: string;
 
-  @Column({ name: 'establishment_id', type: 'uuid' })
-  establishmentId: string;
-
-  @Column({ name: 'product_id', type: 'uuid' })
-  productId: string;
+  @Column({ name: 'physical_product_id', type: 'uuid' })
+  physicalProductId: string;
 
   @Column({ name: 'active_ingredient', type: 'varchar', length: 200 })
   activeIngredient: string;

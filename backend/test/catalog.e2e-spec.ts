@@ -12,6 +12,7 @@ describe('Catalogue produits (e2e)', () => {
   const ownerShop = {
     firstName: 'Hector',
     lastName: 'Kabeya',
+    sex: 'male',
     tenantName: 'Boutique Catalogue',
     activityType: 'boutique',
     currency: 'usd',
@@ -21,6 +22,7 @@ describe('Catalogue produits (e2e)', () => {
   const ownerPharmacy = {
     firstName: 'Amina',
     lastName: 'Ilunga',
+    sex: 'female',
     tenantName: 'Pharmacie Catalogue',
     activityType: 'pharmacie',
     currency: 'cdf',
@@ -28,6 +30,7 @@ describe('Catalogue produits (e2e)', () => {
     password: 'SuperSecret123!',
   };
   const cashier = {
+    sex: 'male',
     email: 'catalog-cashier@kubagest.io',
     password: 'CaissierSecret123!',
     role: 'cashier',

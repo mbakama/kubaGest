@@ -1,0 +1,129 @@
+<header
+  class="layout-tenant-topbar flex items-center justify-between border-b border-outline-variant/30 bg-surface-container-lowest px-gutter-desktop shadow-[0_1px_8px_rgba(0,0,0,0.04)] max-md:py-3 dark:border-white/10 dark:bg-surface-container-lowest/95 dark:shadow-[0_1px_4px_rgba(0,0,0,0.35)] dark:backdrop-blur-md"
+>
+  <div class="flex min-w-0 flex-1 items-center gap-gutter">
+    <div
+      class="flex items-center gap-space-sm rounded-lg bg-surface-container-low px-space-md py-space-xs"
+      title="Taux BCC du jour"
+    >
+      <i class="fa-solid fa-right-left shrink-0 text-[18px] text-retail-blue" aria-hidden="true"></i>
+      <span class="text-label-sm text-text-muted">BCC :</span>
+      <span
+        class="text-label-md"
+        [class.text-text-primary]="cdfPerUsdDisplay()"
+        [class.text-text-muted]="!cdfPerUsdDisplay()"
+      >
+        {{ bccLabel() }}
+      </span>
+    </div>
+    <div
+      class="hidden items-center gap-space-sm rounded-lg bg-surface-container-low px-space-md py-space-xs lg:flex"
+    >
+      <i class="fa-solid fa-cloud-arrow-up shrink-0 text-[18px] text-growth-green" aria-hidden="true"></i>
+      <span class="text-label-sm text-text-muted">Synchro P2P/Cloud :</span>
+      <span class="text-label-md text-growth-green">99,9&nbsp;%</span>
+    </div>
+  </div>
+
+  <div class="flex shrink-0 items-center gap-space-md">
+    <app-theme-toggle />
+
+    <button
+      type="button"
+      class="relative grid cursor-pointer place-items-center rounded-full p-space-sm text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+      aria-label="Notifications"
+      disabled
+    >
+      <i class="fa-regular fa-bell text-[22px]" aria-hidden="true"></i>
+      <span
+        class="absolute right-1 top-1 inline-block h-2 w-2 rounded-full bg-alert-red"
+        aria-hidden="true"
+      ></span>
+    </button>
+
+    <div class="h-8 w-px bg-surface-container-highest" role="separator" aria-hidden="true"></div>
+
+    <div class="relative">
+      <!-- <button
+        type="button"
+        class="group flex cursor-pointer items-center gap-space-sm border-0 bg-transparent p-0 text-left focus-visible:rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+        (click)="toggleProfileMenu($event)"
+        [attr.aria-expanded]="profileMenuOpen()"
+        aria-haspopup="menu"
+        aria-controls="tenant-profile-menu"
+        [attr.aria-label]="'Menu compte : ' + displayName()"
+      >
+        <div class="hidden text-right sm:block">
+          <span class="block text-label-md leading-tight text-text-primary">{{ displayName() }}</span>
+          <span class="block text-label-sm text-retail-blue">{{ roleLabel() }}</span>
+        </div>
+        <span
+          class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-primary transition-shadow group-hover:shadow-[0_0_0_2px_rgba(0,95,65,0.25)]"
+          aria-hidden="true"
+        >
+          <i class="fa-solid fa-user text-[14px] text-on-primary" aria-hidden="true"></i>
+        </span>
+      </button> -->
+
+
+      <button
+        type="button"
+        class="group flex max-w-full cursor-pointer items-center gap-2 rounded-lg border-0 bg-transparent p-0 text-left leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#79c6a4]"
+        (click)="toggleProfileMenu($event)"
+        [attr.aria-expanded]="profileMenuOpen()"
+        aria-haspopup="menu"
+        aria-controls="platform-profile-menu"
+        [attr.aria-label]="'Menu compte : ' + displayName()"
+      >
+        <span
+          class="grid size-[2.35rem] shrink-0 place-items-center rounded-full bg-[#dfeae4] font-semibold text-[#1a4338] group-hover:shadow-[0_0_0_2px_rgba(26,67,56,0.22)]"
+          aria-hidden="true"
+        >
+          {{ displayName().charAt(0).toUpperCase() }}
+        </span>
+        <div class="min-w-0 max-sm:hidden">
+          <strong class="block max-w-40 truncate text-[0.88rem] text-platform-ink">{{
+            displayName()
+          }}</strong>
+          <small class="block text-[0.72rem] text-retail-blue font-bold">{{ roleLabel() }}</small>
+        </div>
+        <i
+          class="fa-solid fa-chevron-down shrink-0 text-[0.65rem] text-platform-muted transition-transform"
+          [class.rotate-180]="profileMenuOpen()"
+          aria-hidden="true"
+        ></i>
+      </button>
+
+      @if (profileMenuOpen()) {
+        <div
+          id="tenant-profile-menu"
+          class="absolute right-0 top-[calc(100%+0.35rem)] z-[120] min-w-52 overflow-hidden rounded-xl border border-border-subtle bg-surface-container-lowest py-1 shadow-lg"
+          role="menu"
+          (click)="$event.stopPropagation()"
+        >
+          <div class="border-b border-border-subtle px-3 py-2 sm:hidden">
+            <p class="truncate text-label-md font-semibold text-text-primary">{{ displayName() }}</p>
+            <p class="text-label-sm text-retail-blue">{{ roleLabel() }}</p>
+          </div>
+          @if (session()?.user.email; as email) {
+            <p
+              class="hidden truncate border-b border-border-subtle px-3 py-2 text-body-sm text-text-muted sm:block"
+              role="presentation"
+            >
+              {{ email }}
+            </p>
+          }
+          <button
+            type="button"
+            class="flex w-full items-center gap-2 px-3 py-2 text-left text-body-md text-alert-red transition-colors hover:bg-error-container"
+            role="menuitem"
+            (click)="logoutFromMenu()"
+          >
+            <i class="fa-solid fa-right-from-bracket w-4 text-center text-[16px]" aria-hidden="true"></i>
+            Déconnexion
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</header>

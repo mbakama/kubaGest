@@ -8,8 +8,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import type { Request } from 'express';
 import { DataSource } from 'typeorm';
-import { assertTenantUsable } from '../../tenants/tenant-access.js';
-import { Tenant } from '../../tenants/tenant.entity.js';
+import { assertTenantUsable } from '../../core/tenants/tenant-access.js';
+import { Tenant } from '../../tenants/entities/tenant.entity.js';
 import type { AuthPrincipal } from '../jwt-payload.interface.js';
 
 @Injectable()

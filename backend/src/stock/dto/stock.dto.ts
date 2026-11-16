@@ -1,5 +1,14 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsInt, IsOptional, IsString, IsUUID, Max, MaxLength, Min } from 'class-validator';
+import {
+  IsInt,
+  IsOptional,
+  IsString,
+  IsUUID,
+  Matches,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class ReceiveStockDto {
   @ApiProperty({ format: 'uuid' })
@@ -20,6 +29,15 @@ export class ReceiveStockDto {
   @IsString()
   @MaxLength(200)
   reference?: string;
+
+  @ApiPropertyOptional({
+    example: '12.500000',
+    description: 'Coût unitaire pour mise à jour CUMP (6 décimales max)',
+  })
+  @IsOptional()
+  @IsString()
+  @Matches(/^\d+(\.\d{1,6})?$/)
+  unitCost?: string;
 }
 
 export class StockLineResponseDto {
@@ -43,4 +61,10 @@ export class StockLineResponseDto {
 
   @ApiProperty({ example: false })
   belowThreshold: boolean;
+
+  @ApiProperty({ example: '8.250000' })
+  averageCost: string;
+
+  @ApiProperty({ example: '346.500000' })
+  totalValue: string;
 }

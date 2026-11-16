@@ -1,0 +1,138 @@
+<header class="audit-head">
+  <div>
+    <nav aria-label="Fil d’Ariane">
+      <a routerLink="/">Tableau de bord</a><i class="fa-solid fa-chevron-right"></i
+      ><span>Journal d’audit</span>
+    </nav>
+    <h1>Journal d’Audit & Traçabilité</h1>
+    <p>
+      Historique chronologique des actions d’administration effectuées sur la plateforme KubaGest.
+    </p>
+  </div>
+  <!-- <span class="audit-head__badge"><i class="fa-solid fa-shield-halved"></i> Registre protégé</span> -->
+</header>
+
+@if (error()) {
+  <p class="audit-error" role="alert">{{ error() }}</p>
+}
+
+<section class="audit-kpis" aria-label="Indicateurs du journal">
+  <article>
+    <div>
+      <small>Événements chargés</small><strong>{{ entries().length }}</strong
+      ><span>dernières actions consignées</span>
+    </div>
+    <i class="fa-solid fa-clock-rotate-left"></i>
+  </article>
+  <article>
+    <div>
+      <small>Activité aujourd’hui</small><strong>{{ todayCount() }}</strong
+      ><span>actions enregistrées</span>
+    </div>
+    <i class="fa-solid fa-calendar-day"></i>
+  </article>
+  <article>
+    <div>
+      <small>Auteurs identifiés</small><strong>{{ actorCount() }}</strong
+      ><span>comptes ou système</span>
+    </div>
+    <i class="fa-solid fa-user-shield"></i>
+  </article>
+  <article>
+    <div>
+      <small>Types d’action</small><strong>{{ actionKinds().length }}</strong
+      ><span>catégories auditées</span>
+    </div>
+    <i class="fa-solid fa-list-check"></i>
+  </article>
+</section>
+
+<section class="audit-register" aria-labelledby="audit-register-title">
+  <div class="audit-register__toolbar">
+    <div>
+      <h2 id="audit-register-title">Registre des événements</h2>
+      <p>{{ filteredEntries().length }} résultat(s) affiché(s)</p>
+    </div>
+    <div class="audit-register__filters">
+      <label
+        ><span class="sr-only">Rechercher</span><i class="fa-solid fa-magnifying-glass"></i
+        ><input
+          type="search"
+          placeholder="Auteur, espace ou action…"
+          [value]="search()"
+          (input)="updateSearch($event)"
+      /></label>
+      <select
+        aria-label="Filtrer par type d’action"
+        [value]="actionFilter()"
+        (change)="updateActionFilter($event)"
+      >
+        <option value="all">Toutes les actions</option>
+        @for (kind of actionKinds(); track kind) {
+          <option [value]="kind">{{ kind }}</option>
+        }
+      </select>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <p class="audit-state">Chargement du registre…</p>
+  } @else if (filteredEntries().length === 0) {
+    <p class="audit-state">Aucune action ne correspond aux filtres.</p>
+  } @else {
+    <div class="audit-table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date et heure</th>
+            <th>Auteur</th>
+            <th>Action</th>
+            <th>Espace / Cible</th>
+            <th>Référence</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of filteredEntries(); track entry.id) {
+            <tr [id]="'audit-' + entry.id" [class.audit-selected]="selectedId() === entry.id">
+              <td>
+                <time [attr.datetime]="entry.occurredAt">{{ formatDate(entry.occurredAt) }}</time>
+              </td>
+              <td>
+                <div class="audit-actor">
+                  <span>{{ initials(entry) }}</span>
+                  <div>
+                    <strong>{{ actor(entry) }}</strong
+                    ><small>{{ entry.actorEmail ?? 'Action système' }}</small>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="audit-action"
+                  ><i class="fa-solid" [class]="actionIcon(entry.kind)"></i>{{ entry.title }}</span
+                ><small>{{ entry.kind }}</small>
+              </td>
+              <td>
+                <strong>{{ entry.detail }}</strong
+                ><small>{{ entry.tenantId ? 'Espace identifié' : 'Cible plateforme' }}</small>
+              </td>
+              <td>
+                <code>#{{ entry.id.slice(0, 8).toUpperCase() }}</code>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
+
+<aside class="audit-notice">
+  <i class="fa-solid fa-circle-info"></i>
+  <div>
+    <strong>Conservation du registre</strong>
+    <p>
+      Les entrées présentées proviennent directement du journal d’audit du backend. Elles sont
+      consultables en lecture seule depuis cette interface.
+    </p>
+  </div>
+</aside>

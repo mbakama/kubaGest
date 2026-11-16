@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import request from 'supertest';
 import { AppModule } from './../src/app.module.js';
 import { configureApp } from './../src/app.setup.js';
+import { MailService, type OutgoingMail } from './../src/mail/mail.service.js';
 
 describe('Auth et isolation multi-tenant (e2e)', () => {
   let app: INestApplication;
@@ -10,6 +11,7 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
   const ownerA = {
     firstName: 'Hector',
     lastName: 'Kabeya',
+    sex: 'male',
     phone: '+243810000001',
     tenantName: 'Boutique Kintambo',
     activityType: 'boutique',
@@ -19,12 +21,17 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
   const ownerB = {
     firstName: 'Amina',
     lastName: 'Ilunga',
+    sex: 'female',
     tenantName: 'Pharmacie Gombe',
     activityType: 'pharmacie',
     email: 'owner-b@kubagest.io',
     password: 'SuperSecret123!',
   };
   const cashier = {
+    firstName: 'Nelly',
+    lastName: 'Kalonji',
+    sex: 'female',
+    phone: '+243810000003',
     email: 'caissier-a@kubagest.io',
     password: 'CaissierSecret123!',
     role: 'cashier',
@@ -34,11 +41,20 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
   let tenantBId: string;
   let ownerAToken: string;
   let cashierToken: string;
+  let cashierMembershipId: string;
+  let lastMail: OutgoingMail | null = null;
 
   beforeAll(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
-    }).compile();
+    })
+      .overrideProvider(MailService)
+      .useValue({
+        send: async (mail: OutgoingMail) => {
+          lastMail = mail;
+        },
+      })
+      .compile();
 
     app = configureApp(moduleFixture.createNestApplication());
     await app.init();
@@ -67,9 +83,24 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
     expect(response.body.user).toMatchObject({
       firstName: ownerA.firstName,
       lastName: ownerA.lastName,
+      sex: ownerA.sex,
       phone: ownerA.phone,
       avatar: null,
     });
+  });
+
+  it('indique si une adresse e-mail est déjà prise', async () => {
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/check-email')
+      .send({ email: 'nouveau-compte@kubagest.io' })
+      .expect(200)
+      .expect({ available: true });
+
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/check-email')
+      .send({ email: ownerA.email })
+      .expect(200)
+      .expect({ available: false });
   });
 
   it('active un second tenant indépendant', async () => {
@@ -121,6 +152,7 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
     expect(response.body.user).toMatchObject({
       firstName: ownerA.firstName,
       lastName: ownerA.lastName,
+      sex: ownerA.sex,
       phone: ownerA.phone,
       avatar: null,
     });
@@ -136,6 +168,7 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
     expect(response.body).toMatchObject({
       firstName: ownerA.firstName,
       lastName: ownerA.lastName,
+      sex: ownerA.sex,
       phone: ownerA.phone,
       avatar: null,
     });
@@ -195,14 +228,36 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
     const response = await request(app.getHttpServer())
       .post('/api/v1/users')
       .set('Authorization', `Bearer ${ownerAToken}`)
-      .send(cashier)
+      .send({
+        firstName: cashier.firstName,
+        lastName: cashier.lastName,
+        sex: cashier.sex,
+        phone: cashier.phone,
+        email: cashier.email,
+        role: cashier.role,
+      })
       .expect(201);
 
     expect(response.body).toMatchObject({
+      firstName: cashier.firstName,
+      lastName: cashier.lastName,
+      sex: 'female',
       email: cashier.email,
       role: 'cashier',
-      isActive: true,
+      isActive: false,
     });
+    cashierMembershipId = response.body.membershipId;
+
+    const token =
+      response.body.invitationUrl?.match(/token=([^&]+)/)?.[1] ??
+      lastMail?.text.match(/\/invitation\?token=([^\s]+)/)?.[1];
+    expect(token).toBeTruthy();
+    expect(response.body.invitationEmailSent).toBe(true);
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/invitations/accept')
+      .send({ token, password: cashier.password })
+      .expect(200)
+      .expect({ activated: true });
   });
 
   it('interdit au caissier de gérer les utilisateurs', async () => {
@@ -220,11 +275,99 @@ describe('Auth et isolation multi-tenant (e2e)', () => {
       .expect(403);
   });
 
+  it('permet à chaque collaborateur de lister et révoquer ses propres sessions', async () => {
+    const listed = await request(app.getHttpServer())
+      .get('/api/v1/users/me/sessions')
+      .set('Authorization', `Bearer ${cashierToken}`)
+      .expect(200);
+
+    expect(Array.isArray(listed.body)).toBe(true);
+    expect(listed.body.length).toBeGreaterThan(0);
+
+    const sessionId = listed.body[0].id as string;
+    await request(app.getHttpServer())
+      .delete(`/api/v1/users/me/sessions/${sessionId}`)
+      .set('Authorization', `Bearer ${cashierToken}`)
+      .expect(200)
+      .expect({ revoked: true });
+
+    const ownerListed = await request(app.getHttpServer())
+      .get('/api/v1/users/me/sessions')
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .expect(200);
+    const foreign = ownerListed.body.find(
+      (row: { id: string }) => row.id === sessionId,
+    );
+    expect(foreign).toBeUndefined();
+  });
+
+  it('permet de changer le rôle et de gérer une dérogation auditée', async () => {
+    const role = await request(app.getHttpServer())
+      .patch(`/api/v1/users/${cashierMembershipId}/role`)
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .send({ role: 'stock_manager', reason: 'Affectation au dépôt' })
+      .expect(200);
+    expect(role.body.role).toBe('stock_manager');
+
+    await request(app.getHttpServer())
+      .put(`/api/v1/users/${cashierMembershipId}/permissions/stock.adjust`)
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .send({ allowed: true, reason: 'Inventaire mensuel' })
+      .expect(200);
+
+    const permissions = await request(app.getHttpServer())
+      .get(`/api/v1/users/${cashierMembershipId}/permissions`)
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .expect(200);
+    expect(permissions.body).toEqual([
+      expect.objectContaining({
+        permissionCode: 'stock.adjust',
+        allowed: true,
+      }),
+    ]);
+
+    const audit = await request(app.getHttpServer())
+      .get('/api/v1/audit/tenant')
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .expect(200);
+    expect(audit.body).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ action: 'membership.role.updated' }),
+        expect.objectContaining({ action: 'membership.permission.set' }),
+      ]),
+    );
+  });
+
+  it('suspend le membre et refuse de suspendre le propriétaire', async () => {
+    const suspended = await request(app.getHttpServer())
+      .patch(`/api/v1/users/${cashierMembershipId}/status`)
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .send({ isActive: false, reason: 'Fin de service' })
+      .expect(200);
+    expect(suspended.body.isActive).toBe(false);
+
+    const members = await request(app.getHttpServer())
+      .get('/api/v1/users')
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .expect(200);
+    const ownerMembership = members.body.find(
+      (member: { role: string }) => member.role === 'owner',
+    );
+    await request(app.getHttpServer())
+      .patch(`/api/v1/users/${ownerMembership.membershipId}/status`)
+      .set('Authorization', `Bearer ${ownerAToken}`)
+      .send({ isActive: false })
+      .expect(403);
+  });
+
   it('refuse un rôle non attribuable', async () => {
     await request(app.getHttpServer())
       .post('/api/v1/users')
       .set('Authorization', `Bearer ${ownerAToken}`)
       .send({
+        firstName: 'Autre',
+        lastName: 'Propriétaire',
+        sex: 'male',
         email: 'autre-proprietaire@kubagest.io',
         password: 'SuperSecret123!',
         role: 'owner',

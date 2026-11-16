@@ -27,10 +27,13 @@ import {
   VerifyResetCodeResponseDto,
 } from './dto/forgot-password.dto.js';
 import { LoginDto } from './dto/login.dto.js';
+import { CheckEmailDto, CheckEmailResponseDto } from './dto/check-email.dto.js';
 import { RegisterDto } from './dto/register.dto.js';
 import { JwtAuthGuard } from './guards/jwt-auth.guard.js';
 import type { AuthPrincipal } from './jwt-payload.interface.js';
 import { PasswordResetService } from './password-reset.service.js';
+import { AcceptInvitationDto } from './dto/accept-invitation.dto.js';
+import { UsersService } from '../users/users.service.js';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -38,7 +41,21 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly passwordReset: PasswordResetService,
+    private readonly usersService: UsersService,
   ) {}
+
+  @Post('check-email')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 15, ttl: 60_000 } })
+  @ApiOperation({
+    summary: 'Vérifier si une adresse e-mail est libre (inscription)',
+  })
+  @ApiResponse({ status: 200, type: CheckEmailResponseDto })
+  @ApiResponse({ status: 400, description: 'Adresse invalide' })
+  @ApiResponse({ status: 429, description: 'Trop de vérifications' })
+  checkEmail(@Body() dto: CheckEmailDto): Promise<CheckEmailResponseDto> {
+    return this.authService.isEmailAvailable(dto.email);
+  }
 
   @Post('register')
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
@@ -49,6 +66,20 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'Email déjà utilisé' })
   register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
     return this.authService.register(dto);
+  }
+
+  @Post('invitations/accept')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({
+    summary: 'Accepter une invitation et choisir son mot de passe',
+  })
+  @ApiResponse({ status: 200, description: 'Compte activé' })
+  @ApiResponse({ status: 400, description: 'Invitation invalide ou expirée' })
+  acceptInvitation(
+    @Body() dto: AcceptInvitationDto,
+  ): Promise<{ activated: true }> {
+    return this.usersService.acceptInvitation(dto.token, dto.password);
   }
 
   @Post('login')

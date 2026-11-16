@@ -22,8 +22,8 @@ import {
 import { DocumentNumberService } from '../documents/document-number.service.js';
 import { periodInZone } from '../common/date.js';
 import { SmsService } from '../sms/sms.service.js';
-import { Establishment } from '../tenants/establishment.entity.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Establishment } from '../tenants/entities/establishment.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
 import { CreditPayment, CreditPaymentMethod } from './credit-payment.entity.js';
 import {
   CreditReminder,

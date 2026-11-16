@@ -5,256 +5,176 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { DataSource, EntityManager, In, Repository } from 'typeorm';
+import { DataSource, EntityManager, In, IsNull, Repository } from 'typeorm';
 import { AuditService } from '../audit/audit.service.js';
-import { ActivityType } from '../tenants/activity-type.enum.js';
-import { Establishment } from '../tenants/establishment.entity.js';
+import { Establishment } from '../tenants/entities/establishment.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
+import { ActivityType } from '../core/tenants/activity-type.enum.js';
 import { AllocationPolicy, TrackingMode } from './catalog.enums.js';
 import { DrugDetails } from './drug-details.entity.js';
-import { ListProductsQueryDto } from './dto/category.dto.js';
+import { EstablishmentProduct } from './establishment-product.entity.js';
+import { PhysicalProduct } from './physical-product.entity.js';
+import { ProductBarcode } from './product-barcode.entity.js';
+import { ProductCategory } from './product-category.entity.js';
+import { ProductPackaging } from './product-packaging.entity.js';
+import { ProductPrice } from './product-price.entity.js';
+import { ListProductsQueryDto, UpdateCategoryDto } from './dto/category.dto.js';
 import { CreateProductDto } from './dto/create-product.dto.js';
-import {
+import { CreatePackagingDto, UpdatePackagingDto } from './dto/packaging.dto.js';
+import { UpdateProductDto } from './dto/update-product.dto.js';
+import type {
   BarcodeResponseDto,
-  DrugDetailsResponseDto,
   PackagingResponseDto,
   ProductCategoryResponseDto,
   ProductResponseDto,
 } from './dto/product-response.dto.js';
-import { CreatePackagingDto, UpdatePackagingDto } from './dto/packaging.dto.js';
-import { UpdateProductDto } from './dto/update-product.dto.js';
-import { ProductBarcode } from './product-barcode.entity.js';
-import { ProductCategory } from './product-category.entity.js';
-import { ProductPackaging } from './product-packaging.entity.js';
-import { Product } from './product.entity.js';
-
-function toCategory(entity: ProductCategory): ProductCategoryResponseDto {
-  return {
-    id: entity.id,
-    name: entity.name,
-    isActive: entity.isActive,
-    createdAt: entity.createdAt,
-    updatedAt: entity.updatedAt,
-  };
-}
-
-function toPackaging(entity: ProductPackaging): PackagingResponseDto {
-  return {
-    id: entity.id,
-    label: entity.label,
-    factorToBase: entity.factorToBase,
-    salePrice: entity.salePrice,
-    isBase: entity.isBase,
-    isActive: entity.isActive,
-  };
-}
-
-function toBarcode(entity: ProductBarcode): BarcodeResponseDto {
-  return {
-    id: entity.id,
-    code: entity.code,
-    packagingId: entity.packagingId,
-  };
-}
-
-function toDrugDetails(entity: DrugDetails | null): DrugDetailsResponseDto | null {
-  return entity
-    ? {
-        activeIngredient: entity.activeIngredient,
-        strength: entity.strength,
-        dosageForm: entity.dosageForm,
-        prescriptionRequired: entity.prescriptionRequired,
-      }
-    : null;
-}
 
 @Injectable()
 export class CatalogService {
   constructor(
     @InjectRepository(ProductCategory)
     private readonly categories: Repository<ProductCategory>,
-    @InjectRepository(Product)
-    private readonly products: Repository<Product>,
+    @InjectRepository(PhysicalProduct)
+    private readonly products: Repository<PhysicalProduct>,
+    @InjectRepository(EstablishmentProduct)
+    private readonly activations: Repository<EstablishmentProduct>,
     @InjectRepository(ProductPackaging)
     private readonly packagings: Repository<ProductPackaging>,
+    @InjectRepository(ProductPrice)
+    private readonly prices: Repository<ProductPrice>,
     @InjectRepository(ProductBarcode)
     private readonly barcodes: Repository<ProductBarcode>,
     @InjectRepository(DrugDetails)
     private readonly drugDetails: Repository<DrugDetails>,
     @InjectRepository(Establishment)
     private readonly establishments: Repository<Establishment>,
+    @InjectRepository(Tenant)
+    private readonly tenants: Repository<Tenant>,
     private readonly dataSource: DataSource,
     private readonly audit: AuditService,
   ) {}
 
-  /**
-   * Point de vente courant du tenant. Le MVP limite un commerce à un
-   * établissement (`UNIQUE(tenant_id)`), donc la résolution est univoque.
-   */
   async resolveEstablishment(tenantId: string): Promise<Establishment> {
-    const establishment = await this.establishments.findOne({
-      where: { tenantId },
+    const rows = await this.establishments.find({
+      where: { tenantId, isActive: true },
       order: { createdAt: 'ASC' },
+      take: 2,
     });
-
-    if (!establishment) {
-      throw new NotFoundException("Aucun établissement pour ce commerce");
-    }
-
-    return establishment;
+    if (rows.length === 0)
+      throw new NotFoundException('Établissement introuvable');
+    return rows[0];
   }
 
-  // --- Catégories ----------------------------------------------------------
-
-  listCategories(
+  async listCategories(
     tenantId: string,
-    establishmentId: string,
+    _establishmentId?: string,
   ): Promise<ProductCategoryResponseDto[]> {
-    return this.categories
-      .find({
-        where: { tenantId, establishmentId },
-        order: { name: 'ASC' },
-      })
-      .then((entities) => entities.map(toCategory));
+    return this.categories.find({
+      where: { tenantId },
+      order: { name: 'ASC' },
+    });
   }
 
   async createCategory(
     tenantId: string,
-    establishmentId: string,
+    _establishmentId: string,
     actorId: string,
     name: string,
-    isActive = true,
+    isActive: boolean,
   ): Promise<ProductCategoryResponseDto> {
     const normalized = name.trim();
-
-    const existing = await this.categories
-      .createQueryBuilder('category')
-      .where('category.tenantId = :tenantId', { tenantId })
-      .andWhere('category.establishmentId = :establishmentId', {
-        establishmentId,
-      })
-      .andWhere('lower(category.name) = lower(:name)', { name: normalized })
-      .getOne();
-
-    if (existing) {
-      throw new ConflictException('Une catégorie porte déjà ce nom');
-    }
-
     return this.dataSource.transaction(async (manager) => {
-      const category = await manager.save(
+      const duplicate = await manager
+        .createQueryBuilder(ProductCategory, 'category')
+        .where('category.tenant_id = :tenantId', { tenantId })
+        .andWhere('lower(category.name) = lower(:name)', { name: normalized })
+        .getOne();
+      if (duplicate) throw new ConflictException('Cette catégorie existe déjà');
+      const row = await manager.save(
         manager.create(ProductCategory, {
           tenantId,
-          establishmentId,
+          parentId: null,
           name: normalized,
           isActive,
         }),
       );
-
       await this.audit.record(
         {
-          action: 'product_category.created',
-          entityType: 'product_category',
-          entityId: category.id,
           tenantId,
-          establishmentId,
           actorId,
-          newValues: { name: category.name },
+          action: 'category.created',
+          entityType: 'product_category',
+          entityId: row.id,
         },
         manager,
       );
-
-      return toCategory(category);
+      return row;
     });
   }
 
   async updateCategory(
     tenantId: string,
-    establishmentId: string,
+    _establishmentId: string,
     actorId: string,
     categoryId: string,
-    changes: { name?: string; isActive?: boolean },
+    dto: UpdateCategoryDto,
   ): Promise<ProductCategoryResponseDto> {
-    if (changes.name === undefined && changes.isActive === undefined) {
-      throw new BadRequestException('Aucune modification fournie');
-    }
-
     return this.dataSource.transaction(async (manager) => {
-      const category = await manager.findOne(ProductCategory, {
-        where: { id: categoryId, tenantId, establishmentId },
+      const row = await manager.findOne(ProductCategory, {
+        where: { id: categoryId, tenantId },
       });
-
-      if (!category) {
-        throw new NotFoundException('Catégorie introuvable');
-      }
-
-      const oldValues = { name: category.name, isActive: category.isActive };
-
-      if (changes.name !== undefined) {
-        category.name = changes.name.trim();
-      }
-      if (changes.isActive !== undefined) {
-        category.isActive = changes.isActive;
-      }
-
-      await manager.save(category);
+      if (!row) throw new NotFoundException('Catégorie introuvable');
+      if (dto.name !== undefined) row.name = dto.name.trim();
+      if (dto.isActive !== undefined) row.isActive = dto.isActive;
+      await manager.save(row);
       await this.audit.record(
         {
-          action: 'product_category.updated',
-          entityType: 'product_category',
-          entityId: category.id,
           tenantId,
-          establishmentId,
           actorId,
-          oldValues,
-          newValues: { name: category.name, isActive: category.isActive },
+          action: 'category.updated',
+          entityType: 'product_category',
+          entityId: row.id,
         },
         manager,
       );
-
-      return toCategory(category);
+      return row;
     });
   }
-
-  // --- Articles ------------------------------------------------------------
 
   async listProducts(
     tenantId: string,
     establishmentId: string,
     query: ListProductsQueryDto,
   ): Promise<ProductResponseDto[]> {
-    const builder = this.products
-      .createQueryBuilder('product')
-      .where('product.tenantId = :tenantId', { tenantId })
-      .andWhere('product.establishmentId = :establishmentId', {
+    const activations = await this.activations.find({
+      where: {
+        tenantId,
         establishmentId,
-      })
-      .orderBy('product.name', 'ASC');
-
-    if (query.search) {
-      // `LOWER(...) LIKE` reste portable PostgreSQL / SQLite (tests).
-      builder.andWhere(
-        '(LOWER(product.name) LIKE :search OR LOWER(product.sku) LIKE :search)',
-        { search: `%${query.search.trim().toLowerCase()}%` },
+        ...(query.categoryId ? { categoryId: query.categoryId } : {}),
+        ...(query.isActive !== undefined ? { isActive: query.isActive } : {}),
+      },
+    });
+    if (!activations.length) return [];
+    let products = await this.products.find({
+      where: {
+        tenantId,
+        id: In(activations.map((row) => row.physicalProductId)),
+      },
+      order: { name: 'ASC' },
+    });
+    const search = query.search?.trim().toLowerCase();
+    if (search)
+      products = products.filter(
+        (p) =>
+          p.name.toLowerCase().includes(search) ||
+          p.sku.toLowerCase().includes(search),
       );
-    }
-    if (query.categoryId) {
-      builder.andWhere('product.categoryId = :categoryId', {
-        categoryId: query.categoryId,
-      });
-    }
-    if (query.isActive !== undefined) {
-      builder.andWhere('product.isActive = :isActive', {
-        isActive: query.isActive,
-      });
-    }
-
-    const products = await builder.getMany();
-    const includePackagings = query.includePackagings !== false;
-
     return this.assemble(
+      tenantId,
+      establishmentId,
       products,
-      includePackagings,
-      includePackagings,
-      includePackagings,
+      activations,
+      query.includePackagings !== false,
     );
   }
 
@@ -264,15 +184,22 @@ export class CatalogService {
     productId: string,
   ): Promise<ProductResponseDto> {
     const product = await this.products.findOne({
-      where: { id: productId, tenantId, establishmentId },
+      where: { id: productId, tenantId },
     });
-
-    if (!product) {
+    const activation = await this.activations.findOne({
+      where: { tenantId, establishmentId, physicalProductId: productId },
+    });
+    if (!product || !activation)
       throw new NotFoundException('Article introuvable');
-    }
-
-    const [view] = await this.assemble([product], true, true, true);
-    return view;
+    return (
+      await this.assemble(
+        tenantId,
+        establishmentId,
+        [product],
+        [activation],
+        true,
+      )
+    )[0];
   }
 
   async createProduct(
@@ -281,132 +208,118 @@ export class CatalogService {
     actorId: string,
     dto: CreateProductDto,
   ): Promise<ProductResponseDto> {
-    const sku = dto.sku.trim().toUpperCase();
-    const isPharmacy = establishment.activityType === ActivityType.PHARMACIE;
-
-    if (dto.drugDetails && !isPharmacy) {
-      throw new BadRequestException(
-        'Les informations médicament sont réservées aux pharmacies',
-      );
-    }
-
-    // F08/F10 : une pharmacie impose le suivi par lot avec péremption et FEFO.
-    const trackingMode =
-      dto.trackingMode ??
-      (dto.drugDetails ? TrackingMode.BATCH_EXPIRY : TrackingMode.NONE);
-    const allocationPolicy =
-      dto.allocationPolicy ??
-      (dto.drugDetails ? AllocationPolicy.FEFO : AllocationPolicy.FIFO);
-
-    if (
-      dto.drugDetails &&
-      (trackingMode !== TrackingMode.BATCH_EXPIRY ||
-        allocationPolicy !== AllocationPolicy.FEFO)
-    ) {
-      throw new BadRequestException(
-        'Un médicament exige tracking_mode=batch_expiry et allocation_policy=fefo',
-      );
-    }
-
-    this.assertTaxRate(dto.taxRate ?? '0');
-
-    const existingSku = await this.products.findOne({
-      where: { tenantId, sku },
-    });
-    if (existingSku) {
-      throw new ConflictException('Ce SKU est déjà utilisé dans ce commerce');
-    }
-
-    if (dto.categoryId) {
-      await this.assertCategory(tenantId, establishment.id, dto.categoryId);
-    }
-
-    const codes = this.normalizeCodes(dto.barcodes ?? []);
-    await this.assertBarcodesAvailable(tenantId, codes);
-
-    const product = await this.dataSource.transaction(async (manager) => {
-      const created = await manager.save(
-        manager.create(Product, {
+    const trackingMode = dto.drugDetails
+      ? (dto.trackingMode ?? TrackingMode.BATCH_EXPIRY)
+      : (dto.trackingMode ?? TrackingMode.NONE);
+    const allocationPolicy = dto.drugDetails
+      ? (dto.allocationPolicy ?? AllocationPolicy.FEFO)
+      : (dto.allocationPolicy ?? AllocationPolicy.FIFO);
+    this.assertPharmacyRules(
+      establishment,
+      trackingMode,
+      allocationPolicy,
+      dto.drugDetails !== undefined,
+    );
+    const productId = await this.dataSource.transaction(async (manager) => {
+      await this.assertCategory(manager, tenantId, dto.categoryId);
+      const sku = dto.sku.trim().toUpperCase();
+      if (
+        await manager
+          .createQueryBuilder(PhysicalProduct, 'product')
+          .where('product.tenant_id = :tenantId', { tenantId })
+          .andWhere('LOWER(product.sku) = LOWER(:sku)', { sku })
+          .getOne()
+      ) {
+        throw new ConflictException('Ce SKU est déjà utilisé');
+      }
+      const product = await manager.save(
+        manager.create(PhysicalProduct, {
           tenantId,
-          establishmentId: establishment.id,
-          categoryId: dto.categoryId ?? null,
           sku,
           name: dto.name.trim(),
+          description: null,
           baseUnit: dto.baseUnit.trim(),
-          reorderLevel: dto.reorderLevel ?? 0,
           trackingMode,
+          isActive: dto.isActive ?? true,
+        }),
+      );
+      await manager.save(
+        manager.create(EstablishmentProduct, {
+          tenantId,
+          establishmentId: establishment.id,
+          physicalProductId: product.id,
+          categoryId: dto.categoryId ?? null,
+          localName: null,
+          reorderLevel: dto.reorderLevel ?? 0,
           allocationPolicy,
           taxRate: dto.taxRate ?? '0',
           isActive: dto.isActive ?? true,
         }),
       );
-
-      // Au moins un conditionnement est requis : la base porte le prix unitaire.
-      const basePackaging = await manager.save(
+      const packaging = await manager.save(
         manager.create(ProductPackaging, {
           tenantId,
-          establishmentId: establishment.id,
-          productId: created.id,
+          physicalProductId: product.id,
           label: dto.basePackaging.label.trim(),
           factorToBase: 1,
-          salePrice: dto.basePackaging.salePrice,
           isBase: true,
           isActive: true,
         }),
       );
-
-      if (codes.length > 0) {
+      const tenant = await manager.findOneOrFail(Tenant, {
+        where: { id: tenantId },
+      });
+      await manager.save(
+        manager.create(ProductPrice, {
+          tenantId,
+          establishmentId: establishment.id,
+          physicalProductId: product.id,
+          packagingId: packaging.id,
+          salePrice: dto.basePackaging.salePrice,
+          currency: tenant.currency,
+          validFrom: new Date(),
+          validTo: null,
+        }),
+      );
+      for (const code of this.normalizeCodes(dto.barcodes ?? [])) {
+        if (
+          await manager.findOne(ProductBarcode, { where: { tenantId, code } })
+        )
+          throw new ConflictException(`Code-barres déjà utilisé : ${code}`);
         await manager.save(
-          codes.map((code) =>
-            manager.create(ProductBarcode, {
-              tenantId,
-              establishmentId: establishment.id,
-              productId: created.id,
-              packagingId: basePackaging.id,
-              code,
-            }),
-          ),
-        );
-      }
-
-      if (dto.drugDetails) {
-        await manager.save(
-          manager.create(DrugDetails, {
+          manager.create(ProductBarcode, {
             tenantId,
-            establishmentId: establishment.id,
-            productId: created.id,
-            activeIngredient: dto.drugDetails.activeIngredient.trim(),
-            strength: dto.drugDetails.strength.trim(),
-            dosageForm: dto.drugDetails.dosageForm.trim(),
-            prescriptionRequired:
-              dto.drugDetails.prescriptionRequired ?? null,
+            physicalProductId: product.id,
+            packagingId: packaging.id,
+            code,
           }),
         );
       }
-
+      if (dto.drugDetails)
+        await manager.save(
+          manager.create(DrugDetails, {
+            tenantId,
+            physicalProductId: product.id,
+            activeIngredient: dto.drugDetails.activeIngredient.trim(),
+            strength: dto.drugDetails.strength.trim(),
+            dosageForm: dto.drugDetails.dosageForm.trim(),
+            prescriptionRequired: dto.drugDetails.prescriptionRequired ?? null,
+          }),
+        );
       await this.audit.record(
         {
-          action: 'product.created',
-          entityType: 'product',
-          entityId: created.id,
           tenantId,
           establishmentId: establishment.id,
           actorId,
-          newValues: {
-            sku,
-            name: created.name,
-            baseUnit: created.baseUnit,
-            trackingMode,
-            allocationPolicy,
-          },
+          action: 'product.created',
+          entityType: 'physical_product',
+          entityId: product.id,
         },
         manager,
       );
-
-      return created;
+      return product.id;
     });
-
-    return this.getProduct(tenantId, establishment.id, product.id);
+    return this.getProduct(tenantId, establishment.id, productId);
   }
 
   async updateProduct(
@@ -416,111 +329,63 @@ export class CatalogService {
     productId: string,
     dto: UpdateProductDto,
   ): Promise<ProductResponseDto> {
-    const fields = Object.entries(dto).filter(
-      ([, value]) => value !== undefined,
-    );
-
-    if (fields.length === 0) {
-      throw new BadRequestException('Aucune modification fournie');
-    }
-
-    if (dto.taxRate !== undefined) {
-      this.assertTaxRate(dto.taxRate);
-    }
-
-    if (dto.categoryId) {
-      await this.assertCategory(tenantId, establishmentId, dto.categoryId);
-    }
-
     await this.dataSource.transaction(async (manager) => {
-      const product = await manager.findOne(Product, {
-        where: { id: productId, tenantId, establishmentId },
-      });
-
-      if (!product) {
-        throw new NotFoundException('Article introuvable');
-      }
-
-      const oldValues = {
-        sku: product.sku,
-        name: product.name,
-        baseUnit: product.baseUnit,
-        categoryId: product.categoryId,
-        reorderLevel: product.reorderLevel,
-        trackingMode: product.trackingMode,
-        allocationPolicy: product.allocationPolicy,
-        taxRate: product.taxRate,
-        isActive: product.isActive,
-      };
-
+      const { product, activation } = await this.getOwnedProduct(
+        manager,
+        tenantId,
+        establishmentId,
+        productId,
+      );
+      await this.assertCategory(manager, tenantId, dto.categoryId);
       if (dto.sku !== undefined) {
         const sku = dto.sku.trim().toUpperCase();
-        const duplicate = await manager.findOne(Product, {
-          where: { tenantId, sku },
-        });
-        if (duplicate && duplicate.id !== product.id) {
-          throw new ConflictException(
-            'Ce SKU est déjà utilisé dans ce commerce',
-          );
-        }
+        const duplicate = await manager
+          .createQueryBuilder(PhysicalProduct, 'candidate')
+          .where('candidate.tenant_id = :tenantId', { tenantId })
+          .andWhere('LOWER(candidate.sku) = LOWER(:sku)', { sku })
+          .andWhere('candidate.id <> :productId', { productId })
+          .getOne();
+        if (duplicate) throw new ConflictException('Ce SKU est déjà utilisé');
         product.sku = sku;
       }
       if (dto.name !== undefined) product.name = dto.name.trim();
       if (dto.baseUnit !== undefined) product.baseUnit = dto.baseUnit.trim();
-      if (dto.categoryId !== undefined) product.categoryId = dto.categoryId;
-      if (dto.reorderLevel !== undefined)
-        product.reorderLevel = dto.reorderLevel;
       if (dto.trackingMode !== undefined)
         product.trackingMode = dto.trackingMode;
+      if (dto.categoryId !== undefined) activation.categoryId = dto.categoryId;
+      if (dto.reorderLevel !== undefined)
+        activation.reorderLevel = dto.reorderLevel;
       if (dto.allocationPolicy !== undefined)
-        product.allocationPolicy = dto.allocationPolicy;
-      if (dto.taxRate !== undefined) product.taxRate = dto.taxRate;
-      if (dto.isActive !== undefined) product.isActive = dto.isActive;
-
-      // Un médicament ne peut pas perdre le suivi par lot ni la FEFO.
+        activation.allocationPolicy = dto.allocationPolicy;
+      if (dto.taxRate !== undefined) activation.taxRate = dto.taxRate;
+      if (dto.isActive !== undefined) activation.isActive = dto.isActive;
       const drug = await manager.findOne(DrugDetails, {
-        where: { tenantId, establishmentId, productId },
+        where: { tenantId, physicalProductId: productId },
       });
       if (
         drug &&
         (product.trackingMode !== TrackingMode.BATCH_EXPIRY ||
-          product.allocationPolicy !== AllocationPolicy.FEFO)
+          activation.allocationPolicy !== AllocationPolicy.FEFO)
       ) {
         throw new BadRequestException(
-          'Un médicament exige tracking_mode=batch_expiry et allocation_policy=fefo',
+          'Un médicament exige le suivi lot/péremption et FEFO',
         );
       }
-
-      await manager.save(product);
+      await manager.save([product, activation]);
       await this.audit.record(
         {
-          action: 'product.updated',
-          entityType: 'product',
-          entityId: product.id,
           tenantId,
           establishmentId,
           actorId,
-          oldValues,
-          newValues: {
-            sku: product.sku,
-            name: product.name,
-            baseUnit: product.baseUnit,
-            categoryId: product.categoryId,
-            reorderLevel: product.reorderLevel,
-            trackingMode: product.trackingMode,
-            allocationPolicy: product.allocationPolicy,
-            taxRate: product.taxRate,
-            isActive: product.isActive,
-          },
+          action: 'product.updated',
+          entityType: 'physical_product',
+          entityId: product.id,
         },
         manager,
       );
     });
-
     return this.getProduct(tenantId, establishmentId, productId);
   }
-
-  // --- Conditionnements ----------------------------------------------------
 
   async createPackaging(
     tenantId: string,
@@ -529,52 +394,56 @@ export class CatalogService {
     productId: string,
     dto: CreatePackagingDto,
   ): Promise<PackagingResponseDto> {
-    return this.dataSource.transaction(async (manager) => {
+    const id = await this.dataSource.transaction(async (manager) => {
       await this.getOwnedProduct(manager, tenantId, establishmentId, productId);
-
       const label = dto.label.trim();
-      await this.assertPackagingLabel(
-        manager,
-        tenantId,
-        establishmentId,
-        productId,
-        label,
-      );
-
+      const duplicate = await manager
+        .createQueryBuilder(ProductPackaging, 'packaging')
+        .where('packaging.tenant_id = :tenantId', { tenantId })
+        .andWhere('packaging.physical_product_id = :productId', { productId })
+        .andWhere('LOWER(packaging.label) = LOWER(:label)', { label })
+        .getOne();
+      if (duplicate)
+        throw new ConflictException('Ce conditionnement existe déjà');
       const packaging = await manager.save(
         manager.create(ProductPackaging, {
           tenantId,
-          establishmentId,
-          productId,
+          physicalProductId: productId,
           label,
           factorToBase: dto.factorToBase,
-          salePrice: dto.salePrice,
-          // La base est créée avec l'article ; un ajout est secondaire.
           isBase: false,
           isActive: dto.isActive ?? true,
         }),
       );
-
+      const tenant = await manager.findOneOrFail(Tenant, {
+        where: { id: tenantId },
+      });
+      await manager.save(
+        manager.create(ProductPrice, {
+          tenantId,
+          establishmentId,
+          physicalProductId: productId,
+          packagingId: packaging.id,
+          salePrice: dto.salePrice,
+          currency: tenant.currency,
+          validFrom: new Date(),
+          validTo: null,
+        }),
+      );
       await this.audit.record(
         {
-          action: 'product_packaging.created',
-          entityType: 'product_packaging',
-          entityId: packaging.id,
           tenantId,
           establishmentId,
           actorId,
-          newValues: {
-            productId,
-            label,
-            factorToBase: dto.factorToBase,
-            salePrice: dto.salePrice,
-          },
+          action: 'packaging.created',
+          entityType: 'product_packaging',
+          entityId: packaging.id,
         },
         manager,
       );
-
-      return toPackaging(packaging);
+      return packaging.id;
     });
+    return this.packagingResponse(tenantId, establishmentId, id);
   }
 
   async updatePackaging(
@@ -585,188 +454,112 @@ export class CatalogService {
     packagingId: string,
     dto: UpdatePackagingDto,
   ): Promise<PackagingResponseDto> {
-    const fields = Object.entries(dto).filter(
-      ([, value]) => value !== undefined,
-    );
-
-    if (fields.length === 0) {
-      throw new BadRequestException('Aucune modification fournie');
-    }
-
-    return this.dataSource.transaction(async (manager) => {
+    await this.dataSource.transaction(async (manager) => {
       await this.getOwnedProduct(manager, tenantId, establishmentId, productId);
-
-      const packaging = await manager.findOne(ProductPackaging, {
-        where: { id: packagingId, tenantId, establishmentId, productId },
+      const row = await manager.findOne(ProductPackaging, {
+        where: { id: packagingId, tenantId, physicalProductId: productId },
       });
-
-      if (!packaging) {
-        throw new NotFoundException('Conditionnement introuvable');
-      }
-
-      const oldValues = {
-        label: packaging.label,
-        factorToBase: packaging.factorToBase,
-        salePrice: packaging.salePrice,
-        isBase: packaging.isBase,
-        isActive: packaging.isActive,
-      };
-
-      if (dto.label !== undefined && dto.label.trim() !== packaging.label) {
+      if (!row) throw new NotFoundException('Conditionnement introuvable');
+      if (row.isBase && (dto.isActive === false || dto.isBase === false))
+        throw new BadRequestException(
+          'Le conditionnement de base doit rester actif et défini comme base',
+        );
+      if (dto.label !== undefined) {
         const label = dto.label.trim();
-        await this.assertPackagingLabel(
+        const duplicate = await manager
+          .createQueryBuilder(ProductPackaging, 'packaging')
+          .where('packaging.tenant_id = :tenantId', { tenantId })
+          .andWhere('packaging.physical_product_id = :productId', {
+            productId,
+          })
+          .andWhere('LOWER(packaging.label) = LOWER(:label)', { label })
+          .andWhere('packaging.id <> :packagingId', { packagingId })
+          .getOne();
+        if (duplicate)
+          throw new ConflictException('Ce conditionnement existe déjà');
+        row.label = label;
+      }
+      if (dto.factorToBase !== undefined) row.factorToBase = dto.factorToBase;
+      if (dto.isActive !== undefined) row.isActive = dto.isActive;
+      if (dto.isBase === true) {
+        if (row.factorToBase !== 1)
+          throw new BadRequestException(
+            'Le conditionnement de base doit avoir un facteur de 1',
+          );
+        await manager.update(
+          ProductPackaging,
+          { tenantId, physicalProductId: productId, isBase: true },
+          { isBase: false },
+        );
+        row.isBase = true;
+      }
+      await manager.save(row);
+      if (dto.salePrice !== undefined)
+        await this.replacePrice(
           manager,
           tenantId,
           establishmentId,
           productId,
-          label,
-          packaging.id,
+          packagingId,
+          dto.salePrice,
         );
-        packaging.label = label;
-      }
-
-      if (dto.factorToBase !== undefined) {
-        if (packaging.isBase && dto.factorToBase !== 1) {
-          throw new BadRequestException(
-            'Le conditionnement de base conserve un facteur de 1',
-          );
-        }
-        packaging.factorToBase = dto.factorToBase;
-      }
-
-      if (dto.salePrice !== undefined) {
-        packaging.salePrice = dto.salePrice;
-      }
-
-      if (dto.isActive !== undefined) {
-        if (!dto.isActive && packaging.isBase) {
-          throw new BadRequestException(
-            'Le conditionnement de base ne peut pas être désactivé ; promouvez d’abord un autre conditionnement',
-          );
-        }
-        packaging.isActive = dto.isActive;
-      }
-
-      if (dto.isBase === true && !packaging.isBase) {
-        if (packaging.factorToBase !== 1) {
-          throw new BadRequestException(
-            'Un conditionnement de base doit avoir un facteur de 1',
-          );
-        }
-
-        // Une seule base par article : l'ancienne est rétrogradée.
-        await manager.update(
-          ProductPackaging,
-          { tenantId, establishmentId, productId, isBase: true },
-          { isBase: false },
-        );
-        packaging.isBase = true;
-        packaging.isActive = true;
-      }
-
-      await manager.save(packaging);
       await this.audit.record(
         {
-          action: 'product_packaging.updated',
-          entityType: 'product_packaging',
-          entityId: packaging.id,
           tenantId,
           establishmentId,
           actorId,
-          oldValues,
-          newValues: {
-            label: packaging.label,
-            factorToBase: packaging.factorToBase,
-            salePrice: packaging.salePrice,
-            isBase: packaging.isBase,
-            isActive: packaging.isActive,
-          },
+          action: 'packaging.updated',
+          entityType: 'product_packaging',
+          entityId: row.id,
         },
         manager,
       );
-
-      return toPackaging(packaging);
     });
+    return this.packagingResponse(tenantId, establishmentId, packagingId);
   }
-
-  // --- Codes-barres --------------------------------------------------------
 
   async createBarcode(
     tenantId: string,
     establishmentId: string,
     actorId: string,
     productId: string,
-    code: string,
-    packagingId?: string,
+    rawCode: string,
   ): Promise<BarcodeResponseDto> {
-    const normalized = code.trim();
-
-    if (normalized.length === 0) {
-      throw new BadRequestException('Le code-barres ne peut pas être vide');
-    }
-
     return this.dataSource.transaction(async (manager) => {
       await this.getOwnedProduct(manager, tenantId, establishmentId, productId);
-
-      const existing = await manager.findOne(ProductBarcode, {
-        where: { tenantId, code: normalized },
+      const code = rawCode.trim();
+      if (await manager.findOne(ProductBarcode, { where: { tenantId, code } }))
+        throw new ConflictException('Ce code-barres est déjà utilisé');
+      const base = await manager.findOne(ProductPackaging, {
+        where: {
+          tenantId,
+          physicalProductId: productId,
+          isBase: true,
+          isActive: true,
+        },
       });
-      if (existing) {
-        throw new ConflictException(
-          'Ce code-barres est déjà rattaché à un article',
-        );
-      }
-
-      let targetPackagingId = packagingId;
-
-      if (targetPackagingId) {
-        const packaging = await manager.findOne(ProductPackaging, {
-          where: {
-            id: targetPackagingId,
-            tenantId,
-            establishmentId,
-            productId,
-          },
-        });
-        if (!packaging) {
-          throw new NotFoundException('Conditionnement introuvable');
-        }
-      } else {
-        const base = await manager.findOne(ProductPackaging, {
-          where: { tenantId, establishmentId, productId, isBase: true },
-        });
-        if (!base) {
-          throw new BadRequestException(
-            "Aucun conditionnement de base pour cet article",
-          );
-        }
-        targetPackagingId = base.id;
-      }
-
-      const barcode = await manager.save(
+      if (!base)
+        throw new BadRequestException('Conditionnement de base introuvable');
+      const row = await manager.save(
         manager.create(ProductBarcode, {
           tenantId,
-          establishmentId,
-          productId,
-          packagingId: targetPackagingId,
-          code: normalized,
+          physicalProductId: productId,
+          packagingId: base.id,
+          code,
         }),
       );
-
       await this.audit.record(
         {
-          action: 'product_barcode.created',
-          entityType: 'product_barcode',
-          entityId: barcode.id,
           tenantId,
           establishmentId,
           actorId,
-          newValues: { productId, code: normalized },
+          action: 'barcode.created',
+          entityType: 'product_barcode',
+          entityId: row.id,
         },
         manager,
       );
-
-      return toBarcode(barcode);
+      return { id: row.id, code: row.code, packagingId: row.packagingId };
     });
   }
 
@@ -778,94 +571,106 @@ export class CatalogService {
     barcodeId: string,
   ): Promise<void> {
     await this.dataSource.transaction(async (manager) => {
-      const barcode = await manager.findOne(ProductBarcode, {
-        where: { id: barcodeId, tenantId, establishmentId, productId },
+      await this.getOwnedProduct(manager, tenantId, establishmentId, productId);
+      const row = await manager.findOne(ProductBarcode, {
+        where: { id: barcodeId, tenantId, physicalProductId: productId },
       });
-
-      if (!barcode) {
-        throw new NotFoundException('Code-barres introuvable');
-      }
-
-      await manager.remove(barcode);
+      if (!row) throw new NotFoundException('Code-barres introuvable');
+      await manager.remove(row);
       await this.audit.record(
         {
-          action: 'product_barcode.deleted',
-          entityType: 'product_barcode',
-          entityId: barcodeId,
           tenantId,
           establishmentId,
           actorId,
-          oldValues: { productId, code: barcode.code },
+          action: 'barcode.deleted',
+          entityType: 'product_barcode',
+          entityId: row.id,
         },
         manager,
       );
     });
   }
 
-  // --- Interne -------------------------------------------------------------
-
   private async assemble(
-    products: Product[],
-    withPackagings: boolean,
-    withBarcodes: boolean,
-    withDrugDetails: boolean,
+    tenantId: string,
+    establishmentId: string,
+    products: PhysicalProduct[],
+    activations: EstablishmentProduct[],
+    include: boolean,
   ): Promise<ProductResponseDto[]> {
-    if (products.length === 0) {
-      return [];
-    }
-
-    const ids = products.map((product) => product.id);
-
-    const [packagings, barcodes, drugs] = await Promise.all([
-      withPackagings
-        ? this.packagings.find({
-            where: { productId: In(ids) },
-            order: { isBase: 'DESC', label: 'ASC' },
-          })
-        : Promise.resolve([]),
-      withBarcodes
-        ? this.barcodes.find({ where: { productId: In(ids) } })
-        : Promise.resolve([]),
-      withDrugDetails
-        ? this.drugDetails.find({ where: { productId: In(ids) } })
-        : Promise.resolve([]),
-    ]);
-
-    const packagingsByProduct = new Map<string, ProductPackaging[]>();
-    for (const packaging of packagings) {
-      const list = packagingsByProduct.get(packaging.productId) ?? [];
-      list.push(packaging);
-      packagingsByProduct.set(packaging.productId, list);
-    }
-
-    const barcodesByProduct = new Map<string, ProductBarcode[]>();
-    for (const barcode of barcodes) {
-      const list = barcodesByProduct.get(barcode.productId) ?? [];
-      list.push(barcode);
-      barcodesByProduct.set(barcode.productId, list);
-    }
-
-    const drugByProduct = new Map(
-      drugs.map((drug) => [drug.productId, drug]),
+    const ids = products.map((p) => p.id);
+    const [packagings, prices, barcodes, drugs] =
+      ids.length && include
+        ? await Promise.all([
+            this.packagings.find({
+              where: { tenantId, physicalProductId: In(ids) },
+            }),
+            this.prices.find({
+              where: {
+                tenantId,
+                establishmentId,
+                physicalProductId: In(ids),
+                validTo: IsNull(),
+              },
+            }),
+            this.barcodes.find({
+              where: { tenantId, physicalProductId: In(ids) },
+            }),
+            this.drugDetails.find({
+              where: { tenantId, physicalProductId: In(ids) },
+            }),
+          ])
+        : ([[], [], [], []] as [
+            ProductPackaging[],
+            ProductPrice[],
+            ProductBarcode[],
+            DrugDetails[],
+          ]);
+    const activationMap = new Map(
+      activations.map((a) => [a.physicalProductId, a]),
     );
-
-    return products.map((product) => ({
-      id: product.id,
-      sku: product.sku,
-      name: product.name,
-      categoryId: product.categoryId,
-      baseUnit: product.baseUnit,
-      reorderLevel: product.reorderLevel,
-      trackingMode: product.trackingMode,
-      allocationPolicy: product.allocationPolicy,
-      taxRate: product.taxRate,
-      isActive: product.isActive,
-      packagings: (packagingsByProduct.get(product.id) ?? []).map(toPackaging),
-      barcodes: (barcodesByProduct.get(product.id) ?? []).map(toBarcode),
-      drugDetails: toDrugDetails(drugByProduct.get(product.id) ?? null),
-      createdAt: product.createdAt,
-      updatedAt: product.updatedAt,
-    }));
+    const priceMap = new Map(prices.map((p) => [p.packagingId, p.salePrice]));
+    return products.map((product) => {
+      const activation = activationMap.get(product.id) as EstablishmentProduct;
+      return {
+        id: product.id,
+        sku: product.sku,
+        name: activation.localName ?? product.name,
+        categoryId: activation.categoryId,
+        baseUnit: product.baseUnit,
+        reorderLevel: activation.reorderLevel,
+        trackingMode: product.trackingMode,
+        allocationPolicy: activation.allocationPolicy,
+        taxRate: activation.taxRate,
+        isActive: activation.isActive,
+        packagings: packagings
+          .filter((p) => p.physicalProductId === product.id)
+          .map((p) => ({
+            id: p.id,
+            label: p.label,
+            factorToBase: p.factorToBase,
+            salePrice: priceMap.get(p.id) ?? '0.000000',
+            isBase: p.isBase,
+            isActive: p.isActive,
+          })),
+        barcodes: barcodes
+          .filter((b) => b.physicalProductId === product.id)
+          .map((b) => ({ id: b.id, code: b.code, packagingId: b.packagingId })),
+        drugDetails: (() => {
+          const d = drugs.find((x) => x.physicalProductId === product.id);
+          return d
+            ? {
+                activeIngredient: d.activeIngredient,
+                strength: d.strength,
+                dosageForm: d.dosageForm,
+                prescriptionRequired: d.prescriptionRequired,
+              }
+            : null;
+        })(),
+        createdAt: product.createdAt,
+        updatedAt: product.updatedAt,
+      };
+    });
   }
 
   private async getOwnedProduct(
@@ -873,80 +678,115 @@ export class CatalogService {
     tenantId: string,
     establishmentId: string,
     productId: string,
-  ): Promise<Product> {
-    const product = await manager.findOne(Product, {
-      where: { id: productId, tenantId, establishmentId },
-    });
-
-    if (!product) {
+  ) {
+    const [product, activation] = await Promise.all([
+      manager.findOne(PhysicalProduct, { where: { id: productId, tenantId } }),
+      manager.findOne(EstablishmentProduct, {
+        where: { tenantId, establishmentId, physicalProductId: productId },
+      }),
+    ]);
+    if (!product || !activation)
       throw new NotFoundException('Article introuvable');
-    }
-
-    return product;
+    return { product, activation };
   }
 
   private async assertCategory(
+    manager: EntityManager,
     tenantId: string,
-    establishmentId: string,
-    categoryId: string,
+    categoryId?: string | null,
   ): Promise<void> {
-    const category = await this.categories.findOne({
-      where: { id: categoryId, tenantId, establishmentId },
-    });
-
-    if (!category) {
+    if (
+      categoryId &&
+      !(await manager.findOne(ProductCategory, {
+        where: { id: categoryId, tenantId, isActive: true },
+      }))
+    ) {
       throw new NotFoundException('Catégorie introuvable');
     }
   }
 
-  private async assertPackagingLabel(
+  private assertPharmacyRules(
+    establishment: Establishment,
+    tracking?: TrackingMode,
+    allocation?: AllocationPolicy,
+    hasDrug = false,
+  ): void {
+    if (hasDrug && establishment.activityType !== ActivityType.PHARMACIE)
+      throw new BadRequestException(
+        'Les médicaments sont réservés aux pharmacies',
+      );
+    if (
+      hasDrug &&
+      (tracking !== TrackingMode.BATCH_EXPIRY ||
+        allocation !== AllocationPolicy.FEFO)
+    )
+      throw new BadRequestException(
+        'Un médicament exige le suivi lot/péremption et FEFO',
+      );
+  }
+
+  private normalizeCodes(codes: string[]): string[] {
+    return [...new Set(codes.map((c) => c.trim()).filter(Boolean))];
+  }
+
+  private async replacePrice(
     manager: EntityManager,
     tenantId: string,
     establishmentId: string,
     productId: string,
-    label: string,
-    ignoreId?: string,
+    packagingId: string,
+    amount: string,
   ): Promise<void> {
-    const duplicate = await manager.findOne(ProductPackaging, {
-      where: { tenantId, establishmentId, productId, label },
+    const current = await manager.findOne(ProductPrice, {
+      where: {
+        tenantId,
+        establishmentId,
+        physicalProductId: productId,
+        packagingId,
+        validTo: IsNull(),
+      },
     });
-
-    if (duplicate && duplicate.id !== ignoreId) {
-      throw new ConflictException(
-        'Ce libellé de conditionnement existe déjà pour cet article',
-      );
+    const now = new Date();
+    if (current) {
+      current.validTo = now;
+      await manager.save(current);
     }
+    const tenant = await manager.findOneOrFail(Tenant, {
+      where: { id: tenantId },
+    });
+    await manager.save(
+      manager.create(ProductPrice, {
+        tenantId,
+        establishmentId,
+        physicalProductId: productId,
+        packagingId,
+        salePrice: amount,
+        currency: tenant.currency,
+        validFrom: now,
+        validTo: null,
+      }),
+    );
   }
 
-  private async assertBarcodesAvailable(
+  private async packagingResponse(
     tenantId: string,
-    codes: string[],
-  ): Promise<void> {
-    if (codes.length === 0) {
-      return;
-    }
-
-    const existing = await this.barcodes.find({ where: { tenantId, code: In(codes) } });
-
-    if (existing.length > 0) {
-      throw new ConflictException(
-        `Code-barres déjà utilisé : ${existing.map((item) => item.code).join(', ')}`,
-      );
-    }
-  }
-
-  private normalizeCodes(codes: string[]): string[] {
-    const normalized = codes.map((code) => code.trim()).filter(Boolean);
-    return [...new Set(normalized)];
-  }
-
-  private assertTaxRate(value: string): void {
-    const rate = Number(value);
-
-    if (!Number.isFinite(rate) || rate < 0 || rate > 100) {
-      throw new BadRequestException(
-        'taxRate doit être un pourcentage entre 0 et 100',
-      );
-    }
+    establishmentId: string,
+    packagingId: string,
+  ): Promise<PackagingResponseDto> {
+    const row = await this.packagings.findOne({
+      where: { id: packagingId, tenantId },
+    });
+    if (!row) throw new NotFoundException('Conditionnement introuvable');
+    const price = await this.prices.findOne({
+      where: { tenantId, establishmentId, packagingId, validTo: IsNull() },
+    });
+    return {
+      id: row.id,
+      label: row.label,
+      factorToBase: row.factorToBase,
+      salePrice: price?.salePrice ?? '0.000000',
+      isBase: row.isBase,
+      isActive: row.isActive,
+    };
   }
 }

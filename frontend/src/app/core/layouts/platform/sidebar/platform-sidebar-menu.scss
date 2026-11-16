@@ -1,0 +1,3 @@
+@use '../../sidebar-menu.styles.scss' as menu;
+
+@include menu.sidebar-menu('platform-sidebar');

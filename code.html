@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta content="web_dashboard" name="shell-type" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"
+    rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <style>
+    @layer base {
+
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        overscroll-behavior: none;
+      }
+
+      main> :first-child {
+        margin-top: 0 !important;
+      }
+
+      main> :last-child {
+        margin-bottom: 0 !important;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script
+    id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "alert-red": "#EF4444", "on-surface": "#191c1e", "secondary-fixed-dim": "#b1c7f0", "on-primary-fixed-variant": "#005137", "secondary-container": "#bfd5fe", "inverse-on-surface": "#eff1f3", "tertiary-fixed": "#64fea5", "on-primary-container": "#a3ffd2", "outline-variant": "#bdc9c1", "outline": "#6e7a72", "error-container": "#ffdad6", "on-tertiary": "#ffffff", "retail-amber": "#F59E0B", "surface": "#f7f9fb", "primary-fixed": "#95f6c8", "on-error-container": "#93000a", "on-background": "#191c1e", "on-surface-variant": "#3e4943", "on-error": "#ffffff", "surface-container-high": "#e6e8ea", "surface-container-lowest": "#ffffff", "surface-bright": "#f7f9fb", "on-tertiary-fixed": "#00210f", "surface-container-low": "#f2f4f6", "tertiary-fixed-dim": "#41e18b", "background": "#f7f9fb", "tertiary": "#006035", "on-tertiary-container": "#aaffc4", "secondary-fixed": "#d5e3ff", "midnight-dark": "#091E3A", "surface-variant": "#e0e3e5", "on-primary-fixed": "#002114", "border-subtle": "#E2E8F0", "surface-tint": "#006c4b", "on-tertiary-fixed-variant": "#00522c", "on-primary": "#ffffff", "error": "#ba1a1a", "tertiary-container": "#007b45", "primary": "#005f41", "inverse-primary": "#79d9ad", "on-secondary-fixed-variant": "#314769", "surface-container": "#eceef0", "surface-container-highest": "#e0e3e5", "secondary": "#495f82", "on-secondary-fixed": "#001c3b", "primary-fixed-dim": "#79d9ad", "primary-container": "#007a55", "text-muted": "#64748B", "surface-dim": "#d8dadc", "growth-green": "#10B981", "retail-blue": "#0284C7", "retail-purple": "#8B5CF6", "text-primary": "#0B1E33", "on-secondary": "#ffffff", "on-secondary-container": "#465c7f", "inverse-surface": "#2d3133" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-xl": "2rem", "margin-desktop": "2rem", "space-md": "1rem", "space-xs": "0.25rem", "space-lg": "1.5rem", "space-sm": "0.5rem", "gutter-desktop": "1.5rem", "gutter": "1rem", "margin": "1rem" }, "fontFamily": { "body-lg": ["Inter"], "headline-lg": ["Inter"], "label-sm": ["Inter"], "headline-sm": ["Inter"], "headline-xl": ["Inter"], "headline-md": ["Inter"], "body-md": ["Inter"], "label-md": ["Inter"], "label-lg": ["Inter"], "headline-xl-mobile": ["Inter"], "body-sm": ["Inter"] }, "fontSize": { "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }], "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }], "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }], "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }], "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }], "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }], "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }], "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }], "label-lg": ["15px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }], "headline-xl-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }], "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }] } } } };</script>
+</head>
+
+<body class="bg-surface font-body-md text-on-surface antialiased">
+  <aside
+    class="fixed left-0 top-0 bottom-0 w-64 bg-surface-container-lowest shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-50 flex flex-col justify-between">
+    <div class="flex flex-col">
+      <div class="h-16 px-space-md flex items-center justify-between bg-surface-container-lowest">
+        <div class="flex items-center gap-space-sm">
+          <div class="w-9 h-9 rounded-lg bg-primary-container flex items-center justify-center"><span
+              class="material-symbols-outlined text-on-primary text-[20px]">point_of_sale</span></div>
+          <div class="flex flex-col leading-none"><span
+              class="font-headline-sm text-headline-sm text-text-primary tracking-tight font-bold">KubaGest</span><span
+              class="font-label-sm text-label-sm text-text-muted">POS &amp; Commerce RDC</span></div>
+        </div><span
+          class="font-label-sm text-label-sm bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded font-medium">v2.4</span>
+      </div>
+      <div class="px-space-md py-space-sm">
+        <div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+          <div class="flex items-center gap-2"><span class="relative flex h-2.5 w-2.5"><span
+                class="animate-ping absolute inline-flex h-full w-full rounded-full bg-growth-green opacity-75"></span><span
+                class="relative inline-flex rounded-full h-2.5 w-2.5 bg-growth-green"></span></span><span
+              class="font-label-sm text-label-sm text-on-surface font-medium">Synchro Locale Kin</span></div><span
+            class="font-label-sm text-label-sm text-text-muted">99.9%</span>
+        </div>
+      </div>
+      <div class="px-space-md pt-space-xs">
+        <p class="font-label-sm text-label-sm text-text-muted uppercase px-2 mb-2">Navigation Commerciale</p>
+      </div>
+      <nav class="flex flex-col gap-1 px-space-sm"
+        data-active-classes="bg-primary-container text-on-primary font-semibold shadow-sm"><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="tableau-de-bord" href="#"><span
+            class="material-symbols-outlined text-[20px]">dashboard</span><span>Tableau de bord</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="point-de-vente" href="#"><span
+            class="material-symbols-outlined text-[20px]">storefront</span><span>Point de Vente (POS)</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="stocks-et-lots" href="#"><span
+            class="material-symbols-outlined text-[20px]">inventory_2</span><span>Stocks &amp; Lots</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="cloture-de-caisse" href="#"><span
+            class="material-symbols-outlined text-[20px]">payments</span><span>Clôture de Caisse</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="rapports-et-marges" href="#"><span
+            class="material-symbols-outlined text-[20px]">trending_up</span><span>Rapports &amp; Marges</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="utilisateurs-et-roles" href="#"><span
+            class="material-symbols-outlined text-[20px]">manage_accounts</span><span>Utilisateurs &amp;
+            Rôles</span></a><a
+          class="flex items-center gap-3 px-3 py-2.5 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface transition-all"
+          data-path="parametres" href="#"><span
+            class="material-symbols-outlined text-[20px]">settings</span><span>Paramètres</span></a></nav>
+    </div>
+    <div class="p-space-sm bg-surface-container-lowest">
+      <div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+        <div class="flex flex-col"><span class="font-label-sm text-label-sm text-text-muted">Mode Hors-ligne</span><span
+            class="font-label-md text-label-md text-on-surface font-semibold">P2P Prêt</span></div><span
+          class="material-symbols-outlined text-growth-green text-[20px]">cloud_done</span>
+      </div>
+    </div>
+  </aside>
+  <div class="pl-64">
+    <header
+      class="fixed top-0 left-64 right-0 h-16 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] z-40 flex items-center justify-between px-margin-desktop">
+      <div class="flex items-center gap-space-md">
+        <div
+          class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded-lg cursor-pointer hover:bg-surface-container transition-colors">
+          <span class="material-symbols-outlined text-primary-container text-[18px]">store</span><span
+            class="font-label-md text-label-md text-text-primary font-semibold">Alimentation La Victoire •
+            Kinshasa</span><span class="material-symbols-outlined text-text-muted text-[16px]">expand_more</span></div>
+        <div class="hidden lg:flex items-center gap-2 px-2.5 py-1 bg-surface-container-low rounded-full"><span
+            class="w-2 h-2 rounded-full bg-growth-green"></span><span
+            class="font-label-sm text-label-sm text-on-surface-variant font-medium">En ligne Cloud &amp; P2P</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-space-md">
+        <div class="relative flex items-center"><button
+            class="w-9 h-9 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-surface-container-low transition-colors relative"
+            type="button"><span class="material-symbols-outlined text-[20px]">notifications</span><span
+              class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-alert-red"></span></button></div>
+        <div class="flex items-center gap-3 pl-3">
+          <div class="flex flex-col items-end leading-none"><span
+              class="font-label-md text-label-md text-text-primary font-semibold">Papa Léon</span><span
+              class="font-label-sm text-label-sm text-text-muted">Gérant Propriétaire</span></div>
+          <div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center"><span
+              class="material-symbols-outlined text-on-primary text-[18px]">person</span></div>
+        </div>
+      </div>
+    </header>
+    <main class="w-full pt-16 px-gutter-desktop bg-surface">
+      <div class="flex flex-col w-full">
+        <!-- Top Context Header & Actions -->
+        <section class="py-space-md flex flex-col gap-space-sm">
+          <div class="flex items-center gap-2 text-text-muted">
+            <span class="font-label-sm text-label-sm uppercase tracking-wider text-text-muted">Paramètres</span>
+            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-semibold">Équipe &amp;
+              Droits d'accès</span>
+          </div>
+          <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+            <div class="flex flex-col gap-1 max-w-3xl">
+              <div class="flex items-center gap-3 flex-wrap">
+                <h1 class="font-headline-lg text-headline-lg text-text-primary tracking-tight font-bold">
+                  Gestion des Utilisateurs &amp; Attribution des Rôles
+                </h1>
+                <span
+                  class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-semibold">
+                  <span class="material-symbols-outlined text-[14px]">verified_user</span>
+                  Principe du Moindre Privilège Actif • Chiffrement AES-256
+                </span>
+              </div>
+              <p class="font-body-md text-body-md text-text-muted">
+                Supervisez vos collaborateurs, attribuez les permissions par terminal et suivez le journal d'activité
+                d'audit en temps réel pour Alimentation La Victoire.
+              </p>
+            </div>
+            <div class="flex items-center gap-3 self-start lg:self-center shrink-0">
+              <button
+                class="h-10 px-4 rounded-lg bg-surface-container-lowest text-text-primary font-label-md text-label-md font-semibold shadow-sm hover:bg-surface-container transition-all flex items-center gap-2"
+                type="button">
+                <span class="material-symbols-outlined text-[18px]">table_chart</span>
+                <span>Exporter la matrice</span>
+              </button>
+              <button
+                class="h-10 px-4 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-md hover:bg-primary-container transition-all flex items-center gap-2"
+                type="button">
+                <span class="material-symbols-outlined text-[20px]">person_add</span>
+                <span>Ajouter un utilisateur</span>
+              </button>
+            </div>
+          </div>
+        </section>
+        <!-- KPI Overview Grid -->
+        <section class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-gutter py-space-sm mb-space-md">
+          <!-- Card 1 -->
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+            <div class="flex flex-col gap-1">
+              <span class="font-label-md text-label-md text-text-muted">Total Collaborateurs</span>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline-md text-headline-md text-text-primary font-bold">4 Actifs</span>
+                <span class="font-label-sm text-label-sm text-growth-green font-medium">100% enregistrés</span>
+              </div>
+              <span class="font-body-sm text-body-sm text-text-muted">1 Gérant, 2 Caissiers, 1 Dépôt</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-primary text-[24px]">group</span>
+            </div>
+          </div>
+          <!-- Card 2 -->
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+            <div class="flex flex-col gap-1">
+              <span class="font-label-md text-label-md text-text-muted">Sessions Actives en direct</span>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline-md text-headline-md text-growth-green font-bold">2 Terminaux</span>
+                <span class="flex h-2 w-2 relative">
+                  <span
+                    class="animate-ping absolute inline-flex h-full w-full rounded-full bg-growth-green opacity-75"></span>
+                  <span class="relative inline-flex rounded-full h-2 w-2 bg-growth-green"></span>
+                </span>
+              </div>
+              <span class="font-body-sm text-body-sm text-text-muted">Caisse 01 + Terminal Stock</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-retail-blue/10 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-retail-blue text-[24px]">point_of_sale</span>
+            </div>
+          </div>
+          <!-- Card 3 -->
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+            <div class="flex flex-col gap-1">
+              <span class="font-label-md text-label-md text-text-muted">Sécurité &amp; Contrôle PIN</span>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline-md text-headline-md text-text-primary font-bold">0 Anomalie</span>
+                <span class="font-label-sm text-label-sm text-growth-green font-medium">Conforme</span>
+              </div>
+              <span class="font-body-sm text-body-sm text-text-muted">Dernier test PIN à 08:30 (Reçu)</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-growth-green/10 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-growth-green text-[24px]">format_image_left</span>
+            </div>
+          </div>
+          <!-- Card 4 -->
+          <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+            <div class="flex flex-col gap-1">
+              <span class="font-label-md text-label-md text-text-muted">Journal d'audit (24h)</span>
+              <div class="flex items-baseline gap-2">
+                <span class="font-headline-md text-headline-md text-text-primary font-bold">38 Actions</span>
+                <span class="font-label-sm text-label-sm text-retail-amber font-medium">Kinshasa Sync</span>
+              </div>
+              <span class="font-body-sm text-body-sm text-text-muted">Traces signées Cloud &amp; P2P</span>
+            </div>
+            <div class="w-12 h-12 rounded-xl bg-retail-purple/10 flex items-center justify-center shrink-0">
+              <span class="material-symbols-outlined text-retail-purple text-[24px]">receipt_long</span>
+            </div>
+          </div>
+        </section>
+        <!-- Main 2-Column Section: Staff Directory (Left ~35%) vs Role Matrix (Right ~65%) -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-gutter mb-space-xl items-start">
+          <!-- LEFT COLUMN: Staff roster & role quick templates (~35%) -->
+          <div class="lg:col-span-4 xl:col-span-4 flex flex-col gap-space-md">
+            <!-- Search and filter container -->
+            <div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-sm">
+              <div class="relative w-full">
+                <span
+                  class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-text-muted text-[18px]">search</span>
+                <input
+                  class="w-full h-10 pl-9 pr-3 rounded-lg bg-surface font-body-md text-body-md text-text-primary placeholder:text-text-muted focus:outline-none focus:bg-surface-container-lowest transition-all"
+                  placeholder="Rechercher par nom, rôle, terminal..." type="text" />
+              </div>
+              <div class="flex items-center gap-1.5 overflow-x-auto pb-1">
+                <button
+                  class="px-3 py-1 rounded-full bg-primary text-on-primary font-label-sm text-label-sm shrink-0">Tous
+                  (4)</button>
+                <button
+                  class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-text-primary font-label-sm text-label-sm shrink-0 transition-colors">Caissiers
+                  (2)</button>
+                <button
+                  class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-text-primary font-label-sm text-label-sm shrink-0 transition-colors">Magasiniers
+                  (1)</button>
+                <button
+                  class="px-3 py-1 rounded-full bg-surface-container hover:bg-surface-container-high text-text-primary font-label-sm text-label-sm shrink-0 transition-colors">Gérance
+                  (1)</button>
+              </div>
+            </div>
+            <!-- Staff Member Cards -->
+            <div class="flex flex-col gap-space-sm">
+              <!-- Selected User: Nelly Kalonji -->
+              <div
+                class="bg-surface-container-lowest rounded-xl p-space-md shadow-md cursor-pointer transition-all transform hover:-translate-y-0.5">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-11 h-11 rounded-full overflow-hidden bg-primary/10 shrink-0 flex items-center justify-center">
+                      <img class="w-full h-full object-cover"
+                        data-alt="Warm portrait of Nelly Kalonji, a cheerful professional Congolese female cashier in Kinshasa wearing a neat green retail uniform polo shirt inside a modern well-lit grocery store."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAfqQ-fHMWnljDE-xsOunZRi8ULVBjS81p_fUgBMJl6jXsZgqnZGGOKr0UIzoB6aJ9ttVft4ppaaRudSz7i21a2PSUwKCfTGEpNos9n2py33pws8V3PvIaS4uj7m3gEwNtZGc4NiF-mDNV-2S24W8RL0HGWqaFeJ9lftaY0tbRBQ29XKHgYG2o-WKTeunLTJ2W-8J0LuCI5AnlrONUSl2GTdsyLY1idews3HMeTfJM" />
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="font-headline-sm text-headline-sm text-text-primary truncate font-bold">Nelly
+                          Kalonji</span>
+                        <span class="w-2 h-2 rounded-full bg-growth-green shrink-0"></span>
+                      </div>
+                      <span class="font-label-sm text-label-sm text-text-muted truncate">Matricule: #KB-0042</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold shrink-0">
+                    Caissière Principale
+                  </span>
+                </div>
+                <div class="mt-3 pt-3 flex flex-col gap-2 bg-surface-container-low rounded-lg p-2.5">
+                  <div class="flex items-center justify-between text-body-sm font-body-sm">
+                    <span class="text-text-muted flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[15px]">point_of_sale</span>
+                      Terminal :
+                    </span>
+                    <span class="text-text-primary font-semibold">Caisse 01 - Comptoir</span>
+                  </div>
+                  <div class="flex items-center justify-between text-body-sm font-body-sm">
+                    <span class="text-text-muted flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[15px]">timer</span>
+                      Session :
+                    </span>
+                    <span class="text-growth-green font-semibold">En direct (depuis 07h30)</span>
+                  </div>
+                  <div class="flex items-center justify-between text-body-sm font-body-sm">
+                    <span class="text-text-muted flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[15px]">lock_clock</span>
+                      Sécurité :
+                    </span>
+                    <span class="text-text-primary">PIN 4 chiffres • 12 droits</span>
+                  </div>
+                </div>
+              </div>
+              <!-- User 2: Roger Bakula -->
+              <div
+                class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-11 h-11 rounded-full overflow-hidden bg-retail-blue/10 shrink-0 flex items-center justify-center">
+                      <img class="w-full h-full object-cover"
+                        data-alt="Portrait of Roger Bakula, an experienced Congolese warehouse inventory manager in Kinshasa with glasses checking an electronic barcode scanner tablet in an organized storeroom."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAc8_k0CgR9szKFsWzQTlV2D50Nlm2U8C5aiEqmAoU5Eu4ZKOf9NPuF0Wi77EUQGIj7bZIPqHaqCod258WfpxspMBk46ozWsfHxCo7TSoihbOXlY4cgdzXIY5CFP7OYeofFCLWKn7rPzrX9F4v5fyLvtbZaMOe0b6UcEHIWw_1OYE9SZf5Reurr6HhhHmKTjF3CSWGJ0RwJLZX5Fyg7fw11stPgCdwF95h5csqhlr4" />
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="font-headline-sm text-headline-sm text-text-primary truncate font-bold">Roger
+                          Bakula</span>
+                        <span class="w-2 h-2 rounded-full bg-growth-green shrink-0"></span>
+                      </div>
+                      <span class="font-label-sm text-label-sm text-text-muted truncate">Matricule: #KB-0021</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 rounded bg-retail-blue/15 text-retail-blue font-label-sm text-label-sm font-semibold shrink-0">
+                    Gestion Stocks FEFO
+                  </span>
+                </div>
+                <div class="mt-2.5 flex items-center justify-between font-body-sm text-body-sm text-text-muted">
+                  <span class="truncate">Dépôt Gros &amp; Réceptions</span>
+                  <span class="text-retail-blue font-semibold">Terminal Handheld</span>
+                </div>
+              </div>
+              <!-- User 3: Junior Mukendi -->
+              <div
+                class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-11 h-11 rounded-full overflow-hidden bg-surface-container shrink-0 flex items-center justify-center">
+                      <img class="w-full h-full object-cover"
+                        data-alt="Professional bust shot of Junior Mukendi, a young Congolese retail worker smiling calmly in a bright store environment."
+                        src="https://lh3.googleusercontent.com/aida-public/AB6AXuAgPSPZ9kPjTIa5joXHPdqh26xQlS1LO6AA7_wWyqJJ5cdrpvcwbWnKPICFBi5GoH532ugACCsmCGznH6PThrm6IkdZcVbqmdIhG5ncRSG7PBGL6ehvcUABthDUVsDJ7iqDPzBLU4CWgONeL4N4GWTpPNeGnBvhDgE65iKhvZTmP2cyzUYA1LnHaBHuSdpOW3NAYwdIm67-AUnDJ1kGUl6knGQsoJSqCgz0ZGMPU2w" />
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="font-headline-sm text-headline-sm text-text-primary truncate font-bold">Junior
+                          Mukendi</span>
+                        <span class="w-2 h-2 rounded-full bg-outline-variant shrink-0"></span>
+                      </div>
+                      <span class="font-label-sm text-label-sm text-text-muted truncate">Matricule: #KB-0055</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 rounded bg-retail-amber/15 text-retail-amber font-label-sm text-label-sm font-semibold shrink-0">
+                    Caissier Renfort
+                  </span>
+                </div>
+                <div class="mt-2.5 flex items-center justify-between font-body-sm text-body-sm text-text-muted">
+                  <span class="truncate">Terminal 02 (Réserve)</span>
+                  <span class="text-text-muted font-medium">Session Inactive</span>
+                </div>
+              </div>
+              <!-- User 4: Papa Léon Kabamba -->
+              <div
+                class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm hover:shadow-md cursor-pointer transition-all">
+                <div class="flex items-start justify-between gap-3">
+                  <div class="flex items-center gap-3">
+                    <div
+                      class="w-11 h-11 rounded-full overflow-hidden bg-primary/20 shrink-0 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-primary text-[24px]">verified</span>
+                    </div>
+                    <div class="flex flex-col min-w-0">
+                      <div class="flex items-center gap-2">
+                        <span class="font-headline-sm text-headline-sm text-text-primary truncate font-bold">Papa Léon
+                          Kabamba</span>
+                      </div>
+                      <span class="font-label-sm text-label-sm text-text-muted truncate">Fondateur • Gérant
+                        Propriétaire</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2 py-0.5 rounded bg-midnight-dark text-on-primary font-label-sm text-label-sm font-semibold shrink-0 flex items-center gap-1">
+                    <span class="material-symbols-outlined text-[13px]">lock</span>
+                    Super-Admin
+                  </span>
+                </div>
+                <div class="mt-2.5 flex items-center justify-between font-body-sm text-body-sm text-text-muted">
+                  <span class="truncate">Tous Terminaux &amp; Cloud Sync</span>
+                  <span class="text-growth-green font-semibold">Droits Inaltérables</span>
+                </div>
+              </div>
+            </div>
+            <!-- Quick Role Templates Box -->
+            <div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-primary text-[20px]">assignment_turned_in</span>
+                  <span class="font-headline-sm text-headline-sm text-text-primary font-bold">Modèles de Rôles
+                    Types</span>
+                </div>
+                <span class="font-label-sm text-label-sm text-text-muted">3 Préréglages</span>
+              </div>
+              <p class="font-body-sm text-body-sm text-text-muted">
+                Appliquez en un clic une combinaison standardisée de privilèges recommandée pour les commerces à
+                Kinshasa.
+              </p>
+              <div class="flex flex-col gap-2">
+                <div
+                  class="bg-surface-container-lowest p-2.5 rounded-lg flex items-center justify-between hover:bg-surface-container transition-colors">
+                  <div class="flex flex-col">
+                    <span class="font-label-md text-label-md text-text-primary font-semibold">Caissier Simple
+                      (Standard)</span>
+                    <span class="font-label-sm text-label-sm text-text-muted">Encaissement strict, 0 remise, pas de
+                      marge</span>
+                  </div>
+                  <button
+                    class="px-2.5 py-1 rounded bg-surface-container text-text-primary font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-all">Appliquer</button>
+                </div>
+                <div
+                  class="bg-surface-container-lowest p-2.5 rounded-lg flex items-center justify-between hover:bg-surface-container transition-colors">
+                  <div class="flex flex-col">
+                    <span class="font-label-md text-label-md text-text-primary font-semibold">Caissier Senior /
+                      Délégué</span>
+                    <span class="font-label-sm text-label-sm text-text-muted">Remise jusqu'à 5%, bidevise, annulations
+                      tracées</span>
+                  </div>
+                  <button
+                    class="px-2.5 py-1 rounded bg-primary text-on-primary font-label-sm text-label-sm shadow-sm">Actif</button>
+                </div>
+                <div
+                  class="bg-surface-container-lowest p-2.5 rounded-lg flex items-center justify-between hover:bg-surface-container transition-colors">
+                  <div class="flex flex-col">
+                    <span class="font-label-md text-label-md text-text-primary font-semibold">Magasinier &amp;
+                      Réceptionnaire</span>
+                    <span class="font-label-sm text-label-sm text-text-muted">Entrées lots, suivi DLUO/FEFO, 0 accès
+                      caisse</span>
+                  </div>
+                  <button
+                    class="px-2.5 py-1 rounded bg-surface-container text-text-primary font-label-sm text-label-sm hover:bg-primary hover:text-on-primary transition-all">Appliquer</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- RIGHT COLUMN: Detailed Permissions Matrix for Nelly Kalonji (~65%) -->
+          <div class="lg:col-span-8 xl:col-span-8 flex flex-col gap-space-md">
+            <!-- Member Overview Header Banner -->
+            <div
+              class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-md">
+              <div class="flex items-center gap-space-md">
+                <div class="w-16 h-16 rounded-full overflow-hidden bg-primary/10 shrink-0 shadow-sm">
+                  <img class="w-full h-full object-cover"
+                    data-alt="Close up portrait of Nelly Kalonji, confident African retail manageress smiling with smart device in Kinshasa supermarket background."
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdHITKDGCWMkPrP_k7-_HU5eVr3S6HIusPLVOQN7apZAwmNBgByd3-DSyfLR2pnnA2z0vSvEjinVhidswMKiiP6ydvJN1-MEruo5erWda2MXUy3lPhEDEFhNeShwVoIc4CUMZJcSKp_0OAYSwqYB1qWuclDjN5COKTXU47ak6W1nuAI07rm83_nAi1QXhZbQgSura0KUG4vwWjicE_yt_g8BbpX7GtDZsXqrE2Frs" />
+                </div>
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h2 class="font-headline-md text-headline-md text-text-primary font-bold">Nelly Kalonji</h2>
+                    <span
+                      class="px-2.5 py-0.5 rounded-full bg-growth-green/15 text-growth-green font-label-sm text-label-sm font-semibold">En
+                      poste (Caisse 01)</span>
+                    <span
+                      class="px-2 py-0.5 rounded bg-surface-container text-text-muted font-label-sm text-label-sm">ID:
+                      USR-KIN-0042</span>
+                  </div>
+                  <div class="flex items-center gap-4 mt-1 font-body-sm text-body-sm text-text-muted flex-wrap">
+                    <span class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[16px]">call</span>
+                      +243 81 920 44 12
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[16px]">mail</span>
+                      n.kalonji@victoire-kin.cd
+                    </span>
+                    <span class="flex items-center gap-1">
+                      <span class="material-symbols-outlined text-[16px]">schedule</span>
+                      Dernier login : 07:30 (Aujourd'hui)
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="flex items-center gap-2 self-stretch sm:self-center shrink-0">
+                <button
+                  class="h-9 px-3 rounded-lg bg-surface-container text-text-primary font-label-md text-label-md font-medium hover:bg-surface-container-high transition-colors flex items-center gap-1.5"
+                  type="button">
+                  <span class="material-symbols-outlined text-[18px]">password</span>
+                  <span>Réinitialiser PIN</span>
+                </button>
+                <button
+                  class="h-9 px-3 rounded-lg bg-alert-red/10 text-alert-red font-label-md text-label-md font-medium hover:bg-alert-red/20 transition-colors flex items-center gap-1.5"
+                  type="button">
+                  <span class="material-symbols-outlined text-[18px]">pause_circle</span>
+                  <span>Suspendre</span>
+                </button>
+              </div>
+            </div>
+            <!-- Permission Matrix Accordion Blocks -->
+            <div class="flex flex-col gap-space-md">
+              <!-- Section A: POS & Transactions -->
+              <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-primary text-[20px]">shopping_cart_checkout</span>
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="font-headline-sm text-headline-sm text-text-primary font-bold">Section A : Ventes
+                        &amp; Encaissements au Comptoir (POS)</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Contrôle les actions autorisées pendant le
+                        cycle de paiement d'un ticket</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2.5 py-1 rounded bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">3 /
+                    5 Autorisés</span>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <!-- Row 1 -->
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-container-low transition-colors">
+                    <div class="flex flex-col pr-4">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Ouvrir et fermer sa
+                        propre session de caisse</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Autorise le comptage initial à l'ouverture
+                        et le billetage contradictoire de clôture (X de caisse individuel).</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input checked="" class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <!-- Row 2 -->
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-container-low transition-colors">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Appliquer des remises
+                          commerciales directes</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-retail-amber/15 text-retail-amber font-label-sm text-label-sm font-bold">Plafond
+                          : 5.0% max</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Plafonné à 5% par ticket. Toute remise
+                        supérieure nécessite le scan du QR code du superviseur.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input checked="" class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <!-- Row 3 -->
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-container-low transition-colors">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Effectuer des
+                          remboursements et annulations de tickets</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-alert-red/15 text-alert-red font-label-sm text-label-sm font-semibold">Validation
+                          Superviseur Requise</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Interdit sans l'approbation explicite de
+                        Papa Léon ou saisie du PIN gérant.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <!-- Row 4 -->
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-container-low transition-colors">
+                    <div class="flex flex-col pr-4">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Encaissement bidevise
+                        (USD &amp; Franc Congolais CDF)</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Calcul automatique du rendu monnaie en
+                        monnaie locale selon le cours officiel paramétré du magasin.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input checked="" class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <!-- Row 5 -->
+                  <div
+                    class="flex items-center justify-between p-3 rounded-lg bg-surface hover:bg-surface-container-low transition-colors">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Modifier manuellement
+                          le taux de change du jour</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-surface-container-highest text-text-muted font-label-sm text-label-sm font-semibold">Réservé
+                          Gérance</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Fixation du taux du jour (ex: 2 850 CDF /
+                        1 USD). Doit rester strictement administré par le propriétaire.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" disabled="" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container peer-focus:outline-none rounded-full peer after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all opacity-50 cursor-not-allowed">
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Section B: Financial & Margin Visibility (Strictly Confidential) -->
+              <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-retail-purple/10 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-retail-purple text-[20px]">visibility_off</span>
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="font-headline-sm text-headline-sm text-text-primary font-bold">Section B : Visibilité
+                        Financière, Coûts &amp; Marges Brutes</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Protection stricte des données de marge
+                        commerciale et prix de revient</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2.5 py-1 rounded bg-alert-red/15 text-alert-red font-label-sm text-label-sm font-semibold">0
+                    / 3 (Verrouillé)</span>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Consulter les taux de
+                          marge et bénéfices nets</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-surface-container-highest text-text-muted font-label-sm text-label-sm">Confidentiel</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Masque totalement les colonnes de
+                        rentabilité sur le POS et les écrans de consultation.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Afficher le prix
+                          d'achat fournisseur / Coût de revient unitaire</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-surface-container-highest text-text-muted font-label-sm text-label-sm">Strict</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Seul le prix de vente public TTC autorisé
+                        est visible lors du scan d'articles.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <div class="flex items-center gap-2">
+                        <span class="font-label-lg text-label-lg text-text-primary font-semibold">Accéder au rapport
+                          consolidé 'Z' de fin de journée de l'alimentation</span>
+                        <span
+                          class="px-2 py-0.5 rounded bg-surface-container-highest text-text-muted font-label-sm text-label-sm">Restreint</span>
+                      </div>
+                      <span class="font-body-sm text-body-sm text-text-muted">Limité exclusivement au ticket
+                        récapitulatif de son propre tiroir-caisse sans agrégation magasin.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Section C: Stock & Catalog Management -->
+              <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-retail-blue/10 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-retail-blue text-[20px]">inventory_2</span>
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="font-headline-sm text-headline-sm text-text-primary font-bold">Section C : Gestion
+                        des Stocks &amp; Traçabilité FEFO</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Autorisations relatives à l'inventaire en
+                        rayon et réceptions d'arrivages</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2.5 py-1 rounded bg-retail-blue/15 text-retail-blue font-label-sm text-label-sm font-semibold">1
+                    / 4 Autorisé</span>
+                </div>
+                <div class="flex flex-col gap-3">
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Consulter le niveau de
+                        stock en rayon et alertes péremption</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Permet de renseigner un client sur la
+                        disponibilité sans pouvoir altérer les quantités théoriques.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input checked="" class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Valider les réceptions
+                        de marchandises et nouveaux lots</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Attribué au profil de Roger Bakula (Dépôt)
+                        pour le contrôle contradictoire des bons de livraison.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                  <div class="flex items-center justify-between p-3 rounded-lg bg-surface">
+                    <div class="flex flex-col pr-4">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Ajuster manuellement les
+                        écarts d'inventaire ou casses</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Nécessite la consignation obligatoire du
+                        motif avec contre-signature du superviseur.</span>
+                    </div>
+                    <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                      <input class="sr-only peer" type="checkbox" />
+                      <div
+                        class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <!-- Section D: Terminal Device Security & Offline Rules -->
+              <div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                <div class="flex items-center justify-between pb-2 bg-surface-container-low px-3 py-2 rounded-lg">
+                  <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-lg bg-growth-green/10 flex items-center justify-center">
+                      <span class="material-symbols-outlined text-growth-green text-[20px]">devices</span>
+                    </div>
+                    <div class="flex flex-col">
+                      <span class="font-headline-sm text-headline-sm text-text-primary font-bold">Section D : Sécurité
+                        Matérielle &amp; Authentification Terminal</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Paramètres locaux de fonctionnement et
+                        synchronisation P2P Kinshasa</span>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2.5 py-1 rounded bg-growth-green/15 text-growth-green font-label-sm text-label-sm font-semibold">Sécurisé</span>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+                  <div class="p-3 rounded-lg bg-surface flex flex-col justify-between gap-3">
+                    <div class="flex flex-col">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Mode Déconnecté (Offline
+                        Chiffré)</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Autorise la poursuite des ventes lors des
+                        coupures Internet locales. Chiffrement SQLite local garanti.</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                      <span class="font-label-sm text-label-sm text-growth-green font-semibold">Activé (Max 72h sans
+                        synchro)</span>
+                      <label class="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input checked="" class="sr-only peer" type="checkbox" />
+                        <div
+                          class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary">
+                        </div>
+                      </label>
+                    </div>
+                  </div>
+                  <div class="p-3 rounded-lg bg-surface flex flex-col justify-between gap-3">
+                    <div class="flex flex-col">
+                      <span class="font-label-lg text-label-lg text-text-primary font-semibold">Délai de verrouillage
+                        automatique</span>
+                      <span class="font-body-sm text-body-sm text-text-muted">Verrouille le terminal en cas d'inactivité
+                        de la caissière pour empêcher toute saisie tierce.</span>
+                    </div>
+                    <div class="flex items-center justify-between pt-2">
+                      <span class="font-label-sm text-label-sm text-text-muted">Inactivité max</span>
+                      <select
+                        class="h-8 px-2 rounded bg-surface-container-lowest font-label-sm text-label-sm text-text-primary focus:outline-none cursor-pointer">
+                        <option>2 minutes</option>
+                        <option selected="">5 minutes (Recommandé)</option>
+                        <option>10 minutes</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Bottom Sticky Save Bar -->
+            <div
+              class="bg-surface-container-lowest rounded-xl p-space-md shadow-md flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm sticky bottom-4 z-20">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-growth-green text-[18px]">verified</span>
+                <span class="font-body-sm text-body-sm text-text-muted">
+                  Dernière mise à jour par <strong>Papa Léon Kabamba</strong> le 24/10/2026 à 08:30
+                </span>
+              </div>
+              <div class="flex items-center gap-3 w-full sm:w-auto justify-end">
+                <button
+                  class="h-10 px-4 rounded-lg bg-surface-container text-text-primary font-label-md text-label-md font-semibold hover:bg-surface-container-high transition-colors"
+                  type="button">
+                  Réinitialiser
+                </button>
+                <button
+                  class="h-10 px-5 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-semibold shadow-md hover:bg-primary-container transition-all flex items-center gap-2"
+                  type="button">
+                  <span class="material-symbols-outlined text-[20px]">check_circle</span>
+                  <span>Enregistrer les modifications</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- Full-Width Section: Live Activity & Audit Log -->
+        <section
+          class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col gap-space-md mb-space-xl">
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md pb-space-sm">
+            <div class="flex flex-col gap-1">
+              <div class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-primary text-[22px]">history_edu</span>
+                <h3 class="font-headline-sm text-headline-sm text-text-primary font-bold">
+                  Journal d'Audit &amp; Traçabilité des Actions Métier
+                </h3>
+              </div>
+              <p class="font-body-sm text-body-sm text-text-muted">
+                Historique immuable conforme aux spécifications F01 / AC-04 pour le contrôle de gestion et la prévention
+                des fraudes.
+              </p>
+            </div>
+            <div class="flex items-center gap-2 flex-wrap">
+              <div
+                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface text-text-primary font-label-sm text-label-sm">
+                <span class="material-symbols-outlined text-[16px] text-text-muted">calendar_today</span>
+                <span>Aujourd'hui, 24 Oct 2026</span>
+              </div>
+              <select
+                class="h-8 px-2 rounded-lg bg-surface font-label-sm text-label-sm text-text-primary focus:outline-none">
+                <option>Tous les collaborateurs</option>
+                <option selected="">Nelly Kalonji</option>
+                <option>Junior Mukendi</option>
+                <option>Roger Bakula</option>
+                <option>Papa Léon</option>
+              </select>
+              <button
+                class="h-8 px-3 rounded-lg bg-surface text-text-primary hover:bg-surface-container font-label-sm text-label-sm font-semibold flex items-center gap-1 transition-colors"
+                type="button">
+                <span class="material-symbols-outlined text-[16px]">file_download</span>
+                <span>Export Audit (CSV/PDF)</span>
+              </button>
+            </div>
+          </div>
+          <!-- Table of Audit Events -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left font-body-sm text-body-sm">
+              <thead>
+                <tr class="bg-surface text-text-muted font-label-sm text-label-sm uppercase tracking-wider">
+                  <th class="py-3 px-4 rounded-l-lg">Horodatage</th>
+                  <th class="py-3 px-4">Collaborateur</th>
+                  <th class="py-3 px-4">Opération &amp; Contexte Commercial</th>
+                  <th class="py-3 px-4">Terminal / Point d'Accès</th>
+                  <th class="py-3 px-4 rounded-r-lg text-right">Statut Audit</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y-0">
+                <!-- Row 1 -->
+                <tr class="hover:bg-surface-container-low transition-colors">
+                  <td class="py-3.5 px-4 font-label-sm text-label-sm text-text-muted whitespace-nowrap">
+                    09:14:20
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-[11px]">
+                        NK</div>
+                      <span class="font-label-md text-label-md text-text-primary font-semibold">Nelly Kalonji</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="flex flex-col">
+                      <span class="text-text-primary font-medium">Ticket #TK-84920 validé • 45.00 USD (Paiement M-Pesa
+                        rapproché)</span>
+                      <span class="text-text-muted text-[11px]">Panier 6 articles • Lait Nido 2.5kg, Huile Chef
+                        5L</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap text-text-muted">
+                    Caisse 01 (Comptoir)
+                  </td>
+                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-growth-green/15 text-growth-green font-label-sm text-label-sm font-semibold">
+                      <span class="material-symbols-outlined text-[13px]">check_circle</span>
+                      Succès
+                    </span>
+                  </td>
+                </tr>
+                <!-- Row 2 -->
+                <tr class="hover:bg-surface-container-low transition-colors">
+                  <td class="py-3.5 px-4 font-label-sm text-label-sm text-text-muted whitespace-nowrap">
+                    08:52:10
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-7 h-7 rounded-full bg-surface-container flex items-center justify-center font-bold text-text-muted text-[11px]">
+                        JM</div>
+                      <span class="font-label-md text-label-md text-text-primary font-semibold">Junior Mukendi</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="flex flex-col">
+                      <span class="text-text-primary font-medium">Déconnexion de session de caisse • Fin de créneau de
+                        renfort</span>
+                      <span class="text-text-muted text-[11px]">Clôture contradictoire : 0 écart constaté sur CDF &amp;
+                        USD</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap text-text-muted">
+                    Terminal 02 (Réserve)
+                  </td>
+                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-primary/15 text-primary font-label-sm text-label-sm font-semibold">
+                      <span class="material-symbols-outlined text-[13px]">done_all</span>
+                      Conforme
+                    </span>
+                  </td>
+                </tr>
+                <!-- Row 3 -->
+                <tr class="hover:bg-surface-container-low transition-colors">
+                  <td class="py-3.5 px-4 font-label-sm text-label-sm text-text-muted whitespace-nowrap">
+                    08:30:00
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-7 h-7 rounded-full bg-midnight-dark text-on-primary flex items-center justify-center font-bold text-[11px]">
+                        PL</div>
+                      <span class="font-label-md text-label-md text-text-primary font-semibold">Papa Léon</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="flex flex-col">
+                      <span class="text-text-primary font-medium">Modification plafond remise commerciale pour Nelly K.
+                        fixé à 5.0%</span>
+                      <span class="text-text-muted text-[11px]">Ajustement suite à la politique promotionnelle du
+                        week-end</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap text-text-muted">
+                    Console Gérance (Mac/Bureau)
+                  </td>
+                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-retail-purple/15 text-retail-purple font-label-sm text-label-sm font-semibold">
+                      <span class="material-symbols-outlined text-[13px]">shield</span>
+                      Audit Loggé
+                    </span>
+                  </td>
+                </tr>
+                <!-- Row 4 -->
+                <tr class="hover:bg-surface-container-low transition-colors">
+                  <td class="py-3.5 px-4 font-label-sm text-label-sm text-text-muted whitespace-nowrap">
+                    07:30:15
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap">
+                    <div class="flex items-center gap-2">
+                      <div
+                        class="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary text-[11px]">
+                        NK</div>
+                      <span class="font-label-md text-label-md text-text-primary font-semibold">Nelly Kalonji</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4">
+                    <div class="flex flex-col">
+                      <span class="text-text-primary font-medium">Ouverture de caisse du matin • Fond de tiroir
+                        validé</span>
+                      <span class="text-text-muted text-[11px]">Billetage contrôlé : 80.00 USD + 200 000 FC (Taux 2
+                        850)</span>
+                    </div>
+                  </td>
+                  <td class="py-3.5 px-4 whitespace-nowrap text-text-muted">
+                    Caisse 01 (Comptoir)
+                  </td>
+                  <td class="py-3.5 px-4 text-right whitespace-nowrap">
+                    <span
+                      class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-growth-green/15 text-growth-green font-label-sm text-label-sm font-semibold">
+                      <span class="material-symbols-outlined text-[13px]">lock_open</span>
+                      Validé
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- Audit Footer / Legal Disclaimers -->
+          <div
+            class="pt-space-sm flex flex-col sm:flex-row items-center justify-between text-text-muted font-body-sm text-body-sm gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="material-symbols-outlined text-[16px]">sync_saved_locally</span>
+              <span>Horodatage synchronisé sur UTC+1 (Heure de Kinshasa) • Hash SHA-256 incorruptible.</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <button class="text-primary hover:underline font-label-sm text-label-sm font-semibold">Voir les 34 logs
+                précédents</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+</body>
+
+</html>

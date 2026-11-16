@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsEnum, IsOptional } from 'class-validator';
-import { TenantPlan, TenantStatus } from '../tenant.enums.js';
+import { TenantPlan, TenantStatus } from '../../core/tenants/tenant.enums.js';
 
 export class ListTenantsQueryDto {
   @ApiProperty({ enum: TenantStatus, required: false })

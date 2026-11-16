@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Establishment } from '../tenants/establishment.entity.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Establishment } from '../tenants/entities/establishment.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
 import { EMPTY_DASHBOARD_FACTS } from './dashboard.facts.js';
 import { buildDashboardSnapshot } from './dashboard.snapshot.js';
 import type { DashboardResponseDto } from './dto/dashboard-response.dto.js';

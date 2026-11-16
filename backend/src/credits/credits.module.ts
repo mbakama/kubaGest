@@ -6,7 +6,7 @@ import { CashModule } from '../cash/cash.module.js';
 import { CatalogModule } from '../catalog/catalog.module.js';
 import { DocumentCounter } from '../documents/document-counter.entity.js';
 import { DocumentNumberService } from '../documents/document-number.service.js';
-import { Tenant } from '../tenants/tenant.entity.js';
+import { Tenant } from '../tenants/entities/tenant.entity.js';
 import { CreditPayment } from './credit-payment.entity.js';
 import { CreditReminder } from './credit-reminder.entity.js';
 import { CreditReminderScheduler } from './credit-reminder.scheduler.js';

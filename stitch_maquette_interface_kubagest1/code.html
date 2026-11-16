@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+
+<html lang="fr"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_blank" name="shell-type"/><title>KubaGest</title><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script><script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "on-secondary-fixed-variant": "#314769",
+          "on-primary-container": "#a3ffd2",
+          "primary-fixed-dim": "#79d9ad",
+          "outline-variant": "#bdc9c1",
+          "background": "#f7f9fb",
+          "on-primary-fixed-variant": "#005137",
+          "on-surface": "#191c1e",
+          "text-muted": "#64748B",
+          "inverse-primary": "#79d9ad",
+          "secondary-container": "#bfd5fe",
+          "tertiary-fixed-dim": "#41e18b",
+          "primary-container": "#007a55",
+          "surface-variant": "#e0e3e5",
+          "on-tertiary-fixed": "#00210f",
+          "outline": "#6e7a72",
+          "primary": "#007a55",
+          "surface-container": "#eceef0",
+          "tertiary-fixed": "#64fea5",
+          "text-primary": "#0B1E33",
+          "tertiary-container": "#007b45",
+          "surface-container-lowest": "#ffffff",
+          "alert-red": "#EF4444",
+          "tertiary": "#006035",
+          "error-container": "#ffdad6",
+          "secondary-fixed": "#d5e3ff",
+          "on-tertiary-fixed-variant": "#00522c",
+          "surface": "#f7f9fb",
+          "on-error-container": "#93000a",
+          "on-primary": "#ffffff",
+          "border-subtle": "#E2E8F0",
+          "surface-container-high": "#e6e8ea",
+          "on-primary-fixed": "#002114",
+          "surface-tint": "#006c4b",
+          "on-secondary-container": "#465c7f",
+          "on-background": "#191c1e",
+          "secondary": "#495f82",
+          "on-secondary": "#ffffff",
+          "surface-dim": "#d8dadc",
+          "error": "#ba1a1a",
+          "retail-amber": "#F59E0B",
+          "on-error": "#ffffff",
+          "retail-blue": "#0284C7",
+          "on-tertiary": "#ffffff",
+          "primary-fixed": "#95f6c8",
+          "growth-green": "#10B981",
+          "inverse-surface": "#2d3133",
+          "on-secondary-fixed": "#001c3b",
+          "inverse-on-surface": "#eff1f3",
+          "on-surface-variant": "#3e4943",
+          "surface-container-highest": "#e0e3e5",
+          "surface-bright": "#f7f9fb",
+          "on-tertiary-container": "#aaffc4",
+          "midnight-dark": "#091E3A",
+          "retail-purple": "#8B5CF6",
+          "secondary-fixed-dim": "#b1c7f0",
+          "surface-container-low": "#f2f4f6",
+          "kubagreen-vibrant": "#00C371"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "full": "9999px"
+        },
+        "spacing": {
+          "space-sm": "0.5rem",
+          "gutter": "1rem",
+          "margin-desktop": "2rem",
+          "margin": "1rem",
+          "space-lg": "1.5rem",
+          "space-xl": "2rem",
+          "gutter-desktop": "1.5rem",
+          "space-xs": "0.25rem",
+          "space-md": "1rem"
+        },
+        "fontFamily": {
+          "headline-md": ["Inter"],
+          "body-lg": ["Inter"],
+          "headline-lg": ["Inter"],
+          "label-md": ["Inter"],
+          "body-sm": ["Inter"],
+          "label-lg": ["Inter"],
+          "headline-xl": ["Inter"],
+          "headline-sm": ["Inter"],
+          "headline-xl-mobile": ["Inter"],
+          "label-sm": ["Inter"],
+          "body-md": ["Inter"]
+        },
+        "fontSize": {
+          "headline-md": ["20px", { "lineHeight": "28px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+          "body-lg": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "headline-lg": ["24px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "600" }],
+          "label-md": ["13px", { "lineHeight": "18px", "letterSpacing": "0.01em", "fontWeight": "500" }],
+          "body-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0em", "fontWeight": "400" }],
+          "label-lg": ["15px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+          "headline-xl": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+          "headline-sm": ["16px", { "lineHeight": "24px", "letterSpacing": "0em", "fontWeight": "600" }],
+          "headline-xl-mobile": ["26px", { "lineHeight": "32px", "letterSpacing": "-0.015em", "fontWeight": "700" }],
+          "label-sm": ["11px", { "lineHeight": "14px", "letterSpacing": "0.02em", "fontWeight": "600" }],
+          "body-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0em", "fontWeight": "400" }]
+        }
+      }
+    }
+  }
+</script><style>@layer base{html,body{width:100vw;min-height:100vh;margin:0;padding:0;}body{overscroll-behavior:none;}.pb-safe{padding-bottom:env(safe-area-inset-bottom,0px);}.pt-safe{padding-top:env(safe-area-inset-top,0px);}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style></head><body class="bg-surface font-body-md text-on-surface flex flex-col min-h-screen"><main class="flex flex-col relative w-full min-h-screen bg-surface pt-safe pb-safe"><div class="flex flex-col w-full pb-8">
+<!-- En-tête de marque sobre et institutionnel -->
+<header class="flex flex-col items-center pt-3 pb-4 px-4 text-center">
+<div class="flex items-center gap-2 mb-1">
+<div class="w-8 h-8 rounded-lg bg-[#007a55] text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">point_of_sale</span>
+</div>
+<div class="flex items-center gap-1.5">
+<span class="font-headline-md text-headline-md tracking-tight text-on-surface font-bold">KubaGest</span>
+<span class="bg-[#d5e3ff] text-[#001c3b] font-label-sm text-label-sm px-2 py-0.5 rounded-full font-semibold">POS</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Solution de gestion commerciale &amp; point de vente</p>
+</header>
+<!-- Stepper visuel à 4 étapes (75% complété) -->
+<section class="px-4 py-2 mb-3">
+<div class="relative flex items-center justify-between max-w-sm mx-auto">
+<!-- Ligne de fond continue -->
+<div class="absolute left-4 right-4 top-3.5 h-1 bg-surface-container -z-0"></div>
+<!-- Ligne de progression active (verte officielle) -->
+<div class="absolute left-4 w-2/3 top-3.5 h-1 bg-[#007a55] -z-0"></div>
+<!-- Étape 1 : Validée -->
+<div class="flex flex-col items-center gap-1.5 z-10">
+<div class="w-7 h-7 rounded-full bg-[#00C371] text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">1. Clé</span>
+</div>
+<!-- Étape 2 : Validée -->
+<div class="flex flex-col items-center gap-1.5 z-10">
+<div class="w-7 h-7 rounded-full bg-[#00C371] text-white flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-[16px] font-bold">check</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">2. Métier</span>
+</div>
+<!-- Étape 3 (Active) : Vert #007a55 avec anneau vert clair -->
+<div class="flex flex-col items-center gap-1.5 z-10">
+<div class="w-7 h-7 rounded-full bg-[#007a55] text-white ring-4 ring-[#95f6c8]/40 flex items-center justify-center shadow-sm">
+<span class="font-label-md text-label-md font-bold text-white">3</span>
+</div>
+<span class="font-label-sm text-label-sm font-semibold text-[#007a55]">3. Devises</span>
+</div>
+<!-- Étape 4 (À venir) -->
+<div class="flex flex-col items-center gap-1.5 z-10">
+<div class="w-7 h-7 rounded-full bg-surface-container text-on-surface-variant flex items-center justify-center">
+<span class="font-label-md text-label-md">4</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant opacity-75">4. PIN</span>
+</div>
+</div>
+</section>
+<!-- Titre et descriptif contextuel -->
+<section class="px-5 mb-4">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface-variant mb-2">
+<span class="material-symbols-outlined text-[14px] text-[#007a55]">location_on</span>
+<span class="font-label-sm text-label-sm tracking-wide font-medium">ÉTAPE 3 SUR 4 • Marché de Kinshasa</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface mb-1">Devises &amp; Taux de change</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-relaxed">
+      KubaGest fonctionne en bidevise native USD et Francs Congolais (CDF). Fixez votre taux de référence initial pour les calculs automatiques d'encaissement.
+    </p>
+</section>
+<!-- Zone de formulaire opérationnelle -->
+<main class="flex flex-col gap-4 px-4">
+<!-- Sélection de la devise de compte principale -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex flex-col gap-3 border border-border-subtle/70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007a55] text-[20px]">account_balance_wallet</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Devise de référence du compte</span>
+</div>
+<span class="bg-surface-container-low text-secondary font-label-sm text-label-sm px-2 py-0.5 rounded font-medium">Gestion</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Détermine la monnaie d'affichage de vos rapports financiers et bilans de stock.
+      </p>
+<div class="grid grid-cols-2 gap-3 pt-1">
+<!-- Option USD (Actif par défaut) -->
+<label class="relative flex flex-col p-3 rounded-lg bg-[#007a55]/[0.05] border-2 border-[#007a55] cursor-pointer transition-colors shadow-sm" id="currency-usd-card">
+<input checked="" class="sr-only" name="base_currency" onchange="selectCurrency('USD')" type="radio" value="USD"/>
+<div class="flex items-center justify-between mb-2">
+<span class="w-8 h-8 rounded-full bg-[#007a55] text-white flex items-center justify-center font-headline-sm text-headline-sm font-bold shadow-sm">$</span>
+<div class="w-5 h-5 rounded-full bg-[#00C371] text-white flex items-center justify-center shadow-xs" id="check-usd">
+<span class="material-symbols-outlined text-[14px] font-bold">check</span>
+</div>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface">USD ($)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Dollar américain</span>
+<span class="inline-block mt-2 font-label-sm text-label-sm text-[#007a55] font-semibold">Recommandé RDC</span>
+</label>
+<!-- Option CDF -->
+<label class="relative flex flex-col p-3 rounded-lg bg-surface-container-lowest border border-border-subtle cursor-pointer transition-colors shadow-sm opacity-80" id="currency-cdf-card">
+<input class="sr-only" name="base_currency" onchange="selectCurrency('CDF')" type="radio" value="CDF"/>
+<div class="flex items-center justify-between mb-2">
+<span class="w-8 h-8 rounded-full bg-surface-container text-on-surface flex items-center justify-center font-headline-sm text-headline-sm font-bold">FC</span>
+<div class="w-5 h-5 rounded-full bg-surface-container text-transparent flex items-center justify-center" id="check-cdf">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</div>
+</div>
+<span class="font-label-md text-label-md font-semibold text-on-surface">CDF (FC)</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant mt-0.5">Franc congolais</span>
+<span class="inline-block mt-2 font-label-sm text-label-sm text-on-surface-variant">Monnaie locale</span>
+</label>
+</div>
+</div>
+<!-- Réglage du taux de change du jour -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex flex-col gap-3 border border-border-subtle/70">
+<div class="flex items-center justify-between">
+<label class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2 font-semibold" for="exchange-rate-input">
+<span class="material-symbols-outlined text-[#007a55] text-[20px]">currency_exchange</span>
+          Taux de conversion caisse
+        </label>
+<span class="flex items-center gap-1.5 font-label-sm text-label-sm text-[#007a55] font-semibold bg-[#95f6c8]/25 px-2 py-0.5 rounded-full">
+<span class="w-2 h-2 rounded-full bg-[#00C371] animate-pulse"></span>
+          BCC Live
+        </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Taux appliqué automatiquement lors de la saisie d'articles ou pour le calcul du rendu de monnaie.
+      </p>
+<!-- Affichage du taux & contrôles d'incrémentation -->
+<div class="bg-surface-container-low rounded-xl p-3 flex flex-col gap-2.5 border border-[#007a55]/15">
+<div class="flex items-center justify-between">
+<span class="font-headline-sm text-headline-sm text-on-surface font-medium">1 USD =</span>
+<div class="flex items-center gap-1.5">
+<input aria-label="Taux de change en CDF" class="w-32 bg-surface-container-lowest text-[#007a55] font-headline-md text-headline-md font-bold text-right py-1.5 px-3 rounded-lg border border-[#007a55]/30 focus:border-[#007a55] focus:ring-2 focus:ring-[#007a55]/20 focus:outline-none shadow-inner" id="exchange-rate-input" step="10" type="number" value="2850"/>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">CDF</span>
+</div>
+</div>
+<!-- Boutons d'ajustement rapide aux touches subtiles aux accents verts #007a55 -->
+<div class="flex items-center justify-between pt-1">
+<div class="flex gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container-lowest hover:bg-[#007a55]/10 active:bg-[#007a55]/20 text-[#007a55] font-label-sm text-label-sm font-semibold rounded border border-[#007a55]/30 shadow-xs flex items-center gap-0.5 transition-colors" onclick="adjustRate(-50)" type="button">
+<span class="material-symbols-outlined text-[14px]">remove</span> 50
+            </button>
+<button class="px-2.5 py-1 bg-surface-container-lowest hover:bg-[#007a55]/10 active:bg-[#007a55]/20 text-[#007a55] font-label-sm text-label-sm font-semibold rounded border border-[#007a55]/30 shadow-xs transition-colors" onclick="adjustRate(-10)" type="button">
+              -10
+            </button>
+</div>
+<div class="flex gap-1.5">
+<button class="px-2.5 py-1 bg-surface-container-lowest hover:bg-[#007a55]/10 active:bg-[#007a55]/20 text-[#007a55] font-label-sm text-label-sm font-semibold rounded border border-[#007a55]/30 shadow-xs transition-colors" onclick="adjustRate(10)" type="button">
+              +10
+            </button>
+<button class="px-2.5 py-1 bg-surface-container-lowest hover:bg-[#007a55]/10 active:bg-[#007a55]/20 text-[#007a55] font-label-sm text-label-sm font-semibold rounded border border-[#007a55]/30 shadow-xs flex items-center gap-0.5 transition-colors" onclick="adjustRate(50)" type="button">
+<span class="material-symbols-outlined text-[14px]">add</span> 50
+            </button>
+</div>
+</div>
+</div>
+<!-- Mention BCC réassurance -->
+<div class="flex items-start gap-2 pt-1 text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px] text-[#007a55] mt-0.5">info</span>
+<span>Taux indicatif BCC synchronisé (2 850 CDF). Modifiable en caisse à tout moment chaque matin par le gérant.</span>
+</div>
+</div>
+<!-- Tolérance d'arrondi de caisse -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex flex-col gap-2.5 border border-border-subtle/70">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[#007a55] text-[20px]">price_change</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-semibold">Rendu de monnaie &amp; Arrondi</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Facilite le rendu pour s'adapter aux coupures réelles en circulation à Kinshasa (pas de pièces).
+      </p>
+<div class="flex flex-col gap-2 pt-1">
+<label class="flex items-center justify-between p-2.5 rounded-lg bg-[#007a55]/[0.04] border border-[#007a55]/30 cursor-pointer">
+<div class="flex items-center gap-2.5">
+<input checked="" class="text-[#007a55] focus:ring-[#007a55] w-4 h-4 accent-[#007a55]" name="rounding_rule" type="radio" value="100"/>
+<span class="font-label-md text-label-md text-on-surface font-medium">Arrondi au 100 CDF le plus proche</span>
+</div>
+<span class="font-label-sm text-label-sm text-[#007a55] bg-[#95f6c8]/30 px-2 py-0.5 rounded font-semibold">Standard Kinshasa</span>
+</label>
+<label class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-lowest border border-border-subtle cursor-pointer opacity-85 hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-2.5">
+<input class="text-[#007a55] focus:ring-[#007a55] w-4 h-4 accent-[#007a55]" name="rounding_rule" type="radio" value="500"/>
+<span class="font-label-md text-label-md text-on-surface font-medium">Arrondi au 500 CDF supérieur</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Gros volumes</span>
+</label>
+</div>
+</div>
+<!-- Réassurance sécurité -->
+<div class="flex items-center justify-center gap-2 px-3 py-1 text-center">
+<span class="material-symbols-outlined text-[16px] text-outline">lock</span>
+<p class="font-label-sm text-label-sm text-on-surface-variant">
+        Le taux peut être mis à jour quotidiennement par le propriétaire.
+      </p>
+</div>
+<!-- Boutons d'action -->
+<div class="flex flex-col gap-2 pt-2">
+<!-- CTA Principal vert plein #007a55 (hover #006345, texte blanc) -->
+<button class="w-full py-3.5 px-4 bg-[#007a55] hover:bg-[#006345] active:bg-[#005137] text-white rounded-xl font-headline-sm text-headline-sm font-semibold shadow-md active:opacity-95 flex items-center justify-center gap-2 cursor-pointer transition-colors" id="continue-btn" type="button">
+<span>Continuer vers la sécurisation (PIN)</span>
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+<!-- Retour Étape 2 -->
+<button class="w-full py-2.5 px-4 bg-transparent text-on-surface-variant hover:text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 cursor-pointer transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">arrow_back</span>
+<span>Étape précédente</span>
+</button>
+</div>
+</main>
+</div>
+<script>
+  function adjustRate(delta) {
+    const input = document.getElementById('exchange-rate-input');
+    if (!input) return;
+    let val = parseInt(input.value, 10) || 2850;
+    val = Math.max(1000, val + delta);
+    input.value = val;
+  }
+
+  function selectCurrency(curr) {
+    const usdCard = document.getElementById('currency-usd-card');
+    const cdfCard = document.getElementById('currency-cdf-card');
+    const checkUsd = document.getElementById('check-usd');
+    const checkCdf = document.getElementById('check-cdf');
+
+    if (curr === 'USD') {
+      usdCard.className = "relative flex flex-col p-3 rounded-lg bg-[#007a55]/[0.05] border-2 border-[#007a55] cursor-pointer transition-colors shadow-sm";
+      cdfCard.className = "relative flex flex-col p-3 rounded-lg bg-surface-container-lowest border border-border-subtle cursor-pointer transition-colors shadow-sm opacity-80";
+      
+      checkUsd.className = "w-5 h-5 rounded-full bg-[#00C371] text-white flex items-center justify-center shadow-xs";
+      checkCdf.className = "w-5 h-5 rounded-full bg-surface-container text-transparent flex items-center justify-center";
+    } else {
+      cdfCard.className = "relative flex flex-col p-3 rounded-lg bg-[#007a55]/[0.05] border-2 border-[#007a55] cursor-pointer transition-colors shadow-sm";
+      usdCard.className = "relative flex flex-col p-3 rounded-lg bg-surface-container-lowest border border-border-subtle cursor-pointer transition-colors shadow-sm opacity-80";
+      
+      checkCdf.className = "w-5 h-5 rounded-full bg-[#00C371] text-white flex items-center justify-center shadow-xs";
+      checkUsd.className = "w-5 h-5 rounded-full bg-surface-container text-transparent flex items-center justify-center";
+    }
+  }
+</script></main></body></html>

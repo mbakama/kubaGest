@@ -3,13 +3,15 @@ import { Transform } from 'class-transformer';
 import {
   IsEmail,
   IsEnum,
+  IsIn,
   IsOptional,
   IsString,
   Matches,
   MaxLength,
   MinLength,
 } from 'class-validator';
-import { ActivityType } from '../../tenants/activity-type.enum.js';
+import { USER_SEXES } from '../../users/user-sex.js';
+import { ActivityType } from '../../core/tenants/activity-type.enum.js';
 import {
   CURRENCY_PATTERN,
   normalizeCurrency,
@@ -27,6 +29,10 @@ export class RegisterDto {
   @MinLength(1)
   @MaxLength(80)
   lastName: string;
+
+  @ApiProperty({ enum: USER_SEXES, example: 'male' })
+  @IsIn(USER_SEXES)
+  sex: (typeof USER_SEXES)[number];
 
   @ApiProperty({ example: '+243 810 000 000', maxLength: 30, required: false })
   @IsOptional()

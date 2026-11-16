@@ -21,6 +21,7 @@ describe('Carnet de crédit (e2e)', () => {
   const owner = {
     firstName: 'Hector',
     lastName: 'Kabeya',
+    sex: 'male',
     tenantName: 'Boutique Crédit',
     activityType: 'boutique',
     currency: 'cdf',
@@ -28,6 +29,7 @@ describe('Carnet de crédit (e2e)', () => {
     password: 'SuperSecret123!',
   };
   const cashier = {
+    sex: 'male',
     email: 'credit-cashier@kubagest.io',
     password: 'CaissierSecret123!',
     role: 'cashier',

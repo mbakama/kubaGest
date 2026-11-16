@@ -11,9 +11,11 @@ import { CatalogModule } from './catalog/catalog.module.js';
 import { CashModule } from './cash/cash.module.js';
 import { CreditsModule } from './credits/credits.module.js';
 import { DashboardModule } from './dashboard/dashboard.module.js';
+import { environmentFilePaths } from './config/env-files.js';
 import { validateEnv } from './config/env.validation.js';
 import { DatabaseModule } from './database/database.module.js';
 import { HealthModule } from './health/health.module.js';
+import { PurchasingModule } from './purchasing/purchasing.module.js';
 import { SalesModule } from './sales/sales.module.js';
 import { SmsModule } from './sms/sms.module.js';
 import { StockModule } from './stock/stock.module.js';
@@ -52,18 +54,20 @@ function observeImports() {
     ConfigModule.forRoot({
       isGlobal: true,
       cache: true,
+      envFilePath: environmentFilePaths(),
       validate: validateEnv,
     }),
     // Limitation de débit globale (§12), renforcée sur l'authentification.
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
     DatabaseModule,
     AuditModule,
-    UsersModule,
     AuthModule,
+    UsersModule,
     TenantsModule,
     CatalogModule,
     CashModule,
     StockModule,
+    PurchasingModule,
     SalesModule,
     CreditsModule,
     DashboardModule,
